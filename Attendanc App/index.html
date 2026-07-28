@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន Super Version (Latest Update)</title>
+    <!-- Google Fonts សម្រាប់ពុម្ពអក្សរខ្មែរ និងអង់គ្លេសស្អាតៗ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #0ea5e9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #e8eefb 100%);
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --input-bg: #f8fafc;
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+
+        body.dark-mode {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --input-bg: #0f172a;
+        }
+
+        body {
+            font-family: 'Kantumruy Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            margin: 0;
+            padding: 24px 16px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            transition: background 0.3s ease;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Top Header */
+        .app-header {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 8px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .theme-toggle, .mode-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow);
+            width: auto;
+        }
+
+        .mode-banner {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        body.dark-mode .mode-banner {
+            background: #451a03;
+            color: #fde68a;
+            border-color: #78350f;
+        }
+
+        /* Card Container */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Form Elements */
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 11px 14px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            border: 1.5px solid var(--border-color);
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-main);
+            background-color: var(--input-bg);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+        }
+
+        input:disabled, select:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background-color: #e2e8f0;
+        }
+
+        body.dark-mode input:disabled, body.dark-mode select:disabled {
+            background-color: #334155;
+        }
+
+        /* Buttons */
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button:active { transform: translateY(0); }
+
+        button.btn-folder { background-color: #8b5cf6; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2); }
+        button.btn-export { background-color: var(--success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+        button.btn-download { background-color: var(--secondary); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2); }
+        
+        button.btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
+            border-radius: 8px;
+            box-shadow: none;
+        }
+
+        button.btn-edit { background-color: var(--warning); }
+        button.btn-danger { background-color: var(--danger); }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+
+        /* Quick Date Controls */
+        .date-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .date-controls button {
+            background: var(--input-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+            font-size: 12px;
+            padding: 8px;
+        }
+
+        /* Analytics Dashboard Bar */
+        .analytics-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+            color: white;
+            border: none;
+        }
+
+        .analytics-card h3 { color: white; }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar-fill {
+            background: #10b981;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .stat-box b {
+            display: block;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 10px;
+            font-size: 13px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th, td { padding: 10px 12px; text-align: left; }
+        th { background-color: var(--input-bg); font-weight: 600; border-bottom: 1px solid var(--border-color); }
+        td { border-bottom: 1px solid var(--border-color); }
+        tr:last-child td { border-bottom: none; }
+
+        /* Student Row */
+        .student-row {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .student-header { font-weight: 700; margin-bottom: 8px; }
+
+        .time-inputs { display: flex; gap: 10px; }
+        .time-inputs div { flex: 1; }
+
+        /* Output Boxes */
+        .handwritten-report {
+            background-color: #fffbeb;
+            border: 1px solid #fef3c7;
+            font-family: 'Kantumruy Pro', monospace;
+            white-space: pre-wrap;
+            line-height: 1.7;
+            font-size: 14px;
+            color: #78350f;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        body.dark-mode .handwritten-report {
+            background-color: #2e1065;
+            border-color: #4c1d95;
+            color: #f3e8ff;
+        }
+
+        textarea {
+            height: 110px;
+            font-family: monospace;
+            font-size: 12px;
+            background-color: #0f172a;
+            color: #38bdf8;
+            border-color: #334155;
+        }
+
+        .status-badge {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        /* Import Section Area */
+        .import-box {
+            border: 2px dashed var(--border-color);
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 12px;
+            background: var(--input-bg);
+        }
+
+        /* Print formatting */
+        @media print {
+            body { background: white; color: black; padding: 0; }
+            .container { max-width: 100%; }
+            .card, button, input, select, .theme-toggle, .mode-toggle, .app-header p, .mode-banner { display: none !important; }
+            #reportCard, #reportBox, #monthlyCard, #monthlyTableArea { display: block !important; border: none; background: none; color: black; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- App Header -->
+    <div class="app-header">
+        <div class="header-top">
+            <h1>✅គ្រប់គ្រងវត្តមាន </h1>
+            
+            <div class="header-actions">
+                <button class="mode-toggle" id="modeSwitchBtn" onclick="toggleViewMode()">👁️ Mode: View-Only</button>
+                <button class="theme-toggle" onclick="toggleTheme()">🌗 Theme</button>
+            </div>
+        </div>
+        <div id="viewModeBanner" class="mode-banner">
+            <span>👁️ អ្នកកំពុងស្ថិតក្នុងរបៀប **មើលតែប៉ុណ្ណោះ (View-Only Mode)** - មិនអាចកែប្រែ ឬលុបទិន្នន័យបានទេ។</span>
+        </div>
+    </div>
+
+    <!-- Live Analytics Dashboard -->
+    <div class="card analytics-card">
+        <h3>📊 ស្ថិតិវត្តមានសរុបប្រចាំថ្ងៃ</h3>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+            <span>អត្រាវត្តមានសរុប (Attendance Rate)</span>
+            <b id="ratePercent">0%</b>
+        </div>
+        <div class="progress-bar-bg">
+            <div id="progressBar" class="progress-bar-fill"></div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-box">វត្តមាន<b id="statP">0</b></div>
+            <div class="stat-box">យឺត<b id="statL">0</b></div>
+            <div class="stat-box">អវត្តមាន<b id="statA">0</b></div>
+            <div class="stat-box">ច្បាប់<b id="statV">0</b></div>
+        </div>
+    </div>
+
+    <!-- Folder Sync Header (Admin Only) -->
+    <div class="card admin-only" style="display: none;">
+        <h3>📂 រក្សាទុកទិន្នន័យស្វ័យប្រវត្តិលើ Desktop</h3>
+        <div id="folderStatus" class="status-badge" style="background:#f1f5f9; color:#475569;">ស្ថានភាព៖ មិនទាន់តភ្ជាប់ Folder</div>
+        <button onclick="selectSyncFolder()" class="btn-folder">📁 តភ្ជាប់ Folder "Attendanc App"</button>
+    </div>
+
+    <!-- Section 1: Manage Students (Admin Only) -->
+    <div class="card admin-only" style="display: none;">
+        <h3>១. គ្រប់គ្រងសមាជិក/សិស្ស</h3>
+        <input type="number" id="stdId" placeholder="លេខសម្គាល់ / ID (ឧទាហរណ៍៖ 1)">
+        <input type="text" id="stdName" placeholder="ឈ្មោះសមាជិក / សិស្ស">
+        <button onclick="addOrEditStudent()">💾 រក្សាទុកសមាជិក</button>
+
+        <!-- Bulk Import Area -->
+        <div class="import-box">
+            <label style="margin-bottom:8px;">📥 បញ្ចូលឈ្មោះច្រើនក្នុងពេលតែមួយ (Import CSV):</label>
+            <input type="file" id="csvFileInput" accept=".csv" style="margin-bottom: 8px;">
+            <button onclick="importStudentsFromCSV()" class="btn-small" style="background-color: var(--secondary);">📥 នាំចូលសមាជិក (Import)</button>
+        </div>
+
+        <input type="text" id="searchStudent" placeholder="🔍 ស្វែងរកសមាជិកតាម ID ឬឈ្មោះ..." onkeyup="renderStudents()" style="margin-top: 14px;">
+        <div id="studentList"></div>
+    </div>
+
+    <!-- Section 2: Mark Attendance -->
+    <div class="card">
+        <h3>២. កត់ត្រាវត្តមានប្រចាំថ្ងៃ</h3>
+        <label>ជ្រើសរើសថ្ងៃខែ៖</label>
+        <input type="date" id="attDate">
+        
+        <div class="date-controls">
+            <button onclick="shiftDate('attDate', -1)">⬅️ ម្សិលមិញ</button>
+            <button onclick="setToday('attDate')">ថ្ងៃនេះ</button>
+            <button onclick="shiftDate('attDate', 1)">ថ្ងៃស្អែក ➡️</button>
+        </div>
+
+        <div id="markArea"></div>
+        <button onclick="saveAttendance()" class="admin-only-btn" style="display: none;">✅ រក្សាទុកវត្តមាន</button>
+    </div>
+
+    <!-- Section 3: Daily Report -->
+    <div class="card" id="reportCard">
+        <h3>៣. របាយការណ៍ប្រចាំថ្ងៃ</h3>
+        <label>ជ្រើសរើសថ្ងៃខែមើលរបាយការណ៍៖</label>
+        <input type="date" id="reportDate" onchange="generateReport()">
+        
+        <div id="reportBox" class="handwritten-report">
+សូមជ្រើសរើសថ្ងៃខែដើម្បីមើលរបាយការណ៍...
+        </div>
+
+        <div class="btn-group">
+            <button onclick="saveTextFile()" class="btn-download">💾 Text (.txt)</button>
+            <button onclick="downloadCSVFile()" class="btn-export">📊 CSV (.csv)</button>
+            <button onclick="window.print()" style="background:#475569;">🖨️ Print Report</button>
+        </div>
+        
+        <button onclick="copyCSV()" style="margin-top: 10px; background-color: #64748b;">📋 ចម្លងទិន្នន័យសម្រាប់ Google Sheets</button>
+        
+        <label style="margin-top: 14px;">ទិន្នន័យ CSV (ធ្វើបច្ចុប្បន្នភាពស្វ័យប្រវត្តិ)៖</label>
+        <textarea id="csvArea" readonly></textarea>
+    </div>
+
+    <!-- Section 4: Monthly Summary Report -->
+    <div class="card" id="monthlyCard">
+        <h3>📅 ៤. របាយការណ៍បូកសរុបប្រចាំខែ (Monthly Summary)</h3>
+        <label>ជ្រើសរើសខែ និងឆ្នាំ៖</label>
+        <input type="month" id="reportMonth" onchange="generateMonthlyReport()">
+        
+        <div id="monthlyTableArea"></div>
+        
+        <button onclick="downloadMonthlyCSV()" class="btn-export" style="margin-top: 10px;">📊 ទាញយក CSV ប្រចាំខែ (.csv)</button>
+    </div>
+
+    <!-- Section 5: Individual Student History -->
+    <div class="card">
+        <h3>៥. ពិនិត្យមើលប្រវត្តិសមាជិក</h3>
+        <label>ជ្រើសរើសឈ្មោះសមាជិក៖</label>
+        <select id="selectStudentHistory" onchange="viewStudentHistory()">
+            <option value="">-- ជ្រើសរើសឈ្មោះ --</option>
+        </select>
+
+        <div id="historyResult"></div>
+    </div>
+
+    <!-- Section 6: Settings & Controls (Admin Only) -->
+    <div class="card admin-only" style="display: none;">
+        <h3>⚙️ ៦. ការកំណត់ Admin (Settings)</h3>
+        <button onclick="changeAdminPassword()" style="background-color: var(--warning); margin-bottom: 8px;">🔑 ផ្លាស់ប្តូរលេខកូដសម្ងាត់ Admin</button>
+        <button onclick="clearAllAttendance()" class="btn-danger" style="width: 100%;">🗑️ លុបទិន្នន័យវត្តមានទាំងអស់ (Reset Attendance)</button>
+    </div>
+    <p>Create by: Ny Chandara</p>
+</div>
+
+<script>
+    let students = JSON.parse(localStorage.getItem('students')) || [];
+    let records = JSON.parse(localStorage.getItem('records')) || [];
+    let dirHandle = null;
+
+    // Admin Password (Saved in localStorage or default to 1234)
+    let adminPassword = localStorage.getItem('admin_pwd') || "1234";
+    let isReadOnly = true;
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const currentMonthStr = todayStr.substring(0, 7);
+    document.getElementById('attDate').value = todayStr;
+    document.getElementById('reportDate').value = todayStr;
+    document.getElementById('reportMonth').value = currentMonthStr;
+
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+    }
+
+    function toggleViewMode() {
+        if (isReadOnly) {
+            const pwd = prompt("🔑 សូមបញ្ចូលលេខកូដសម្ងាត់ Admin (Admin Password) ៖");
+            if (pwd === adminPassword) {
+                isReadOnly = false;
+                alert("✅ ចូលប្រព័ន្ធ Admin ជោគជ័យ!");
+                applyViewMode();
+            } else if (pwd !== null) {
+                alert("❌ លេខកូដសម្ងាត់មិនត្រឹមត្រូវទេ!");
+            }
+        } else {
+            isReadOnly = true;
+            alert("🔒 បានចាកចេញពី Admin Mode។");
+            applyViewMode();
+        }
+    }
+
+    function changeAdminPassword() {
+        if (isReadOnly) return;
+        const currentPwd = prompt("🔑 សូមបញ្ចូលលេខកូដសម្ងាត់ចាស់ ៖");
+        if (currentPwd === adminPassword) {
+            const newPwd = prompt("✨ សូមបញ្ចូលលេខកូដសម្ងាត់ថ្មី ៖");
+            if (newPwd && newPwd.trim() !== "") {
+                adminPassword = newPwd.trim();
+                localStorage.setItem('admin_pwd', adminPassword);
+                alert("✅ ផ្លាស់ប្តូរលេខកូដសម្ងាត់ជោគជ័យ!");
+            } else {
+                alert("❌ លេខកូដសម្ងាត់មិនអាចទទេបានទេ!");
+            }
+        } else if (currentPwd !== null) {
+            alert("❌ លេខកូដសម្ងាត់ចាស់មិនត្រឹមត្រូវទេ!");
+        }
+    }
+
+    function clearAllAttendance() {
+        if (isReadOnly) return;
+        if (confirm("⚠️ តើអ្នកប្រាកដជាចង់លុបទិន្នន័យវត្តមានទាំងអស់ចោលមែនទេ? សកម្មភាពនេះមិនអាចផ្លាស់ប្តូរវិញបានទេ។")) {
+            records = [];
+            saveData();
+            renderMarkArea();
+            generateReport();
+            generateMonthlyReport();
+            viewStudentHistory();
+            alert("✅ ទិន្នន័យវត្តមានត្រូវលុបសម្អាតរួចរាល់!");
+        }
+    }
+
+    function applyViewMode() {
+        const btn = document.getElementById('modeSwitchBtn');
+        const banner = document.getElementById('viewModeBanner');
+        const adminCards = document.querySelectorAll('.admin-only');
+        const adminBtns = document.querySelectorAll('.admin-only-btn');
+
+        if (isReadOnly) {
+            btn.innerText = "👁️ Mode: View-Only";
+            btn.style.background = "#fef3c7";
+            btn.style.color = "#92400e";
+            banner.style.display = "flex";
+
+            adminCards.forEach(c => c.style.display = 'none');
+            adminBtns.forEach(b => b.style.display = 'none');
+        } else {
+            btn.innerText = "🔒 Mode: Admin";
+            btn.style.background = "var(--card-bg)";
+            btn.style.color = "var(--text-main)";
+            banner.style.display = "none";
+
+            adminCards.forEach(c => c.style.display = 'block');
+            adminBtns.forEach(b => b.style.display = 'inline-flex');
+        }
+
+        renderStudents();
+        renderMarkArea();
+    }
+
+    function setToday(inputId) {
+        document.getElementById(inputId).value = new Date().toISOString().split('T')[0];
+        if (inputId === 'attDate') renderMarkArea();
+        if (inputId === 'reportDate') generateReport();
+    }
+
+    function shiftDate(inputId, days) {
+        const input = document.getElementById(inputId);
+        const current = new Date(input.value || Date.now());
+        current.setDate(current.getDate() + days);
+        input.value = current.toISOString().split('T')[0];
+        if (inputId === 'attDate') renderMarkArea();
+        if (inputId === 'reportDate') generateReport();
+    }
+
+    async function selectSyncFolder() {
+        if (isReadOnly) return;
+        try {
+            dirHandle = await window.showDirectoryPicker();
+            const badge = document.getElementById('folderStatus');
+            badge.innerText = `បានតភ្ជាប់៖ "${dirHandle.name}"`;
+            badge.style.background = "#dcfce7";
+            badge.style.color = "#166534";
+            autoSaveToFolder();
+        } catch (err) {
+            console.log("Canceled folder selection.");
+        }
+    }
+
+    async function autoSaveToFolder() {
+        if (!dirHandle || isReadOnly) return;
+        try {
+            const csvText = generateCSVText();
+            const fileHandle = await dirHandle.getFileHandle('attendance_records.csv', { create: true });
+            const writable = await fileHandle.createWritable();
+            await writable.write(csvText);
+            await writable.close();
+        } catch (err) {
+            console.error("Folder auto-save failed:", err);
+        }
+    }
+
+    function saveData() {
+        if (isReadOnly) return;
+        localStorage.setItem('students', JSON.stringify(students));
+        localStorage.setItem('records', JSON.stringify(records));
+        updateCSVArea();
+        autoSaveToFolder();
+        updateDashboard();
+        generateMonthlyReport();
+    }
+
+    function addOrEditStudent() {
+        if (isReadOnly) return;
+        const id = parseInt(document.getElementById('stdId').value);
+        const name = document.getElementById('stdName').value.trim();
+
+        if (!id || !name) {
+            alert('សូមបញ្ចូលទាំង ID និងឈ្មោះសមាជិក!');
+            return;
+        }
+
+        const existing = students.find(s => s.id === id);
+        if (existing) {
+            existing.name = name;
+            alert('ឈ្មោះសមាជិកត្រូវបានធ្វើបច្ចុប្បន្នភាព!');
+        } else {
+            students.push({ id, name });
+            alert('បានបន្ថែមសមាជិកថ្មីជោគជ័យ!');
+        }
+
+        document.getElementById('stdId').value = '';
+        document.getElementById('stdName').value = '';
+        saveData();
+        renderStudents();
+        renderMarkArea();
+        generateReport();
+        updateHistoryDropdown();
+    }
+
+    function importStudentsFromCSV() {
+        if (isReadOnly) return;
+        const fileInput = document.getElementById('csvFileInput');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert('សូមជ្រើសរើសឯកសារ CSV ជាមុនសិន!');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const lines = text.split('\n');
+            let addedCount = 0;
+
+            lines.forEach((line, idx) => {
+                if (idx === 0 || !line.trim()) return; // Skip header
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    const id = parseInt(parts[0].trim());
+                    const name = parts[1].replace(/"/g, '').trim();
+
+                    if (id && name && !students.some(s => s.id === id)) {
+                        students.push({ id, name });
+                        addedCount++;
+                    }
+                }
+            });
+
+            saveData();
+            renderStudents();
+            renderMarkArea();
+            updateHistoryDropdown();
+            alert(`✅ បាននាំចូលសមាជិកថ្មីសរុប ${addedCount} នាក់!`);
+            fileInput.value = '';
+        };
+        reader.readAsText(file);
+    }
+
+    function editStudent(id) {
+        if (isReadOnly) return;
+        const student = students.find(s => s.id === id);
+        if (student) {
+            document.getElementById('stdId').value = student.id;
+            document.getElementById('stdName').value = student.name;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function deleteStudent(id) {
+        if (isReadOnly) return;
+        if (confirm('តើអ្នកប្រាកដជាចង់លុបសមាជិកនេះមែនទេ?')) {
+            students = students.filter(s => s.id !== id);
+            records = records.filter(r => r.studentId !== id);
+            saveData();
+            renderStudents();
+            renderMarkArea();
+            generateReport();
+            updateHistoryDropdown();
+            document.getElementById('historyResult').innerHTML = '';
+        }
+    }
+
+    function renderStudents() {
+        const list = document.getElementById('studentList');
+        if (!list) return;
+        const query = document.getElementById('searchStudent')?.value.toLowerCase() || '';
+
+        if (students.length === 0) {
+            list.innerHTML = '<small style="color:gray;">មិនទាន់មានសមាជិកត្រូវបានបន្ថែមនៅឡើយទេ។</small>';
+            return;
+        }
+
+        students.sort((a, b) => a.id - b.id);
+        const filtered = students.filter(s => s.id.toString().includes(query) || s.name.toLowerCase().includes(query));
+
+        let tableHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ឈ្មោះ</th>
+                        ${!isReadOnly ? '<th style="width: 120px;">សកម្មភាព</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        filtered.forEach(s => {
+            tableHTML += `
+                <tr>
+                    <td><b>#${s.id}</b></td>
+                    <td>${s.name}</td>
+                    ${!isReadOnly ? `
+                    <td>
+                        <div style="display: flex; gap: 6px;">
+                            <button class="btn-small btn-edit" onclick="editStudent(${s.id})">កែប្រែ</button>
+                            <button class="btn-small btn-danger" onclick="deleteStudent(${s.id})">លុប</button>
+                        </div>
+                    </td>` : ''}
+                </tr>
+            `;
+        });
+
+        tableHTML += '</tbody></table>';
+        list.innerHTML = tableHTML;
+    }
+
+    function renderMarkArea() {
+        const date = document.getElementById('attDate').value;
+        const area = document.getElementById('markArea');
+        area.innerHTML = '';
+
+        if (students.length === 0) {
+            area.innerHTML = '<small style="color:gray;">សូមបន្ថែមសមាជិកជាមុនសិន។</small>';
+            return;
+        }
+
+        students.forEach(s => {
+            const existing = records.find(r => r.date === date && r.studentId === s.id);
+            const status = existing ? existing.status : 'P';
+            const timeIn = existing ? existing.timeIn || '' : '';
+            const timeOut = existing ? existing.timeOut || '' : '';
+
+            const disabledAttr = isReadOnly ? 'disabled' : '';
+
+            const div = document.createElement('div');
+            div.className = 'student-row';
+            div.innerHTML = `
+                <div class="student-header">${s.name} (ID: #${s.id})</div>
+                <label>ស្ថានភាព៖</label>
+                <select id="status-${s.id}" ${disabledAttr}>
+                    <option value="P" ${status==='P'?'selected':''}>វត្តមាន (Present)</option>
+                    <option value="L" ${status==='L'?'selected':''}>យឺត (Late)</option>
+                    <option value="A" ${status==='A'?'selected':''}>អវត្តមាន (Absent)</option>
+                    <option value="V" ${status==='V'?'selected':''}>ច្បាប់ (Leave)</option>
+                </select>
+                <div class="time-inputs">
+                    <div>
+                        <label>ម៉ោងចូល (In)៖</label>
+                        <input type="time" id="timeIn-${s.id}" value="${timeIn}" ${disabledAttr}>
+                    </div>
+                    <div>
+                        <label>ម៉ោងចេញ (Out)៖</label>
+                        <input type="time" id="timeOut-${s.id}" value="${timeOut}" ${disabledAttr}>
+                    </div>
+                </div>
+            `;
+            area.appendChild(div);
+        });
+        updateDashboard();
+    }
+
+    document.getElementById('attDate').addEventListener('change', renderMarkArea);
+
+    function saveAttendance() {
+        if (isReadOnly) return;
+        const date = document.getElementById('attDate').value;
+
+        students.forEach(s => {
+            const status = document.getElementById(`status-${s.id}`).value;
+            const timeIn = document.getElementById(`timeIn-${s.id}`).value;
+            const timeOut = document.getElementById(`timeOut-${s.id}`).value;
+
+            const index = records.findIndex(r => r.date === date && r.studentId === s.id);
+
+            if (index !== -1) {
+                records[index] = { date, studentId: s.id, status, timeIn, timeOut };
+            } else {
+                records.push({ date, studentId: s.id, status, timeIn, timeOut });
+            }
+        });
+
+        saveData();
+        alert('បានរក្សាទុកវត្តមានសម្រាប់ថ្ងៃទី ' + date + ' រួចរាល់!');
+        generateReport();
+        viewStudentHistory();
+    }
+
+    function generateReportText() {
+        const date = document.getElementById('reportDate').value;
+        const dayRecords = records.filter(r => r.date === date);
+
+        if (dayRecords.length === 0) {
+            return "មិនមានទិន្នន័យសម្រាប់ថ្ងៃទី " + date + " ទេ";
+        }
+
+        let presentList = [];
+        let absentList = [];
+        let lateCount = 0;
+        let leaveCount = 0;
+
+        dayRecords.forEach(r => {
+            const student = students.find(s => s.id === r.studentId);
+            const name = student ? student.name : "មិនស្គាល់ឈ្មោះ";
+
+            let times = '';
+            if (r.timeIn || r.timeOut) {
+                times = ` (${r.timeIn || '--:--'} -> ${r.timeOut || '--:--'})`;
+            }
+
+            if (r.status === 'P') {
+                presentList.push({ name, info: times });
+            } else if (r.status === 'L') {
+                presentList.push({ name, info: ` ${times} (យឺត)` });
+                lateCount++;
+            } else if (r.status === 'A') {
+                absentList.push({ name, info: '' });
+            } else if (r.status === 'V') {
+                absentList.push({ name, info: ' (ច្បាប់)' });
+                leaveCount++;
+            }
+        });
+
+        const totalAbsent = absentList.length;
+
+        let text = `សូមគោរពរាយការណ៍\n`;
+        text += `ថ្ងៃទី : ${date}\n`;
+        text += `សមាជិកមកធ្វើការសរុប : ${presentList.length}   យឺត : ${lateCount}\n`;
+
+        presentList.forEach((st, idx) => {
+            text += `${idx + 1}. ${st.name}${st.info}\n`;
+        });
+
+        text += `\nអវត្តមាន : ${totalAbsent}   ច្បាប់ : ${leaveCount}\n`;
+
+        absentList.forEach((st, idx) => {
+            text += `${idx + 1}. ${st.name}${st.info}\n`;
+        });
+
+        text += `\nសូមអរគុណ !`;
+        return text;
+    }
+
+    function generateReport() {
+        const box = document.getElementById('reportBox');
+        box.textContent = generateReportText();
+        updateCSVArea();
+    }
+
+    function generateMonthlyReport() {
+        const monthVal = document.getElementById('reportMonth').value;
+        const area = document.getElementById('monthlyTableArea');
+
+        if (!monthVal) {
+            area.innerHTML = '<small style="color:gray;">សូមជ្រើសរើសខែជាមុនសិន។</small>';
+            return;
+        }
+
+        if (students.length === 0) {
+            area.innerHTML = '<small style="color:gray;">មិនទាន់មានសមាជិកនៅឡើយទេ។</small>';
+            return;
+        }
+
+        const monthRecords = records.filter(r => r.date.startsWith(monthVal));
+
+        let tableHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ឈ្មោះ</th>
+                        <th style="color:#10b981;">វត្តមាន</th>
+                        <th style="color:#f59e0b;">យឺត</th>
+                        <th style="color:#ef4444;">អវត្តមាន</th>
+                        <th style="color:#0ea5e9;">ច្បាប់</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        students.sort((a, b) => a.id - b.id);
+
+        students.forEach(s => {
+            const sRecs = monthRecords.filter(r => r.studentId === s.id);
+            let p = 0, l = 0, a = 0, v = 0;
+
+            sRecs.forEach(r => {
+                if (r.status === 'P') p++;
+                if (r.status === 'L') l++;
+                if (r.status === 'A') a++;
+                if (r.status === 'V') v++;
+            });
+
+            tableHTML += `
+                <tr>
+                    <td><b>#${s.id}</b></td>
+                    <td>${s.name}</td>
+                    <td><b>${p}</b></td>
+                    <td><b>${l}</b></td>
+                    <td><b>${a}</b></td>
+                    <td><b>${v}</b></td>
+                </tr>
+            `;
+        });
+
+        tableHTML += '</tbody></table>';
+        area.innerHTML = tableHTML;
+    }
+
+    function downloadMonthlyCSV() {
+        const monthVal = document.getElementById('reportMonth').value;
+        if (!monthVal) return;
+
+        const monthRecords = records.filter(r => r.date.startsWith(monthVal));
+        let csv = `\uFEFFMonthly Attendance Summary (${monthVal})\nID,Student Name,Present,Late,Absent,Leave\n`;
+
+        students.sort((a, b) => a.id - b.id);
+        students.forEach(s => {
+            const sRecs = monthRecords.filter(r => r.studentId === s.id);
+            let p = 0, l = 0, a = 0, v = 0;
+            sRecs.forEach(r => {
+                if (r.status === 'P') p++;
+                if (r.status === 'L') l++;
+                if (r.status === 'A') a++;
+                if (r.status === 'V') v++;
+            });
+            csv += `${s.id},"${s.name}",${p},${l},${a},${v}\n`;
+        });
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `Monthly_Report_${monthVal}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function saveTextFile() {
+        const reportText = generateReportText();
+        const date = document.getElementById('reportDate').value;
+        
+        const blob = new Blob([reportText], { type: "text/plain;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `Attendance_${date}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function generateCSVText() {
+        let text = "\uFEFFDate,Student ID,Student Name,Status,Time In,Time Out\n";
+        if (records.length === 0) return text;
+
+        records.sort((a, b) => a.date.localeCompare(b.date) || a.studentId - b.studentId);
+
+        records.forEach(r => {
+            const student = students.find(s => s.id === r.studentId);
+            const name = student ? student.name : "Unknown";
+            let statusName = "Present";
+            if (r.status === 'L') statusName = "Late";
+            if (r.status === 'A') statusName = "Absent";
+            if (r.status === 'V') statusName = "Leave";
+
+            text += `${r.date},${r.studentId},"${name}",${statusName},${r.timeIn || ''},${r.timeOut || ''}\n`;
+        });
+        return text;
+    }
+
+    function updateCSVArea() {
+        document.getElementById('csvArea').value = generateCSVText();
+    }
+
+    function downloadCSVFile() {
+        const csvText = generateCSVText();
+        const blob = new Blob([csvText], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "attendance_records.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function copyCSV() {
+        const text = generateCSVText();
+        navigator.clipboard.writeText(text).then(() => {
+            alert("បានចម្លងទិន្នន័យ CSV រួចរាល់!");
+        }).catch(() => {
+            const csvArea = document.getElementById('csvArea');
+            csvArea.select();
+            alert("ទិន្នន័យត្រូវបានជ្រើសរើស!");
+        });
+    }
+
+    function updateDashboard() {
+        const date = document.getElementById('attDate').value;
+        const dayRecords = records.filter(r => r.date === date);
+
+        let p = 0, l = 0, a = 0, v = 0;
+        dayRecords.forEach(r => {
+            if (r.status === 'P') p++;
+            if (r.status === 'L') l++;
+            if (r.status === 'A') a++;
+            if (r.status === 'V') v++;
+        });
+
+        document.getElementById('statP').innerText = p;
+        document.getElementById('statL').innerText = l;
+        document.getElementById('statA').innerText = a;
+        document.getElementById('statV').innerText = v;
+
+        const total = students.length;
+        const rate = total > 0 ? Math.round(((p + l) / total) * 100) : 0;
+
+        document.getElementById('ratePercent').innerText = `${rate}%`;
+        document.getElementById('progressBar').style.width = `${rate}%`;
+    }
+
+    function updateHistoryDropdown() {
+        const select = document.getElementById('selectStudentHistory');
+        const selectedValue = select.value;
+        select.innerHTML = '<option value="">-- ជ្រើសរើសឈ្មោះ --</option>';
+
+        students.sort((a, b) => a.id - b.id);
+        students.forEach(s => {
+            select.innerHTML += `<option value="${s.id}">[ID: #${s.id}] ${s.name}</option>`;
+        });
+
+        select.value = selectedValue;
+    }
+
+    function viewStudentHistory() {
+        const studentId = parseInt(document.getElementById('selectStudentHistory').value);
+        const resultDiv = document.getElementById('historyResult');
+
+        if (!studentId) {
+            resultDiv.innerHTML = '';
+            return;
+        }
+
+        const student = students.find(s => s.id === studentId);
+        const studentRecords = records.filter(r => r.studentId === studentId);
+
+        let present = 0, late = 0, absent = 0, leave = 0;
+
+        studentRecords.forEach(r => {
+            if (r.status === 'P') present++;
+            else if (r.status === 'L') late++;
+            else if (r.status === 'A') absent++;
+            else if (r.status === 'V') leave++;
+        });
+
+        const totalDays = studentRecords.length;
+        const attendRate = totalDays > 0 ? Math.round(((present + late) / totalDays) * 100) : 0;
+
+        let html = `
+            <div style="margin-top:10px; font-size:13px; font-weight:600;">
+                អត្រាវត្តមានសរុបទាំងអស់៖ <span style="color:var(--primary);">${attendRate}%</span> (${present + late} / ${totalDays} ថ្ងៃ)
+            </div>
+            <div class="stats-grid" style="margin-top:10px;">
+                <div class="stat-box" style="background:rgba(16,185,129,0.1); color:#10b981;">🟢 វត្តមាន<b>${present} ថ្ងៃ</b></div>
+                <div class="stat-box" style="background:rgba(245,158,11,0.1); color:#f59e0b;">🟡 យឺត<b>${late} ថ្ងៃ</b></div>
+                <div class="stat-box" style="background:rgba(239,68,68,0.1); color:#ef4444;">🔴 អវត្តមាន<b>${absent} ថ្ងៃ</b></div>
+                <div class="stat-box" style="background:rgba(14,165,233,0.1); color:#0ea5e9;">🔵 ច្បាប់<b>${leave} ថ្ងៃ</b></div>
+            </div>
+            <br>
+            <b>ប្រវត្តិនៃការកត់ត្រា៖</b>
+        `;
+
+        if (studentRecords.length === 0) {
+            html += '<p><small style="color:gray;">មិនទាន់មានប្រវត្តិអវត្តមាន/វត្តមាននៅឡើយទេ។</small></p>';
+        } else {
+            studentRecords.sort((a, b) => b.date.localeCompare(a.date));
+
+            html += `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ថ្ងៃខែ</th>
+                            <th>ស្ថានភាព</th>
+                            <th>ម៉ោង (ចូល/ចេញ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            studentRecords.forEach(r => {
+                let statusText = "វត្តមាន (Present)";
+                if (r.status === 'L') statusText = "យឺត (Late)";
+                if (r.status === 'A') statusText = "អវត្តមាន (Absent)";
+                if (r.status === 'V') statusText = "ច្បាប់ (Leave)";
+
+                let timeStr = (r.timeIn || '--:--') + ' -> ' + (r.timeOut || '--:--');
+
+                html += `
+                    <tr>
+                        <td>${r.date}</td>
+                        <td>${statusText}</td>
+                        <td>${timeStr}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+        }
+
+        resultDiv.innerHTML = html;
+    }
+
+    applyViewMode();
+    renderStudents();
+    renderMarkArea();
+    generateReport();
+    updateCSVArea();
+    updateHistoryDropdown();
+    generateMonthlyReport();
+</script>
+
+</body>
+</html>
