@@ -315,7 +315,7 @@
               <h3 style="font-size: 1.05rem; color: var(--benefit-gold);">🌟 ទទួលបានសិទ្ធិពិសេសចេញមុនថ្ងៃនេះ (Special Benefit Days)</h3>
               <span class="badge-benefit" id="benefitCountBadge">0 នាក់</span>
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">បុគ្គលិក/និស្សិតដែលមានឈ្មោះខាងក្រោម អាចធ្វើការចេញមុនម៉ោងได้ដោយមិនគិតជា "ចេញមុន (Early Leave)"</p>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">បុគ្គលិក/និស្សិតដែលមានឈ្មោះខាងក្រោម អាចធ្វើការចេញមុនម៉ោងបានដោយមិនគិតជា "ចេញមុន (Early Leave)"</p>
             <div id="dashboardBenefitList" style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
               <!-- Dynamic Cards -->
             </div>
@@ -387,12 +387,9 @@
         <div class="form-row" style="margin-bottom: 24px;">
           <div class="stat-card" style="flex-direction: column; align-items: flex-start;">
             <h4>កត់ត្រាវត្តមាន (Manual Check-In/Out)</h4>
-            <!-- Manual Selection Component -->
-            <div class="form-group" style="width: 100%;">
+            <div class="form-group" style="width: 100%; margin-top: 12px;">
               <label>ជ្រើសរើសឈ្មោះ (Choose Member List)</label>
-              <select class="form-control" id="manualEmpSelect">
-                <!-- Populated dynamically with all active employees/students -->
-              </select>
+              <select class="form-control" id="manualEmpSelect"></select>
             </div>
             <div class="form-group" style="width: 100%;">
               <label>ប្រភេទវត្តមាន / ច្បាប់</label>
@@ -1036,11 +1033,6 @@
         
         tbody.innerHTML = '';
 
-        if (records.length === 0) {
-          // Ensure ALL members are listed here even if they don't have attendance records for today yet, or ensure all active members appear
-          // Let's make sure ALL members are listed so user can easily choose time via clock icon
-        }
-
         // Synchronize list to include ALL members for the chosen date so user can easily pick time
         const allEmps = State.employees;
         allEmps.forEach(emp => {
@@ -1207,7 +1199,6 @@
         const query = document.getElementById('dashSearchInput')?.value.toLowerCase().trim() || '';
 
         const filteredAtt = State.attendance.filter(a => a.date === filterDate);
-        const searchFilteredAtt = filteredAtt.filter(a => a.empName.toLowerCase().includes(query) || (a.empCode && a.empCode.toLowerCase().includes(query)));
 
         if(document.getElementById('dashTotalEmp')) document.getElementById('dashTotalEmp').innerText = State.employees.length;
         if(document.getElementById('dashPresent')) document.getElementById('dashPresent').innerText = filteredAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
@@ -1609,6 +1600,7 @@
       State.attendance = await Database.getAll('attendance');
       
       injectUIUpdates();
+      await EmployeeApp.render();
       await DashboardModule.render();
       await AttendanceUI.renderAttendanceList();
     });
