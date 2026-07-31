@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="km" data-theme="emerald">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន | Enterprise Attendance Management System</title>
+  
+  <!-- Google Fonts for Khmer & English -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kantenbold&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- External JS Libraries (CDNs) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       ENTERPRISE DESIGN SYSTEM & CSS VARIABLES
+       ========================================================================== */
+    :root {
+      --font-main: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif;
+      --font-brand: 'Kantenbold', 'Plus Jakarta Sans', sans-serif;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 30px;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 24px rgba(0,0,0,0.12);
+      --shadow-glow: 0 0 15px rgba(234, 179, 8, 0.4);
+    }
+
+    /* THEME DEFINITIONS */
+    [data-theme="emerald"] {
+      --bg-main: #f4f7f6;
+      --bg-card: #ffffff;
+      --bg-sidebar: #064e3b;
+      --text-sidebar: #ecfdf5;
+      --sidebar-active: #059669;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --primary: #059669;
+      --primary-hover: #047857;
+      --accent: #f59e0b;
+      --border: #e2e8f0;
+      --benefit-gold: #d97706;
+      --benefit-bg: #fef3c7;
+    }
+    [data-theme="dark"] {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-sidebar: #0f172a;
+      --text-sidebar: #94a3b8;
+      --sidebar-active: #3b82f6;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #10b981;
+      --border: #334155;
+      --benefit-gold: #fbbf24;
+      --benefit-bg: #451a03;
+    }
+    [data-theme="cyberpunk"] {
+      --bg-main: #0d0221;
+      --bg-card: #190a38;
+      --bg-sidebar: #0f051d;
+      --text-sidebar: #00f5d4;
+      --sidebar-active: #7b2cbf;
+      --text-primary: #00f5d4;
+      --text-secondary: #f72585;
+      --primary: #f72585;
+      --primary-hover: #b5179e;
+      --accent: #7209b7;
+      --border: #3c096c;
+      --benefit-gold: #ffee32;
+      --benefit-bg: #5c0099;
+    }
+    [data-theme="hacker"] {
+      --bg-main: #000000;
+      --bg-card: #0a0a0a;
+      --bg-sidebar: #050505;
+      --text-sidebar: #00ff00;
+      --sidebar-active: #003300;
+      --text-primary: #00ff00;
+      --text-secondary: #008800;
+      --primary: #00ff00;
+      --primary-hover: #00cc00;
+      --accent: #00ff00;
+      --border: #003300;
+      --benefit-gold: #ffff00;
+      --benefit-bg: #112200;
+    }
+    [data-theme="royal"] {
+      --bg-main: #1a1b26;
+      --bg-card: #24283b;
+      --bg-sidebar: #16161e;
+      --text-sidebar: #a9b1d6;
+      --sidebar-active: #7aa2f7;
+      --text-primary: #c0caf5;
+      --text-secondary: #9aa5ce;
+      --primary: #7aa2f7;
+      --primary-hover: #2ac3de;
+      --accent: #bb9af7;
+      --border: #414868;
+      --benefit-gold: #e0af68;
+      --benefit-bg: #392a1d;
+    }
+
+    /* GLOBAL RESETS & BASE STYLES */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); }
+    body { background-color: var(--bg-main); color: var(--text-primary); transition: var(--transition); display: flex; height: 100vh; overflow: hidden; }
+
+    /* LAYOUT: SIDEBAR & MAIN AREA */
+    aside.sidebar { width: 280px; background-color: var(--bg-sidebar); color: var(--text-sidebar); display: flex; flex-direction: column; transition: var(--transition); z-index: 100; border-right: 1px solid var(--border); }
+    .brand { padding: 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .brand i { font-size: 1.8rem; color: var(--primary); }
+    .brand h2 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; }
+
+    .nav-menu { list-style: none; padding: 16px 12px; flex: 1; overflow-y: auto; }
+    .nav-item { margin-bottom: 4px; }
+    .nav-link { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: inherit; text-decoration: none; border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 500; transition: var(--transition); }
+    .nav-link:hover, .nav-link.active { background-color: var(--sidebar-active); color: #fff; }
+    .nav-link i { font-size: 1.2rem; width: 24px; text-align: center; }
+
+    main.content-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* TOP NAVBAR */
+    header.navbar { height: 70px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; z-index: 90; }
+    .header-left { display: flex; align-items: center; gap: 20px; }
+    .clock-display { font-size: 1.1rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.03); padding: 6px 14px; border-radius: var(--radius-md); }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+
+    .btn { padding: 10px 20px; border-radius: var(--radius-sm); border: none; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+    .btn-primary { background-color: var(--primary); color: #fff; }
+    .btn-primary:hover { background-color: var(--primary-hover); }
+    .btn-danger { background-color: #ef4444; color: #fff; }
+    .btn-danger:hover { background-color: #dc2626; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+    .btn-outline:hover { background: rgba(0,0,0,0.05); }
+
+    /* VIEW CONTAINER */
+    .view-container { flex: 1; padding: 28px; overflow-y: auto; }
+    .view-section { display: none; }
+    .view-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* DASHBOARD GRID & CARDS */
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 28px; }
+    .stat-card { background-color: var(--bg-card); border: 1px solid var(--border); padding: 20px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 16px; transition: var(--transition); }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .stat-icon { width: 54px; height: 54px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: rgba(0,0,0,0.04); }
+    .stat-info h4 { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-info h2 { font-size: 1.8rem; font-weight: 700; margin-top: 4px; }
+
+    /* SPECIAL BENEFIT WIDGET & BADGES */
+    .benefit-card-highlight { background: linear-gradient(135deg, var(--bg-card) 0%, var(--benefit-bg) 100%); border: 2px solid var(--benefit-gold); box-shadow: var(--shadow-glow); }
+    .badge-benefit { background-color: var(--benefit-gold); color: #fff; padding: 4px 10px; border-radius: var(--radius-xl); font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; animation: pulse 2s infinite; }
+    
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(217, 119, 6, 0); } 100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); } }
+
+    /* TABLES & DATA GRIDS */
+    .table-container { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 14px 18px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    th { background-color: rgba(0,0,0,0.02); font-weight: 600; color: var(--text-secondary); }
+    tr:hover { background-color: rgba(0,0,0,0.015); }
+
+    /* MODAL WINDOWS */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: var(--bg-card); width: 100%; max-width: 650px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); overflow: hidden; animation: popUp 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes popUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 24px; max-height: 75vh; overflow-y: auto; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
+
+    /* FORMS & INPUTS */
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+    .form-control { width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background-color: var(--bg-main); color: var(--text-primary); font-size: 0.9rem; transition: var(--transition); }
+    .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* REPORT VIEW SPECIFIC */
+    .report-paper { background: #fff; color: #000; padding: 40px; border-radius: var(--radius-sm); font-family: 'Kantumruy Pro', monospace; line-height: 1.6; border: 1px solid var(--border); box-shadow: var(--shadow-md); white-space: pre-wrap; font-size: 1rem; }
+
+    /* TOAST NOTIFICATIONS */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: var(--bg-card); color: var(--text-primary); border-left: 5px solid var(--primary); padding: 14px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; min-width: 300px; animation: slideIn 0.3s forwards; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <h2>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន</h2>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item"><a href="#dashboard" class="nav-link active" data-view="dashboard"><i class="fa-solid fa-chart-pie"></i> ផ្ទាំងព័ត៌មានដើម</a></li>
+      <li class="nav-item"><a href="#employees" class="nav-link" data-view="employees"><i class="fa-solid fa-users-line"></i> គ្រប់គ្រងបុគ្គលិក/និស្សិត</a></li>
+      <li class="nav-item"><a href="#attendance" class="nav-link" data-view="attendance"><i class="fa-solid fa-clipboard-user"></i> ការកត់ត្រាវត្តមាន</a></li>
+      <li class="nav-item"><a href="#benefits" class="nav-link" data-view="benefits"><i class="fa-solid fa-star"></i> ថ្ងៃអត្ថប្រយោជន៍ពិសេស</a></li>
+      <li class="nav-item"><a href="#reports" class="nav-link" data-view="reports"><i class="fa-solid fa-file-invoice"></i> របាយការណ៍ប្រចាំថ្ងៃ (ខ្មែរ)</a></li>
+      <li class="nav-item"><a href="#analytics" class="nav-link" data-view="analytics"><i class="fa-solid fa-chart-line"></i> ការវិភាគទិន្នន័យ</a></li>
+      <li class="nav-item"><a href="#settings" class="nav-link" data-view="settings"><i class="fa-solid fa-gears"></i> ការកំណត់ប្រព័ន្ធ</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="content-area">
+    <!-- TOP NAVBAR -->
+    <header class="navbar">
+      <div class="header-left">
+        <div class="clock-display" id="liveClock">
+          <i class="fa-regular fa-clock"></i> <span id="clockTime">08:00:00 AM</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <select class="form-control" id="themeSelector" onchange="System.setTheme(this.value)" style="width: auto;">
+          <option value="emerald">Emerald (Default)</option>
+          <option value="dark">Dark Enterprise</option>
+          <option value="cyberpunk">Cyberpunk Neon</option>
+          <option value="hacker">Hacker Matrix</option>
+          <option value="royal">Royal Purple</option>
+        </select>
+        <button class="btn btn-primary" onclick="AttendanceApp.openScanner()"><i class="fa-solid fa-qrcode"></i> ស្កែន QR Code</button>
+      </div>
+    </header>
+
+    <!-- VIEWS -->
+    <div class="view-container">
+
+      <!-- 1. DASHBOARD VIEW -->
+      <section id="dashboard" class="view-section active">
+        <div class="dashboard-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #3b82f6;"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-info">
+              <h4>ចំនួនសរុប</h4>
+              <h2 id="dashTotalEmp">0</h2>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #10b981;"><i class="fa-solid fa-user-check"></i></div>
+            <div class="stat-info">
+              <h4>វត្តមានថ្ងៃនេះ</h4>
+              <h2 id="dashPresent">0</h2>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #f59e0b;"><i class="fa-solid fa-user-clock"></i></div>
+            <div class="stat-info">
+              <h4>មកយឺត</h4>
+              <h2 id="dashLate">0</h2>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="color: #ef4444;"><i class="fa-solid fa-user-xmark"></i></div>
+            <div class="stat-info">
+              <h4>អវត្តមាន / ច្បាប់</h4>
+              <h2 id="dashAbsent">0</h2>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPECIAL BENEFIT WIDGET -->
+        <div class="stat-card benefit-card-highlight" style="margin-bottom: 28px;">
+          <div class="stat-icon" style="color: #d97706; font-size: 2rem;"><i class="fa-solid fa-star"></i></div>
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 1.1rem; color: var(--benefit-gold);">🌟 ទទួលបានសិទ្ធិពិសេសចេញមុនថ្ងៃនេះ (Special Benefit Days)</h3>
+              <span class="badge-benefit" id="benefitCountBadge">0 នាក់</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">បុគ្គលិក/និស្សិតដែលមានឈ្មោះខាងក្រោម អាចធ្វើការចេញមុនម៉ោងបានដោយមិនគិតជា "ចេញមុន (Early Leave)"</p>
+            <div id="dashboardBenefitList" style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+              <!-- Dynamic Cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT ACTIVITY TABLE -->
+        <div class="table-container">
+          <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); font-weight: 700;">
+            វត្តមានថ្មីៗចុងក្រោយថ្ងៃនេះ
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>អត្តលេខ</th>
+                <th>ឈ្មោះពេញ</th>
+                <th>មុខជំនាញ/ផ្នែក</th>
+                <th>ម៉ោងចូល</th>
+                <th>ម៉ោងចេញ</th>
+                <th>ស្ថានភាព</th>
+              </tr>
+            </thead>
+            <tbody id="dashRecentTable">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 2. EMPLOYEE / STUDENT MANAGEMENT VIEW -->
+      <section id="employees" class="view-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3>បញ្ជីឈ្មោះបុគ្គលិក / និស្សិតសរុប</h3>
+          <button class="btn btn-primary" onclick="EmployeeApp.openModal()"><i class="fa-solid fa-plus"></i> បន្ថែមថ្មី</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>រូបថត</th>
+                <th>អត្តលេខ</th>
+                <th>ឈ្មោះពេញ</th>
+                <th>មុខជំនាញ / ផ្នែក</th>
+                <th>តួនាទី / ឆ្នាំទី</th>
+                <th>ថ្ងៃអត្ថប្រយោជន៍</th>
+                <th>សកម្មភាព</th>
+              </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+              <!-- Dynamic Content -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3. ATTENDANCE SCANNER / MANUAL VIEW -->
+      <section id="attendance" class="view-section">
+        <div class="form-row" style="margin-bottom: 24px;">
+          <div class="stat-card" style="flex-direction: column; align-items: flex-start;">
+            <h4>កត់ត្រាវត្តមាន (Manual Check-In/Out)</h4>
+            <div class="form-group" style="width: 100%; margin-top: 12px;">
+              <label>ជ្រើសរើសឈ្មោះ</label>
+              <select class="form-control" id="manualEmpSelect"></select>
+            </div>
+            <div class="form-group" style="width: 100%;">
+              <label>ប្រភេទវត្តមាន / ច្បាប់</label>
+              <select class="form-control" id="manualStatusSelect">
+                <option value="Present">វត្តមានធម្មតា (Present)</option>
+                <option value="Leave">សុំច្បាប់ (Leave)</option>
+                <option value="Absent">អវត្តមាន (Absent)</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 10px; width: 100%;">
+              <button class="btn btn-primary" style="flex:1;" onclick="AttendanceApp.manualCheck(true)">Check IN (ចូល)</button>
+              <button class="btn btn-outline" style="flex:1;" onclick="AttendanceApp.manualCheck(false)">Check OUT (ចេញ)</button>
+            </div>
+          </div>
+          <div class="stat-card" style="flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <i class="fa-solid fa-qrcode" style="font-size: 3rem; color: var(--primary); margin-bottom: 12px;"></i>
+            <h4>ស្កែនកាត QR Code</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">ប្រើប្រាស់កាមេរ៉ាឧបករណ៍ដើម្បីស្កែន QR Code</p>
+            <button class="btn btn-primary" onclick="AttendanceApp.openScanner()">បើកកាមេរ៉ាស្កែន</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. SPECIAL BENEFIT MANAGEMENT VIEW -->
+      <section id="benefits" class="view-section">
+        <div class="stat-card benefit-card-highlight" style="margin-bottom: 20px;">
+          <div>
+            <h2>🌟 ការគ្រប់គ្រងថ្ងៃអត្ថប្រយោជន៍ពិសេស (Early Leave Privilege)</h2>
+            <p style="margin-top: 6px; color: var(--text-secondary);">កំណត់ និងគ្រប់គ្រងថ្ងៃដែលទទួលបានសិទ្ធិពិសេសចេញមុនម៉ោង អាទិត្យ ដល់ សៅរ៍</p>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ឈ្មោះពេញ</th>
+                <th>មុខជំនាញ / ផ្នែក</th>
+                <th>ថ្ងៃទទួលបានសិទ្ធិ (Benefit Days)</th>
+                <th>ម៉ោងអនុញ្ញាតឱ្យចេញ</th>
+                <th>សកម្មភាព</th>
+              </tr>
+            </thead>
+            <tbody id="benefitScheduleTable">
+              <!-- Dynamic Benefit Content -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 5. KHMER DAILY REPORT VIEW -->
+      <section id="reports" class="view-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3>របាយការណ៍វត្តមានប្រចាំថ្ងៃ</h3>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-outline" onclick="ReportModule.copyText()"><i class="fa-solid fa-copy"></i> ចម្លងអត្ថបទ</button>
+            <button class="btn btn-primary" onclick="ReportModule.exportPDF()"><i class="fa-solid fa-file-pdf"></i> ទាញយក PDF</button>
+            <button class="btn btn-primary" style="background-color: #16a34a;" onclick="ReportModule.exportExcel()"><i class="fa-solid fa-file-excel"></i> ទាញយក Excel</button>
+          </div>
+        </div>
+        <div class="report-paper" id="khmerReportPaper">
+          <!-- Khmer Report Render Output -->
+        </div>
+      </section>
+
+      <!-- 6. ANALYTICS VIEW -->
+      <section id="analytics" class="view-section">
+        <div class="form-row">
+          <div class="stat-card" style="height: 380px;">
+            <canvas id="attendanceChart"></canvas>
+          </div>
+          <div class="stat-card" style="height: 380px;">
+            <canvas id="deptChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. SETTINGS VIEW -->
+      <section id="settings" class="view-section">
+        <!-- Managed Dynamically -->
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL: ADD / EDIT EMPLOYEE/STUDENT -->
+  <div class="modal-overlay" id="employeeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="empModalTitle">បន្ថែមទិន្នន័យថ្មី</h3>
+        <button class="btn btn-outline" style="padding: 4px 10px;" onclick="EmployeeApp.closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="empForm">
+          <input type="hidden" id="empId">
+          <div class="form-row">
+            <div class="form-group">
+              <label>អត្តលេខ (ID Code)</label>
+              <input type="text" class="form-control" id="empCode" placeholder="ឧ. STU-001" required>
+            </div>
+            <div class="form-group">
+              <label>ឈ្មោះពេញ (Full Name)</label>
+              <input type="text" class="form-control" id="empName" placeholder="ឧ. សុខ ដារ៉ា" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>មុខជំនាញសាកលវិទ្យាល័យ / ផ្នែក</label>
+              <select class="form-control" id="empMajor" required>
+                <option value="">-- ជ្រើសរើសមុខជំនាញ / ផ្នែក --</option>
+                
+                <!-- វិទ្យាសាស្ត្រ និង បច្ចេកវិទ្យា -->
+                <optgroup label="💻 វិទ្យាសាស្ត្រ និង បច្ចេកវិទ្យា (Science & Tech)">
+                  <option value="វិទ្យាសាស្ត្រកុំព្យូទ័រ (Computer Science)">វិទ្យាសាស្ត្រកុំព្យូទ័រ (Computer Science)</option>
+                  <option value="បច្ចេកវិទ្យាព័ត៌មាន (Information Technology)">បច្ចេកវិទ្យាព័ត៌មាន (Information Technology)</option>
+                  <option value="វិស្វកម្មសូហ្វវែរ (Software Engineering)">វិស្វកម្មសូហ្វវែរ (Software Engineering)</option>
+                  <option value="សុវត្ថិភាពស៊ីប័រ (Cyber Security)">សុវត្ថិភាពស៊ីប័រ (Cyber Security)</option>
+                  <option value="វិទ្យាសាស្ត្រទិន្នន័យ & AI (Data Science & AI)">វិទ្យាសាស្ត្រទិន្នន័យ & AI (Data Science & AI)</option>
+                  <option value="ប្រព័ន្ធបណ្តាញអ៊ីនធឺណិត (Network Engineering)">ប្រព័ន្ធបណ្តាញអ៊ីនធឺណិត (Network Engineering)</option>
+                </optgroup>
+
+                <!-- វិស្វកម្ម -->
+                <optgroup label="🏗️ វិស្វកម្ម (Engineering)">
+                  <option value="វិស្វកម្មសំណង់ស៊ីវិល (Civil Engineering)">វិស្វកម្មសំណង់ស៊ីវិល (Civil Engineering)</option>
+                  <option value="វិស្វកម្មអគ្គិសនី & អេឡិចត្រូនិក (Electrical Engineering)">វិស្វកម្មអគ្គិសនី & អេឡិចត្រូនិក (Electrical Engineering)</option>
+                  <option value="វិស្វកម្មមេកានិច (Mechanical Engineering)">វិស្វកម្មមេកានិច (Mechanical Engineering)</option>
+                  <option value="វិស្វកម្មស្ថាបត្យកម្ម (Architecture)">វិស្វកម្មស្ថាបត្យកម្ម (Architecture)</option>
+                  <option value="វិស្វកម្មបរិស្ថាន (Environmental Engineering)">វិស្វកម្មបរិស្ថាន (Environmental Engineering)</option>
+                </optgroup>
+
+                <!-- ធុរកិច្ច និង សេដ្ឋកិច្ច -->
+                <optgroup label="📈 ធុរកិច្ច និង សេដ្ឋកិច្ច (Business & Economics)">
+                  <option value="គ្រប់គ្រងអាជីវកម្ម (Business Management)">គ្រប់គ្រងអាជីវកម្ម (Business Management)</option>
+                  <option value="គណនេយ្យ និង ហិរញ្ញវត្ថុ (Accounting & Finance)">គណនេយ្យ និង ហិរញ្ញវត្ថុ (Accounting & Finance)</option>
+                  <option value="ទីផ្សារ និង ពាណិជ្ជកម្មឌីជីថល (Digital Marketing)">ទីផ្សារ និង ពាណិជ្ជកម្មឌីជីថល (Digital Marketing)</option>
+                  <option value="សេដ្ឋកិច្ចវិទ្យា (Economics)">សេដ្ឋកិច្ចវិទ្យា (Economics)</option>
+                  <option value="ពាណិជ្ជកម្មអន្តរជាតិ (International Business)">ពាណិជ្ជកម្មអន្តរជាតិ (International Business)</option>
+                  <option value="គ្រប់គ្រងសណ្ឋាគារ & ទេសចរណ៍ (Hospitality & Tourism)">គ្រប់គ្រងសណ្ឋាគារ & ទេសចរណ៍ (Hospitality & Tourism)</option>
+                </optgroup>
+
+                <!-- វិទ្យាសាស្ត្រសុខាភិបាល -->
+                <optgroup label="🩺 វិទ្យាសាស្ត្រសុខាភិបាល (Health Sciences)">
+                  <option value="វេជ្ជសាស្ត្រទូទៅ (General Medicine)">វេជ្ជសាស្ត្រទូទៅ (General Medicine)</option>
+                  <option value="ទន្តវជ្ជសាស្ត្រ (Dentistry)">ទន្តវជ្ជសាស្ត្រ (Dentistry)</option>
+                  <option value="ឱសថសាស្ត្រ (Pharmacy)">ឱសថសាស្ត្រ (Pharmacy)</option>
+                  <option value="គិលានុបដ្ឋាកសាស្ត្រ (Nursing)">គិលានុបដ្ឋាកសាស្ត្រ (Nursing)</option>
+                  <option value="បរិស្ថានសុខភាព (Public Health)">បរិស្ថានសុខភាព (Public Health)</option>
+                </optgroup>
+
+                <!-- សង្គមសាស្ត្រ និង ភាសាបរទេស -->
+                <optgroup label="🌐 សង្គមសាស្ត្រ និង ភាសាបរទេស (Humanities & Languages)">
+                  <option value="ទំនាក់ទំនងអន្តរជាតិ (International Relations)">ទំនាក់ទំនងអន្តរជាតិ (International Relations)</option>
+                  <option value="នីតិសាស្ត្រ / ច្បាប់ (Law)">នីតិសាស្ត្រ / ច្បាប់ (Law)</option>
+                  <option value="អក្សរសាស្ត្រអង់គ្លេស (English Literature/TEFL)">អក្សរសាស្ត្រអង់គ្លេស (English Literature/TEFL)</option>
+                  <option value="ភាសាចិន (Chinese Studies)">ភាសាចិន (Chinese Studies)</option>
+                  <option value="ចិត្តវិទ្យា (Psychology)">ចិត្តវិទ្យា (Psychology)</option>
+                  <option value="សារព័ត៌មាន & ប្រព័ន្ធផ្សព្វផ្សាយ (Media & Mass Comm)">សារព័ត៌មាន & ប្រព័ន្ធផ្សព្វផ្សាយ (Media & Mass Comm)</option>
+                </optgroup>
+
+                <!-- សិល្បៈ និង រចនា -->
+                <optgroup label="🎨 សិល្បៈ និង រចនា (Art & Design)">
+                  <option value="រចនាក្រាហ្វិក (Graphic Design)">រចនាក្រាហ្វិក (Graphic Design)</option>
+                  <option value="រចនាផ្ទៃក្នុង (Interior Design)">រចនាផ្ទៃក្នុង (Interior Design)</option>
+                  <option value="ផលិកម្មភាពយន្ត (Film Production)">ផលិកម្មភាពយន្ត (Film Production)</option>
+                </optgroup>
+                
+                <!-- ផ្នែកសាជីវកម្ម -->
+                <optgroup label="🏢 ផ្នែកសាជីវកម្ម / ក្រុមហ៊ុន (Corporate)">
+                  <option value="IT & Software">IT & Software</option>
+                  <option value="Human Resources">Human Resources</option>
+                  <option value="Accounting">Accounting</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Operations">Operations</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>តួនាទី / ឆ្នាំសិក្សា (Position / Year)</label>
+              <input type="text" class="form-control" id="empPosition" placeholder="ឧ. និស្សិតឆ្នាំទី ៣" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>កំណត់ថ្ងៃអត្ថប្រយោជន៍ពិសេស (Special Benefit Days)</label>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px;">
+              <label><input type="checkbox" name="benefitDays" value="0"> អាទិត្យ</label>
+              <label><input type="checkbox" name="benefitDays" value="1"> ច័ន្ទ</label>
+              <label><input type="checkbox" name="benefitDays" value="2"> អង្គារ</label>
+              <label><input type="checkbox" name="benefitDays" value="3"> ពុធ</label>
+              <label><input type="checkbox" name="benefitDays" value="4"> ព្រហស្បតិ៍</label>
+              <label><input type="checkbox" name="benefitDays" value="5"> សុក្រ</label>
+              <label><input type="checkbox" name="benefitDays" value="6"> សៅរ៍</label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="EmployeeApp.closeModal()">បោះបង់</button>
+        <button class="btn btn-primary" onclick="EmployeeApp.save()">រក្សាទុក</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: QR SCANNER -->
+  <div class="modal-overlay" id="scannerModal">
+    <div class="modal-content" style="max-width: 450px;">
+      <div class="modal-header">
+        <h3>ស្កែន QR Code</h3>
+        <button class="btn btn-outline" onclick="AttendanceApp.closeScanner()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="reader" style="width: 100%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastBox"></div>
+
+  <!-- MAIN JAVASCRIPT ENGINE -->
+  <script>
+    /* ==========================================================================
+       ENTERPRISE CORE SYSTEM & DATABASE ARCHITECTURE
+       ========================================================================== */
+    const DB_NAME = 'EnterpriseAttendanceDB';
+    const DB_VERSION = 1;
+
+    class Database {
+      static async getStore() {
+        return new Promise((resolve) => {
+          const req = indexedDB.open(DB_NAME, DB_VERSION);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains('employees')) db.createObjectStore('employees', { keyPath: 'id' });
+            if (!db.objectStoreNames.contains('attendance')) db.createObjectStore('attendance', { keyPath: 'id' });
+          };
+          req.onsuccess = (e) => resolve(e.target.result);
+        });
+      }
+
+      static async getAll(storeName) {
+        const db = await this.getStore();
+        return new Promise((resolve) => {
+          const tx = db.transaction(storeName, 'readonly');
+          const store = tx.objectStore(storeName);
+          const req = store.getAll();
+          req.onsuccess = () => resolve(req.result || []);
+        });
+      }
+
+      static async save(storeName, item) {
+        const db = await this.getStore();
+        return new Promise((resolve) => {
+          const tx = db.transaction(storeName, 'readwrite');
+          const store = tx.objectStore(storeName);
+          store.put(item);
+          tx.oncomplete = () => resolve(true);
+        });
+      }
+
+      static async delete(storeName, id) {
+        const db = await this.getStore();
+        return new Promise((resolve) => {
+          const tx = db.transaction(storeName, 'readwrite');
+          const store = tx.objectStore(storeName);
+          store.delete(id);
+          tx.oncomplete = () => resolve(true);
+        });
+      }
+    }
+
+    /* ==========================================================================
+       APPLICATION STATE & CONFIGURATION
+       ========================================================================== */
+    const State = {
+      employees: [],
+      attendance: [],
+      config: {
+        companyName: 'សាកលវិទ្យាល័យ / Enterprise System',
+        standardCheckout: '17:00',
+        benefitCheckout: '15:30',
+        lateThreshold: '08:15'
+      }
+    };
+
+    /* ==========================================================================
+       SYSTEM UTILITIES & TOAST NOTIFICATIONS
+       ========================================================================== */
+    class System {
+      static init() {
+        this.updateClock();
+        setInterval(() => this.updateClock(), 1000);
+        this.setupNavigation();
+      }
+
+      static updateClock() {
+        const now = new Date();
+        document.getElementById('clockTime').innerText = now.toLocaleTimeString('en-US');
+      }
+
+      static setupNavigation() {
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            
+            link.classList.add('active');
+            const targetView = link.getAttribute('data-view');
+            document.getElementById(targetView).classList.add('active');
+
+            if(targetView === 'reports') ReportModule.renderKhmerReport();
+            if(targetView === 'analytics') AnalyticsModule.render();
+          });
+        });
+      }
+
+      static setTheme(themeName) {
+        document.documentElement.setAttribute('data-theme', themeName);
+        this.toast('បានផ្លាស់ប្តូរ Theme ទៅជា ' + themeName);
+      }
+
+      static toast(msg, type = 'success') {
+        const box = document.getElementById('toastBox');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--primary);"></i> <span>${msg}</span>`;
+        box.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
+      }
+    }
+
+    /* ==========================================================================
+       EMPLOYEE / STUDENT MODULE
+       ========================================================================== */
+    class EmployeeApp {
+      static async render() {
+        State.employees = await Database.getAll('employees');
+        const tbody = document.getElementById('employeeTableBody');
+        const select = document.getElementById('manualEmpSelect');
+        tbody.innerHTML = '';
+        select.innerHTML = '';
+
+        if (State.employees.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding: 20px;">គ្មានទិន្នន័យឡើយ។ សូមចុច "បន្ថែមថ្មី" ដើម្បីបញ្ចូលទិន្នន័យ។</td></tr>`;
+          select.innerHTML = `<option value="">-- គ្មានទិន្នន័យ --</option>`;
+          this.renderBenefitSchedule();
+          return;
+        }
+
+        const daysMap = {0:'អាទិត្យ', 1:'ច័ន្ទ', 2:'អង្គារ', 3:'ពុធ', 4:'ព្រហ', 5:'សុក្រ', 6:'សៅរ៍'};
+
+        State.employees.forEach(emp => {
+          const daysMapText = (emp.benefitDays || []).map(d => daysMap[d]).filter(Boolean).join(', ');
+          
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><i class="fa-solid fa-circle-user" style="font-size: 1.8rem; color: var(--primary);"></i></td>
+            <td><strong>${emp.code || emp.id}</strong></td>
+            <td>${emp.name}</td>
+            <td><span style="color: var(--primary); font-weight:600;">${emp.major || emp.dept}</span></td>
+            <td>${emp.position}</td>
+            <td><span class="badge-benefit">${daysMapText || 'គ្មាន'}</span></td>
+            <td>
+              <button class="btn btn-outline" style="padding: 4px 8px;" onclick="EmployeeApp.openModal('${emp.id}')"><i class="fa-solid fa-pen-to-square"></i> កែប្រែ</button>
+              <button class="btn btn-danger" style="padding: 4px 8px;" onclick="EmployeeApp.delete('${emp.id}')"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+
+          const opt = document.createElement('option');
+          opt.value = emp.id;
+          opt.textContent = `${emp.name} (${emp.major || emp.dept})`;
+          select.appendChild(opt);
+        });
+
+        this.renderBenefitSchedule();
+        DashboardModule.render();
+      }
+
+      static openModal(id = null) {
+        document.getElementById('empForm').reset();
+        document.getElementById('empId').value = '';
+        document.getElementById('empModalTitle').innerText = 'បន្ថែមទិន្នន័យថ្មី';
+
+        if (id) {
+          const emp = State.employees.find(e => e.id === id);
+          if (emp) {
+            document.getElementById('empId').value = emp.id;
+            document.getElementById('empCode').value = emp.code || emp.id;
+            document.getElementById('empName').value = emp.name;
+            document.getElementById('empMajor').value = emp.major || emp.dept;
+            document.getElementById('empPosition').value = emp.position;
+            document.getElementById('empModalTitle').innerText = 'កែប្រែព័ត៌មាន';
+
+            const checkboxes = document.querySelectorAll('input[name="benefitDays"]');
+            checkboxes.forEach(cb => {
+              cb.checked = (emp.benefitDays || []).includes(parseInt(cb.value));
+            });
+          }
+        }
+        document.getElementById('employeeModal').classList.add('active');
+      }
+
+      static closeModal() {
+        document.getElementById('employeeModal').classList.remove('active');
+      }
+
+      static async save() {
+        const id = document.getElementById('empId').value || 'ID-' + Date.now();
+        const code = document.getElementById('empCode').value;
+        const name = document.getElementById('empName').value;
+        const major = document.getElementById('empMajor').value;
+        const position = document.getElementById('empPosition').value;
+
+        if (!code || !name || !major) {
+          System.toast('សូមបំព័ត៌មានចាំបាច់ឱ្យបានគ្រប់!', 'error');
+          return;
+        }
+
+        const benefitDays = [];
+        document.querySelectorAll('input[name="benefitDays"]:checked').forEach(cb => {
+          benefitDays.push(parseInt(cb.value));
+        });
+
+        const empData = { id, code, name, major, position, dept: major, benefitDays };
+        await Database.save('employees', empData);
+        System.toast('រក្សាទុកបានជោគជ័យ!');
+        this.closeModal();
+        this.render();
+      }
+
+      static async delete(id) {
+        if (confirm('តើអ្នកពិតជាចង់លុបទិន្នន័យនេះមែនទេ?')) {
+          await Database.delete('employees', id);
+          System.toast('បានលុបទិន្នន័យចេញពីប្រព័ន្ធ');
+          this.render();
+        }
+      }
+
+      static renderBenefitSchedule() {
+        const tbody = document.getElementById('benefitScheduleTable');
+        tbody.innerHTML = '';
+        const daysMap = {0:'អាទិត្យ', 1:'ច័ន្ទ', 2:'អង្គារ', 3:'ពុធ', 4:'ព្រហស្បតិ៍', 5:'សុក្រ', 6:'សៅរ៍'};
+
+        State.employees.forEach(emp => {
+          const daysText = (emp.benefitDays || []).map(d => daysMap[d]).filter(Boolean).join(' | ');
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${emp.name}</strong> (${emp.code || emp.id})</td>
+            <td>${emp.major || emp.dept}</td>
+            <td><span class="badge-benefit">${daysText || 'គ្មានសិទ្ធិ'}</span></td>
+            <td><strong style="color:var(--benefit-gold);">${State.config.benefitCheckout || '15:30'} PM</strong></td>
+            <td><button class="btn btn-outline" style="padding: 4px 8px;" onclick="EmployeeApp.openModal('${emp.id}')">កែប្រែ</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    /* ==========================================================================
+       ATTENDANCE ENGINE & SCANNER
+       ========================================================================== */
+    class AttendanceApp {
+      static async manualCheck(isCheckIn) {
+        const empId = document.getElementById('manualEmpSelect').value;
+        const status = document.getElementById('manualStatusSelect').value;
+        if (!empId) {
+          System.toast('សូមជ្រើសរើសឈ្មោះ!', 'error');
+          return;
+        }
+
+        const emp = State.employees.find(e => e.id === empId);
+        const todayStr = document.getElementById('attLogDateFilter')?.value || new Date().toISOString().split('T')[0];
+        const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false });
+        
+        let attRecord = State.attendance.find(a => a.empId === empId && a.date === todayStr);
+
+        if (!attRecord) {
+          attRecord = {
+            id: 'ATT-' + Date.now(),
+            empId: emp.id,
+            empCode: emp.code || emp.id,
+            empName: emp.name,
+            major: emp.major || emp.dept,
+            dept: emp.dept || emp.major,
+            date: todayStr,
+            checkIn: isCheckIn ? timeStr : '--:--',
+            checkOut: !isCheckIn ? timeStr : '--:--',
+            status: status
+          };
+        } else {
+          if (isCheckIn) attRecord.checkIn = timeStr;
+          else attRecord.checkOut = timeStr;
+          attRecord.status = status;
+        }
+
+        if (isCheckIn && status === 'Present') {
+          const lateTime = State.config.lateThreshold || '08:15';
+          if (timeStr > lateTime) {
+            attRecord.status = 'Late';
+          }
+        }
+
+        await Database.save('attendance', attRecord);
+        System.toast(`បានកត់ត្រាវត្តមាន ${emp.name} រួចរាល់!`);
+        DashboardModule.render();
+      }
+
+      static openScanner() {
+        document.getElementById('scannerModal').classList.add('active');
+        const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render((decodedText) => {
+          html5QrcodeScanner.clear();
+          this.closeScanner();
+          this.processQRCode(decodedText);
+        });
+      }
+
+      static closeScanner() {
+        document.getElementById('scannerModal').classList.remove('active');
+      }
+
+      static async processQRCode(code) {
+        const emp = State.employees.find(e => e.code === code || e.id === code);
+        if (emp) {
+          document.getElementById('manualEmpSelect').value = emp.id;
+          await this.manualCheck(true);
+        } else {
+          System.toast('រកមិនឃើញទិន្នន័យតាមរយៈ QR នេះទេ!', 'error');
+        }
+      }
+    }
+
+    /* ==========================================================================
+       DASHBOARD & DATE FILTERING ENGINE
+       ========================================================================== */
+    class DashboardModule {
+      static async render() {
+        State.attendance = await Database.getAll('attendance');
+        const filterDate = document.getElementById('dashDateFilter')?.value || new Date().toISOString().split('T')[0];
+
+        const filteredAtt = State.attendance.filter(a => a.date === filterDate);
+
+        document.getElementById('dashTotalEmp').innerText = State.employees.length;
+        document.getElementById('dashPresent').innerText = filteredAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
+        document.getElementById('dashLate').innerText = filteredAtt.filter(a => a.status === 'Late').length;
+        document.getElementById('dashAbsent').innerText = filteredAtt.filter(a => a.status === 'Leave' || a.status === 'Absent').length;
+
+        const tbody = document.getElementById('dashRecentTable');
+        tbody.innerHTML = '';
+
+        if (filteredAtt.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-secondary);">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
+        } else {
+          filteredAtt.forEach(att => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><strong>${att.empCode || att.empId}</strong></td>
+              <td>${att.empName}</td>
+              <td><span style="color:var(--primary); font-weight:600;">${att.major || att.dept}</span></td>
+              <td><span style="color: #10b981; font-weight:600;">${att.checkIn}</span></td>
+              <td><span style="color: #f59e0b; font-weight:600;">${att.checkOut}</span></td>
+              <td><strong>${att.status}</strong></td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+
+        const todayDayNum = new Date(filterDate).getDay(); 
+        const benefitEmps = State.employees.filter(e => (e.benefitDays || []).includes(todayDayNum));
+        
+        document.getElementById('benefitCountBadge').innerText = `${benefitEmps.length} នាក់`;
+        const container = document.getElementById('dashboardBenefitList');
+        container.innerHTML = '';
+
+        if (benefitEmps.length === 0) {
+          container.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary);">គ្មានបុគ្គលិក/និស្សិតទទួលបានសិទ្ធិចេញមុនថ្ងៃនេះទេ</span>`;
+        } else {
+          benefitEmps.forEach(e => {
+            const tag = document.createElement('div');
+            tag.className = 'badge-benefit';
+            tag.style.fontSize = '0.85rem';
+            tag.style.padding = '6px 12px';
+            tag.innerHTML = `<i class="fa-solid fa-user-check"></i> ${e.name} (${e.major || e.dept})`;
+            container.appendChild(tag);
+          });
+        }
+      }
+    }
+
+    /* ==========================================================================
+       KHMER REPORT GENERATION ENGINE (UPDATED FORMAT & MAJOR)
+       ========================================================================== */
+class ReportModule {
+      static renderKhmerReport() {
+        const reportDate = document.getElementById('reportDateFilter')?.value || new Date().toISOString().split('T')[0];
+        
+        const dateParts = reportDate.split('-');
+        const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+
+        const dayAtt = State.attendance.filter(a => a.date === reportDate);
+
+        const presentList = dayAtt.filter(a => a.status === 'Present' || a.status === 'Late');
+        const lateList = dayAtt.filter(a => a.status === 'Late');
+        const absentList = dayAtt.filter(a => a.status === 'Leave' || a.status === 'Absent');
+
+        const padZero = (num) => String(num).padStart(2, '0');
+
+        let reportStr = `[របាយការណ៍វត្តមានប្រចាំថ្ងៃ]\n`;
+        reportStr += `កាលបរិច្ឆេទ ៖ ${formattedDate}\n`;
+        reportStr += `វត្តមានសរុប ៖ ${presentList.length} នាក់\n`;
+        reportStr += `អវត្តមានសរុប ៖ ${absentList.length} នាក់\n`;
+        reportStr += `មកយឺត ៖ ${lateList.length} នាក់\n\n`;
+
+        // 1. Present List (Including Late members with label)
+        reportStr += `🟢 ១. បញ្ជីឈ្មោះសមាជិកដែលមានវត្តមាន (${padZero(presentList.length)} នាក់) មកយឺត (${padZero(lateList.length)} នាក់)៖\n`;
+        if (presentList.length === 0) {
+          reportStr += `  (គ្មានទិន្នន័យ)\n`;
+        } else {
+          presentList.forEach((a, index) => {
+            const timeIn = a.checkIn || '--:--';
+            const timeOut = a.checkOut || '--:--';
+            const lateLabel = a.status === 'Late' ? ' (មកយឹត)' : '';
+            reportStr += `  ${index + 1}.${a.empName} (${timeIn} -> ${timeOut})${lateLabel}\n`;
+          });
+        }
+
+        reportStr += `\n`;
+
+        reportStr += `🔴 ២. បញ្ជីឈ្មោះសមាជិកអវត្តមាន (${padZero(absentList.length)} នាក់)\n`;
+        if (absentList.length === 0) {
+          reportStr += `  (គ្មានសមាជិកអវត្តមាន)\n`;
+        } else {
+          absentList.forEach((a, index) => {
+            const leaveType = a.status === 'Leave' ? 'សុំច្បាប់' : 'អវត្តមាន';
+            reportStr += `  ${index + 1}.${a.empName} — (${leaveType})\n`;
+          });
+        }
+
+        reportStr += `\n[បញ្ចប់របាយការណ៍]`;
+
+        document.getElementById('khmerReportPaper').textContent = reportStr;
+      }
+
+      static copyText() {
+        const text = document.getElementById('khmerReportPaper').textContent;
+        navigator.clipboard.writeText(text);
+        System.toast('បានចម្លងរបាយការណ៍ទៅ Clipboard រួចរាល់!');
+      }
+
+      static exportExcel() {
+        const reportDate = document.getElementById('reportDateFilter')?.value || new Date().toISOString().split('T')[0];
+        const data = State.attendance.filter(a => a.date === reportDate);
+        if (data.length === 0) {
+          System.toast('គ្មានទិន្នន័យសម្រាប់ Export ទេ!', 'error');
+          return;
+        }
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Attendance");
+        XLSX.writeFile(wb, `Attendance_Report_${reportDate}.xlsx`);
+        System.toast('បានទាញយកជា Excel រួចរាល់');
+      }
+
+      static exportPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const text = document.getElementById('khmerReportPaper').textContent;
+        doc.text(text, 10, 10);
+        doc.save(`Attendance_Report.pdf`);
+        System.toast('បានទាញយកជា PDF រួចរាល់');
+      }
+    }
+
+    /* ==========================================================================
+       ANALYTICS & CHART ENGINE
+       ========================================================================== */
+    class AnalyticsModule {
+      static render() {
+        const ctx1 = document.getElementById('attendanceChart').getContext('2d');
+        const ctx2 = document.getElementById('deptChart').getContext('2d');
+
+        if (window.myChart1) window.myChart1.destroy();
+        if (window.myChart2) window.myChart2.destroy();
+
+        window.myChart1 = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: ['វត្តមាន', 'មកយឺត', 'សុំច្បាប់ / អវត្តមាន'],
+            datasets: [{
+              label: 'ស្ថិតិវត្តមានទូទៅ',
+              data: [
+                State.attendance.filter(a => a.status === 'Present').length,
+                State.attendance.filter(a => a.status === 'Late').length,
+                State.attendance.filter(a => a.status === 'Leave' || a.status === 'Absent').length
+              ],
+              backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // Grouping Data dynamically by Major / Department
+        const majorCounts = {};
+        State.employees.forEach(e => {
+          const key = e.major || e.dept || 'ផ្សេងៗ';
+          majorCounts[key] = (majorCounts[key] || 0) + 1;
+        });
+
+        window.myChart2 = new Chart(ctx2, {
+          type: 'pie',
+          data: {
+            labels: Object.keys(majorCounts).length ? Object.keys(majorCounts) : ['គ្មានទិន្នន័យ'],
+            datasets: [{
+              data: Object.values(majorCounts).length ? Object.values(majorCounts) : [1],
+              backgroundColor: ['#3b82f6', '#ec4899', '#8b5cf6', '#14b8a6', '#f97316', '#eab308', '#6366f1']
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false }
+        });
+      }
+    }
+
+    /* ==========================================================================
+       BACKUP & RESTORE JSON ENGINE
+       ========================================================================== */
+    async function exportDatabaseJSON() {
+      const employees = await Database.getAll('employees');
+      const attendance = await Database.getAll('attendance');
+      
+      const backupData = {
+        version: DB_VERSION,
+        exportDate: new Date().toISOString(),
+        config: State.config,
+        employees: employees,
+        attendance: attendance
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `attendance_backup_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      System.toast('បានទាញយកទិន្នន័យ Backup (JSON) រួចរាល់!');
+    }
+
+    async function importDatabaseJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const content = JSON.parse(e.target.result);
+          if (!content.employees || !content.attendance) {
+            throw new Error('Invalid Format');
+          }
+
+          const db = await Database.getStore();
+          
+          const tx1 = db.transaction('employees', 'readwrite');
+          const empStore = tx1.objectStore('employees');
+          empStore.clear();
+          content.employees.forEach(emp => empStore.put(emp));
+
+          const tx2 = db.transaction('attendance', 'readwrite');
+          const attStore = tx2.objectStore('attendance');
+          attStore.clear();
+          content.attendance.forEach(att => attStore.put(att));
+
+          if (content.config) {
+            State.config = content.config;
+          }
+
+          System.toast('បានស្តារទិន្នន័យ (Restore) ពីឯកសារ JSON ជោគជ័យ!');
+          setTimeout(() => location.reload(), 1000);
+        } catch (err) {
+          System.toast('ឯកសារ JSON មិនត្រឹមត្រូវ (Invalid Format)!', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /* ==========================================================================
+       CLEAR ALL DATA (Bulk Delete Engine)
+       ========================================================================== */
+    async function clearAllData() {
+      if (confirm('តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់ (បុគ្គលិក និងកំណត់ត្រាវត្តមាន) ចេញពីប្រព័ន្ធមែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់វិញបានឡើយ!')) {
+        const db = await Database.getStore();
+        const tx1 = db.transaction('employees', 'readwrite');
+        tx1.objectStore('employees').clear();
+        const tx2 = db.transaction('attendance', 'readwrite');
+        tx2.objectStore('attendance').clear();
+
+        System.toast('បានលុបទិន្នន័យទាំងអស់ចេញពីប្រព័ន្ធដោយជោគជ័យ!');
+        setTimeout(() => location.reload(), 1000);
+      }
+    }
+
+    /* ==========================================================================
+       SYSTEM INITIALIZATION
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', async () => {
+      System.init();
+      await EmployeeApp.render();
+      injectUIUpdates();
+    });
+
+    /* INJECT TIME CONFIGURATION & DATE FILTERS DYNAMICALLY */
+    function injectUIUpdates() {
+      const settingsView = document.getElementById('settings');
+      if (settingsView) {
+        settingsView.innerHTML = `
+          <div class="stat-card" style="flex-direction: column; align-items: flex-start; max-width: 650px;">
+            <h3><i class="fa-solid fa-clock"></i> ការកំណត់ម៉ោងធ្វើការ (Time Settings)</h3>
+            <br>
+            <div class="form-group" style="width: 100%;">
+              <label>ឈ្មោះក្រុមហ៊ុន/ស្ថាប័ន</label>
+              <input type="text" class="form-control" id="cfgCompanyName" value="${State.config.companyName}">
+            </div>
+            <div class="form-row" style="width: 100%;">
+              <div class="form-group">
+                <label>ម៉ោងចូលធ្វើការ (Check-In)</label>
+                <input type="time" class="form-control" id="cfgCheckIn" value="08:00">
+              </div>
+              <div class="form-group">
+                <label>ម៉ោងរាប់ថាយឺត (Late Threshold)</label>
+                <input type="time" class="form-control" id="cfgLateThreshold" value="${State.config.lateThreshold}">
+              </div>
+            </div>
+            <div class="form-row" style="width: 100%;">
+              <div class="form-group">
+                <label>ម៉ោងចេញធម្មតា (Regular Check-Out)</label>
+                <input type="time" class="form-control" id="cfgStandardCheckout" value="${State.config.standardCheckout}">
+              </div>
+              <div class="form-group">
+                <label>ម៉ោងចេញពិសេស (Special Benefit Check-Out)</label>
+                <input type="time" class="form-control" id="cfgBenefitCheckout" value="${State.config.benefitCheckout}">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="saveAdvancedSettings()"><i class="fa-solid fa-floppy-disk"></i> រក្សាទុកការកំណត់</button>
+            
+            <hr style="width:100%; margin: 24px 0; border: 0; border-top: 1px solid var(--border);">
+            
+            <h3><i class="fa-solid fa-database"></i> បម្រុងទុក និង ស្តារទិន្នន័យ (Backup & Restore JSON)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 8px 0 14px 0;">ទាញយកទិន្នន័យទាំងអស់ទុកជាឯកសារ JSON ឬផ្ទុកឯកសារចាស់មកវិញដើម្បីស្តារទិន្នន័យ។</p>
+            <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
+              <button class="btn btn-primary" onclick="exportDatabaseJSON()"><i class="fa-solid fa-download"></i> Export Backup (JSON)</button>
+              <label class="btn btn-outline" style="cursor: pointer; margin-bottom: 0;">
+                <i class="fa-solid fa-upload"></i> Import / Restore JSON
+                <input type="file" id="importJsonFile" accept=".json" onchange="importDatabaseJSON(event)" style="display: none;">
+              </label>
+            </div>
+
+            <hr style="width:100%; margin: 24px 0; border: 0; border-top: 1px solid var(--border);">
+            
+            <h3 style="color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> តំបន់គ្រោះថ្នាក់ (Danger Zone)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 8px 0 14px 0;">លុបទិន្នន័យបុគ្គលិក និងកំណត់ត្រាវត្តមានទាំងអស់ចេញពី Local Database នៃប្រព័ន្ធ។</p>
+            <button class="btn btn-danger" onclick="clearAllData()"><i class="fa-solid fa-trash-can"></i> លុបទិន្នន័យទាំងអស់ (Delete All Data)</button>
+          </div>
+        `;
+      }
+
+      const dashHeader = document.querySelector('#dashboard .dashboard-grid');
+      if (dashHeader) {
+        const dateFilterDiv = document.createElement('div');
+        dateFilterDiv.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;";
+        dateFilterDiv.innerHTML = `
+          <h3>ផ្ទាំងព័ត៌មានទូទៅ</h3>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label style="font-weight: 600;">ជ្រើសរើសកាលបរិច្ឆេទ៖</label>
+            <input type="date" class="form-control" id="dashDateFilter" value="${new Date().toISOString().split('T')[0]}" onchange="DashboardModule.render()" style="width: auto;">
+          </div>
+        `;
+        dashHeader.parentNode.insertBefore(dateFilterDiv, dashHeader);
+      }
+
+      const attView = document.getElementById('attendance');
+      if (attView) {
+        const filterDiv = document.createElement('div');
+        filterDiv.style.cssText = "display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;";
+        filterDiv.innerHTML = `
+          <h3>កត់ត្រាវត្តមានប្រចាំថ្ងៃ</h3>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label style="font-weight: 600;">កាលបរិច្ឆេទកត់ត្រា៖</label>
+            <input type="date" class="form-control" id="attLogDateFilter" value="${new Date().toISOString().split('T')[0]}" style="width: auto;">
+          </div>
+        `;
+        attView.insertBefore(filterDiv, attView.firstChild);
+      }
+
+      const reportHeader = document.querySelector('#reports div');
+      if (reportHeader) {
+        const datePickerDiv = document.createElement('div');
+        datePickerDiv.style.cssText = "display: flex; align-items: center; gap: 10px; margin-right: 15px;";
+        datePickerDiv.innerHTML = `
+          <label style="font-weight: 600;">ជ្រើសរើសថ្ងៃ៖</label>
+          <input type="date" class="form-control" id="reportDateFilter" value="${new Date().toISOString().split('T')[0]}" onchange="ReportModule.renderKhmerReport()" style="width: auto;">
+        `;
+        reportHeader.children[1].insertBefore(datePickerDiv, reportHeader.children[1].firstChild);
+      }
+
+      const analyticsView = document.getElementById('analytics');
+      if (analyticsView) {
+        const filterDiv = document.createElement('div');
+        filterDiv.style.cssText = "display: flex; align-items: center; gap: 12px; margin-bottom: 20px;";
+        filterDiv.innerHTML = `
+          <h3>ការវិភាគទិន្នន័យ</h3>
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+            <label style="font-weight: 600;">ចាប់ពី៖</label>
+            <input type="date" class="form-control" id="analyticsStart" value="${new Date().toISOString().split('T')[0]}" style="width: auto;">
+            <label style="font-weight: 600;">ដល់៖</label>
+            <input type="date" class="form-control" id="analyticsEnd" value="${new Date().toISOString().split('T')[0]}" style="width: auto;">
+            <button class="btn btn-primary" onclick="AnalyticsModule.render()"><i class="fa-solid fa-filter"></i> Filter</button>
+          </div>
+        `;
+        analyticsView.insertBefore(filterDiv, analyticsView.firstChild);
+      }
+    }
+
+    function saveAdvancedSettings() {
+      State.config.companyName = document.getElementById('cfgCompanyName').value;
+      State.config.checkIn = document.getElementById('cfgCheckIn').value;
+      State.config.lateThreshold = document.getElementById('cfgLateThreshold').value;
+      State.config.standardCheckout = document.getElementById('cfgStandardCheckout').value;
+      State.config.benefitCheckout = document.getElementById('cfgBenefitCheckout').value;
+      System.toast('បានរក្សាទុកការកំណត់ម៉ោងធ្វើការរួចរាល់!');
+    }
+  </script>
+</body>
+</html>
