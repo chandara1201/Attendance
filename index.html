@@ -340,7 +340,7 @@
         </div>
       </section>
 
-      <!-- 3. ATTENDANCE SCANNER / MANUAL VIEW -->
+      <!-- 3. ATTENDANCE SCANNER / MANUAL & EDITABLE VIEW -->
       <section id="attendance" class="view-section">
         <div class="form-row" style="margin-bottom: 24px;">
           <div class="stat-card" style="flex-direction: column; align-items: flex-start;">
@@ -368,6 +368,27 @@
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">ប្រើប្រាស់កាមេរ៉ាឧបករណ៍ដើម្បីស្កែន QR Code</p>
             <button class="btn btn-primary" onclick="AttendanceApp.openScanner()">បើកកាមេរ៉ាស្កែន</button>
           </div>
+        </div>
+
+        <!-- INTEGRATED EDITABLE ATTENDANCE TABLE -->
+        <div class="table-container" style="margin-top: 24px;">
+          <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+            <span>បញ្ជីវត្តមានប្រចាំថ្ងៃ (អាចកែសម្រួលបាន)</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ឈ្មោះ</th>
+                <th>ម៉ោងចូល</th>
+                <th>ម៉ោងចេញ</th>
+                <th>ស្ថានភាព</th>
+                <th>សកម្មភាព</th>
+              </tr>
+            </thead>
+            <tbody id="attendanceListBody">
+              <!-- Inline Editable Attendance Rows -->
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -660,6 +681,7 @@
             const targetView = link.getAttribute('data-view');
             document.getElementById(targetView).classList.add('active');
 
+            if(targetView === 'attendance') AttendanceUI.renderAttendanceList();
             if(targetView === 'reports') ReportModule.renderKhmerReport();
             if(targetView === 'analytics') AnalyticsModule.render();
           });
@@ -855,6 +877,7 @@
 
         await Database.save('attendance', attRecord);
         System.toast(`បានកត់ត្រាវត្តមាន ${emp.name} រួចរាល់!`);
+        AttendanceUI.renderAttendanceList();
         DashboardModule.render();
       }
 
@@ -879,6 +902,76 @@
           await this.manualCheck(true);
         } else {
           System.toast('រកមិនឃើញទិន្នន័យតាមរយៈ QR នេះទេ!', 'error');
+        }
+      }
+    }
+
+    /* ==========================================================================
+       INTEGRATED EDITABLE ATTENDANCE UI CLASS
+       ========================================================================== */
+    class AttendanceUI {
+      static async renderAttendanceList() {
+        const tbody = document.getElementById('attendanceListBody');
+        if (!tbody) return;
+
+        const date = document.getElementById('attLogDateFilter')?.value || new Date().toISOString().split('T')[0];
+        
+        State.attendance = await Database.getAll('attendance');
+        const records = State.attendance.filter(a => a.date === date);
+        
+        tbody.innerHTML = '';
+
+        if (records.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-secondary); padding: 16px;">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
+          return;
+        }
+        
+        records.forEach(att => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${att.empName}</strong> (${att.empCode || att.empId})</td>
+            <td><input type="time" class="form-control" style="width: auto; padding: 4px 8px;" value="${att.checkIn === '--:--' ? '' : att.checkIn}" onchange="AttendanceUI.updateTime('${att.id}', 'checkIn', this.value)"></td>
+            <td><input type="time" class="form-control" style="width: auto; padding: 4px 8px;" value="${att.checkOut === '--:--' ? '' : att.checkOut}" onchange="AttendanceUI.updateTime('${att.id}', 'checkOut', this.value)"></td>
+            <td>
+              <select class="form-control" style="width: auto; padding: 4px 8px;" onchange="AttendanceUI.updateStatus('${att.id}', this.value)">
+                <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>វត្តមាន</option>
+                <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>មកយឺត</option>
+                <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>សុំច្បាប់</option>
+                <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>អវត្តមាន</option>
+              </select>
+            </td>
+            <td><button class="btn btn-danger" style="padding: 4px 8px;" onclick="AttendanceUI.deleteRecord('${att.id}')"><i class="fa-solid fa-trash"></i> លុប</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      static async updateTime(id, field, value) {
+        const record = State.attendance.find(a => a.id === id);
+        if (record) {
+          record[field] = value || '--:--';
+          await Database.save('attendance', record);
+          System.toast('បានកែសម្រួលម៉ោងរួចរាល់');
+          DashboardModule.render();
+        }
+      }
+
+      static async updateStatus(id, newStatus) {
+        const record = State.attendance.find(a => a.id === id);
+        if (record) {
+          record.status = newStatus;
+          await Database.save('attendance', record);
+          System.toast('បានផ្លាស់ប្តូរស្ថានភាពរួចរាល់');
+          DashboardModule.render();
+        }
+      }
+
+      static async deleteRecord(id) {
+        if (confirm('តើអ្នកពិតជាចង់លុបប័ណ្ណវត្តមាននេះមែនទេ?')) {
+          await Database.delete('attendance', id);
+          System.toast('បានលុបកំណត់ត្រា');
+          this.renderAttendanceList();
+          DashboardModule.render();
         }
       }
     }
@@ -943,7 +1036,7 @@
     /* ==========================================================================
        KHMER REPORT GENERATION ENGINE (UPDATED FORMAT & MAJOR)
        ========================================================================== */
-class ReportModule {
+    class ReportModule {
       static renderKhmerReport() {
         const reportDate = document.getElementById('reportDateFilter')?.value || new Date().toISOString().split('T')[0];
         
@@ -964,7 +1057,6 @@ class ReportModule {
         reportStr += `អវត្តមានសរុប ៖ ${absentList.length} នាក់\n`;
         reportStr += `មកយឺត ៖ ${lateList.length} នាក់\n\n`;
 
-        // 1. Present List (Including Late members with label)
         reportStr += `🟢 ១. បញ្ជីឈ្មោះសមាជិកដែលមានវត្តមាន (${padZero(presentList.length)} នាក់) មកយឺត (${padZero(lateList.length)} នាក់)៖\n`;
         if (presentList.length === 0) {
           reportStr += `  (គ្មានទិន្នន័យ)\n`;
@@ -972,7 +1064,7 @@ class ReportModule {
           presentList.forEach((a, index) => {
             const timeIn = a.checkIn || '--:--';
             const timeOut = a.checkOut || '--:--';
-            const lateLabel = a.status === 'Late' ? ' (មកយឹត)' : '';
+            const lateLabel = a.status === 'Late' ? ' (មកយឺត)' : '';
             reportStr += `  ${index + 1}.${a.empName} (${timeIn} -> ${timeOut})${lateLabel}\n`;
           });
         }
@@ -1052,7 +1144,6 @@ class ReportModule {
           options: { responsive: true, maintainAspectRatio: false }
         });
 
-        // Grouping Data dynamically by Major / Department
         const majorCounts = {};
         State.employees.forEach(e => {
           const key = e.major || e.dept || 'ផ្សេងៗ';
@@ -1158,6 +1249,7 @@ class ReportModule {
       System.init();
       await EmployeeApp.render();
       injectUIUpdates();
+      AttendanceUI.renderAttendanceList();
     });
 
     /* INJECT TIME CONFIGURATION & DATE FILTERS DYNAMICALLY */
@@ -1237,7 +1329,7 @@ class ReportModule {
           <h3>កត់ត្រាវត្តមានប្រចាំថ្ងៃ</h3>
           <div style="display: flex; align-items: center; gap: 10px;">
             <label style="font-weight: 600;">កាលបរិច្ឆេទកត់ត្រា៖</label>
-            <input type="date" class="form-control" id="attLogDateFilter" value="${new Date().toISOString().split('T')[0]}" style="width: auto;">
+            <input type="date" class="form-control" id="attLogDateFilter" value="${new Date().toISOString().split('T')[0]}" onchange="AttendanceUI.renderAttendanceList()" style="width: auto;">
           </div>
         `;
         attView.insertBefore(filterDiv, attView.firstChild);
