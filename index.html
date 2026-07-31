@@ -3,17 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន Enterprise v2.0 | Attendance Management System</title>
+  <title>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន Enterprise v2.0 Pro | Attendance Management System</title>
   
-  <!-- Google Fonts for Khmer & English -->
+  <!-- Google Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Kantenbold&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- External JS Libraries (CDNs) -->
+  <!-- External Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -26,7 +24,6 @@
        ========================================================================== */
     :root {
       --font-main: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif;
-      --font-brand: 'Kantenbold', 'Plus Jakarta Sans', sans-serif;
       --font-mono: 'Fira Code', monospace;
       --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       --radius-sm: 8px;
@@ -125,7 +122,7 @@
     aside.sidebar.collapsed { width: 0; min-width: 0; overflow: hidden; border-right: none; }
     
     .brand { padding: 20px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .brand img { height: 38px; width: 38px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+    .brand i { font-size: 1.5rem; color: var(--primary); }
     .brand h2 { font-size: 1.05rem; font-weight: 700; letter-spacing: 0.5px; }
 
     .nav-menu { list-style: none; padding: 16px 12px; flex: 1; overflow-y: auto; }
@@ -142,13 +139,14 @@
     .toggle-sidebar-btn { background: transparent; border: 1px solid var(--border); padding: 8px 12px; border-radius: var(--radius-sm); color: var(--text-primary); cursor: pointer; font-size: 1.1rem; }
     .toggle-sidebar-btn:hover { background: rgba(0,0,0,0.05); }
     .clock-display { font-size: 1.05rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.03); padding: 6px 14px; border-radius: var(--radius-md); }
-    .header-right { display: flex; align-items: center; gap: 14px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
 
-    .btn { padding: 9px 18px; border-radius: var(--radius-sm); border: none; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; }
+    .btn { padding: 8px 16px; border-radius: var(--radius-sm); border: none; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; }
     .btn-primary { background-color: var(--primary); color: #fff; }
     .btn-primary:hover { background-color: var(--primary-hover); }
     .btn-danger { background-color: #ef4444; color: #fff; }
     .btn-danger:hover { background-color: #dc2626; }
+    .btn-warning { background-color: #f59e0b; color: #fff; }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
     .btn-outline:hover { background: rgba(0,0,0,0.05); }
     .btn-sm { padding: 5px 10px; font-size: 0.8rem; }
@@ -161,7 +159,7 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     /* DASHBOARD GRID & CARDS */
-    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 24px; }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 24px; }
     .stat-card { background-color: var(--bg-card); border: 1px solid var(--border); padding: 18px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 16px; transition: var(--transition); }
     .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
     .stat-icon { width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: rgba(0,0,0,0.04); }
@@ -175,13 +173,12 @@
     /* SPECIAL BENEFIT WIDGET & BADGES */
     .benefit-card-highlight { background: linear-gradient(135deg, var(--bg-card) 0%, var(--benefit-bg) 100%); border: 2px solid var(--benefit-gold); box-shadow: var(--shadow-glow); }
     .badge-benefit { background-color: var(--benefit-gold); color: #fff; padding: 4px 10px; border-radius: var(--radius-xl); font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; animation: pulse 2s infinite; }
-    .badge-status { padding: 4px 10px; border-radius: var(--radius-xl); font-size: 0.78rem; font-weight: 600; display: inline-block; }
-    .badge-status.Present { background: #d1fae5; color: #065f46; }
-    .badge-status.Late { background: #fef3c7; color: #92400e; }
-    .badge-status.Leave { background: #e0e7ff; color: #3730a3; }
-    .badge-status.Absent { background: #fee2e2; color: #991b1b; }
-    .badge-status.EarlyLeave { background: #ffedd5; color: #c2410c; }
     
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
+    .badge-present { background: #d1fae5; color: #065f46; }
+    .badge-absent { background: #fee2e2; color: #991b1b; }
+    .badge-admin { background: #fef3c7; color: #92400e; }
+
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(217, 119, 6, 0); } 100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); } }
 
     /* SEARCH BAR TOOLBAR */
@@ -235,75 +232,78 @@
   <!-- SIDEBAR NAVIGATION -->
   <aside class="sidebar" id="appSidebar">
     <div class="brand">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDh0_1M-Zvo3t2fpBiIE2WNocUo0GjOWPU15AOhSoh4g&s=10" alt="Logo">
-      <h2>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន</h2>
+      <i class="fa-solid fa-shield-halved"></i>
+      <h2>គ្រប់គ្រងវត្តមាន v2.0 Pro</h2>
     </div>
     <ul class="nav-menu">
-      <li class="nav-item"><a href="#dashboard" class="nav-link active" data-view="dashboard"><i class="fa-solid fa-chart-pie"></i> ផ្ទាំងព័ត៌មានដើម</a></li>
-      <li class="nav-item"><a href="#employees" class="nav-link" data-view="employees"><i class="fa-solid fa-users-line"></i> គ្រប់គ្រងបុគ្គលិក/និស្សិត</a></li>
-      <li class="nav-item"><a href="#attendance" class="nav-link" data-view="attendance"><i class="fa-solid fa-clipboard-user"></i> ការកត់ត្រាវត្តមាន</a></li>
-      <li class="nav-item"><a href="#benefits" class="nav-link" data-view="benefits"><i class="fa-solid fa-star"></i> ថ្ងៃអត្ថប្រយោជន៍ពិសេស</a></li>
-      <li class="nav-item"><a href="#reports" class="nav-link" data-view="reports"><i class="fa-solid fa-file-invoice"></i> របាយការណ៍ប្រចាំថ្ងៃ (ខ្មែរ)</a></li>
+      <li class="nav-item"><a href="#dashboard" class="nav-link active" data-view="dashboard"><i class="fa-solid fa-chart-pie"></i> ផ្ទាំងព័ត៌មាន</a></li>
+      <li class="nav-item"><a href="#employees" class="nav-link" data-view="employees"><i class="fa-solid fa-users"></i> បុគ្គលិក/និស្សិត</a></li>
+      <li class="nav-item"><a href="#attendance" class="nav-link" data-view="attendance"><i class="fa-solid fa-calendar-check"></i> កត់ត្រាវត្តមាន</a></li>
+      <li class="nav-item"><a href="#benefits" class="nav-link" data-view="benefits"><i class="fa-solid fa-star"></i> ថ្ងៃអត្ថប្រយោជន៍</a></li>
+      <li class="nav-item"><a href="#history" class="nav-link" data-view="history"><i class="fa-solid fa-magnifying-glass-chart"></i> ស្វែងរកប្រវត្តិ</a></li>
+      <li class="nav-item"><a href="#reports" class="nav-link" data-view="reports"><i class="fa-solid fa-file-invoice"></i> របាយការណ៍ប្រចាំថ្ងៃ</a></li>
+      <li class="nav-item"><a href="#monthly" class="nav-link" data-view="monthly"><i class="fa-solid fa-file-csv"></i> របាយការណ៍ប្រចាំខែ</a></li>
+      <li class="nav-item"><a href="#leaderboard" class="nav-link" data-view="leaderboard"><i class="fa-solid fa-trophy"></i> តារាងចំណាត់ថ្នាក់</a></li>
       <li class="nav-item"><a href="#analytics" class="nav-link" data-view="analytics"><i class="fa-solid fa-chart-line"></i> ការវិភាគទិន្នន័យ</a></li>
-      <li class="nav-item"><a href="#settings" class="nav-link" data-view="settings"><i class="fa-solid fa-gears"></i> ការកំណត់ប្រព័ន្ធ</a></li>
+      <li class="nav-item"><a href="#settings" class="nav-link" data-view="settings"><i class="fa-solid fa-sliders"></i> ការកំណត់</a></li>
     </ul>
   </aside>
 
-  <!-- MAIN CONTENT CONTAINER -->
+  <!-- MAIN AREA -->
   <main class="content-area">
-    <!-- TOP NAVBAR -->
+    <!-- NAVBAR -->
     <header class="navbar">
       <div class="header-left">
-        <button class="toggle-sidebar-btn" onclick="System.toggleSidebar()" title="Toggle Navigation Menu"><i class="fa-solid fa-bars"></i></button>
+        <button class="toggle-sidebar-btn" onclick="System.toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <span id="viewModeBadge" class="badge badge-admin">Admin Mode</span>
         <div class="clock-display" id="liveClock">
           <i class="fa-regular fa-clock"></i> <span id="clockTime">08:00:00 AM</span>
         </div>
       </div>
       <div class="header-right">
+        <button class="btn btn-outline" onclick="toggleViewMode()"><i class="fa-solid fa-eye"></i> ដូររបៀបមើល</button>
+        <button class="btn btn-outline" onclick="requestNotificationPermission()"><i class="fa-solid fa-bell"></i> ផ្ញើការជូនដំណឹង</button>
+        <button class="btn btn-primary" onclick="AttendanceApp.openScanner()"><i class="fa-solid fa-qrcode"></i> ស្កែន QR</button>
         <select class="form-control" id="themeSelector" onchange="System.setTheme(this.value)" style="width: auto;">
-          <option value="emerald">Emerald (Default)</option>
+          <option value="emerald">Emerald</option>
           <option value="dark">Dark Enterprise</option>
           <option value="cyberpunk">Cyberpunk Neon</option>
           <option value="hacker">Hacker Matrix</option>
           <option value="royal">Royal Purple</option>
         </select>
-        <button class="btn btn-primary" onclick="AttendanceApp.openScanner()"><i class="fa-solid fa-qrcode"></i> ស្កែន QR Code</button>
       </div>
     </header>
 
-    <!-- VIEWS -->
     <div class="view-container">
 
-      <!-- 1. DASHBOARD VIEW -->
+      <!-- DASHBOARD SECTION -->
       <section id="dashboard" class="view-section active">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2>ផ្ទាំងព័ត៌មានទូទៅ</h2>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <button class="btn btn-outline btn-sm" onclick="shiftDate('dashDate', -1)"><i class="fa-solid fa-chevron-left"></i> ម្សិលមិញ</button>
+            <input type="date" class="form-control" id="dashDate" style="width: auto;" onchange="DashboardModule.render()">
+            <button class="btn btn-outline btn-sm" onclick="shiftDate('dashDate', 1)">ថ្ងៃស្អែក <i class="fa-solid fa-chevron-right"></i></button>
+            <button class="btn btn-primary btn-sm" onclick="setToday('dashDate'); DashboardModule.render();">ថ្ងៃនេះ</button>
+          </div>
+        </div>
+
         <div class="dashboard-grid">
           <div class="stat-card">
             <div class="stat-icon" style="color: #3b82f6;"><i class="fa-solid fa-users"></i></div>
-            <div class="stat-info">
-              <h4>ចំនួនសរុប</h4>
-              <h2 id="dashTotalEmp">0</h2>
-            </div>
+            <div class="stat-info"><h4>សរុប</h4><h2 id="dashTotal">0</h2></div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="color: #10b981;"><i class="fa-solid fa-user-check"></i></div>
-            <div class="stat-info">
-              <h4>វត្តមានថ្ងៃនេះ</h4>
-              <h2 id="dashPresent">0</h2>
-            </div>
+            <div class="stat-info"><h4>វត្តមាន</h4><h2 id="dashPresent">0</h2></div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="color: #f59e0b;"><i class="fa-solid fa-user-clock"></i></div>
-            <div class="stat-info">
-              <h4>មកយឺត</h4>
-              <h2 id="dashLate">0</h2>
-            </div>
+            <div class="stat-info"><h4>មកយឺត</h4><h2 id="dashLate">0</h2></div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="color: #ef4444;"><i class="fa-solid fa-user-xmark"></i></div>
-            <div class="stat-info">
-              <h4>អវត្តមាន / ច្បាប់</h4>
-              <h2 id="dashAbsent">0</h2>
-            </div>
+            <div class="stat-info"><h4>អវត្តមាន</h4><h2 id="dashAbsent">0</h2></div>
           </div>
         </div>
 
@@ -316,42 +316,53 @@
               <span class="badge-benefit" id="benefitCountBadge">0 នាក់</span>
             </div>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">បុគ្គលិក/និស្សិតដែលមានឈ្មោះខាងក្រោម អាចធ្វើការចេញមុនម៉ោងបានដោយមិនគិតជា "ចេញមុន (Early Leave)"</p>
-            <div id="dashboardBenefitList" style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
-              <!-- Dynamic Cards -->
-            </div>
+            <div id="dashboardBenefitList" style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;"></div>
           </div>
         </div>
 
-        <!-- RECENT ACTIVITY TOOLBAR & TABLE -->
-        <div class="table-container">
-          <div class="toolbar-container" style="border: none; margin-bottom: 0;">
-            <span><i class="fa-solid fa-pen-to-square" style="color: var(--primary);"></i> វត្តមានថ្មីៗចុងក្រោយថ្ងៃនេះ (អាចកែសម្រួលផ្ទាល់បាន)</span>
-            <div class="search-box">
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" id="dashSearchInput" placeholder="ស្វែងរកតាមឈ្មោះ ឬអត្តលេខ..." onkeyup="DashboardModule.render()">
-            </div>
+        <!-- BULK ACTIONS & SEARCH -->
+        <div class="toolbar-container">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span>កំណត់វត្តមានជាដុំ៖</span>
+            <button class="btn btn-primary btn-sm" onclick="markAllStatus('P')"><i class="fa-solid fa-check-double"></i> វត្តមានទាំងអស់</button>
+            <button class="btn btn-danger btn-sm" onclick="markAllStatus('A')"><i class="fa-solid fa-xmark"></i> អវត្តមានទាំងអស់</button>
           </div>
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="dashSearchInput" placeholder="ស្វែងរកតាមឈ្មោះ ឬអត្តលេខ..." onkeyup="DashboardModule.render()">
+          </div>
+        </div>
+
+        <div class="table-container">
           <table>
             <thead>
               <tr>
                 <th>អត្តលេខ</th>
-                <th>ឈ្មោះពេញ</th>
-                <th>មុខជំនាញ/ផ្នែក</th>
+                <th>ឈ្មោះ</th>
+                <th>ផ្នែក/ជំនាញ</th>
                 <th>ម៉ោងចូល</th>
                 <th>ម៉ោងចេញ</th>
                 <th>ស្ថានភាព</th>
                 <th>សកម្មភាព</th>
               </tr>
             </thead>
-            <tbody id="dashRecentTable">
-              <!-- Dynamic Editable Rows -->
-            </tbody>
+            <tbody id="dashTable"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- 2. EMPLOYEE / STUDENT MANAGEMENT VIEW -->
+      <!-- EMPLOYEES & CSV IMPORT SECTION -->
       <section id="employees" class="view-section">
+        <h2>គ្រប់គ្រងទិន្នន័យបុគ្គលិក / និស្សិត</h2>
+        
+        <div style="margin: 16px 0; background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h4><i class="fa-solid fa-file-import"></i> នាំចូលទិន្នន័យតាមរយៈ CSV (CSV Import)</h4>
+          <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <input type="file" id="csvStudentInput" accept=".csv" class="form-control" style="width: auto;">
+            <button class="btn btn-primary" onclick="importStudentsFromCSV()"><i class="fa-solid fa-upload"></i> នាំចូលបញ្ជីឈ្មោះពី CSV</button>
+          </div>
+        </div>
+
         <div class="toolbar-container">
           <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -362,6 +373,7 @@
             <button class="btn btn-primary" onclick="EmployeeApp.openModal()"><i class="fa-solid fa-plus"></i> បន្ថែមថ្មី</button>
           </div>
         </div>
+
         <div class="table-container">
           <table>
             <thead>
@@ -375,20 +387,28 @@
                 <th>សកម្មភាព</th>
               </tr>
             </thead>
-            <tbody id="employeeTableBody">
-              <!-- Dynamic Content -->
-            </tbody>
+            <tbody id="employeeTableBody"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- 3. ATTENDANCE SCANNER / MANUAL & EDITABLE VIEW -->
+      <!-- ATTENDANCE & CSV ATTENDANCE IMPORT SECTION -->
       <section id="attendance" class="view-section">
+        <h2>កត់ត្រាវត្តមាន & នាំចូលប្រវត្តិ</h2>
+
+        <div style="margin: 16px 0; background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h4><i class="fa-solid fa-file-csv"></i> នាំចូលប្រវត្តិកត់ត្រាវត្តមានពី CSV (CSV Attendance Import)</h4>
+          <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <input type="file" id="csvAttInput" accept=".csv" class="form-control" style="width: auto;">
+            <button class="btn btn-primary" onclick="importAttendanceFromCSV()"><i class="fa-solid fa-upload"></i> នាំចូលប្រវត្តិកត់ត្រាពី CSV</button>
+          </div>
+        </div>
+
         <div class="form-row" style="margin-bottom: 24px;">
           <div class="stat-card" style="flex-direction: column; align-items: flex-start;">
             <h4>កត់ត្រាវត្តមាន (Manual Check-In/Out)</h4>
             <div class="form-group" style="width: 100%; margin-top: 12px;">
-              <label>ជ្រើសរើសឈ្មោះ (Choose Member List)</label>
+              <label>ជ្រើសរើសឈ្មោះ</label>
               <select class="form-control" id="manualEmpSelect"></select>
             </div>
             <div class="form-group" style="width: 100%;">
@@ -412,8 +432,7 @@
           </div>
         </div>
 
-        <!-- INTEGRATED EDITABLE ATTENDANCE TABLE -->
-        <div class="table-container" style="margin-top: 24px;">
+        <div class="table-container">
           <div class="toolbar-container" style="border: none; margin-bottom: 0;">
             <span>បញ្ជីវត្តមានប្រចាំថ្ងៃ (អាចកែសម្រួលបាន)</span>
             <div class="search-box">
@@ -431,14 +450,12 @@
                 <th>សកម្មភាព</th>
               </tr>
             </thead>
-            <tbody id="attendanceListBody">
-              <!-- Inline Editable Attendance Rows -->
-            </tbody>
+            <tbody id="attendanceListBody"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- 4. SPECIAL BENEFIT MANAGEMENT VIEW -->
+      <!-- SPECIAL BENEFIT MANAGEMENT SECTION -->
       <section id="benefits" class="view-section">
         <div class="stat-card benefit-card-highlight" style="margin-bottom: 20px;">
           <div>
@@ -457,29 +474,96 @@
                 <th>សកម្មភាព</th>
               </tr>
             </thead>
-            <tbody id="benefitScheduleTable">
-              <!-- Dynamic Benefit Content -->
-            </tbody>
+            <tbody id="benefitScheduleTable"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- 5. KHMER DAILY REPORT VIEW -->
+      <!-- ADVANCED HISTORY SEARCH SECTION -->
+      <section id="history" class="view-section">
+        <h2><i class="fa-solid fa-magnifying-glass"></i> ស្វែងរកប្រវត្តិពិស្ដារ (Advanced History Search)</h2>
+        <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); margin: 16px 0;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>ជ្រើសរើសបុគ្គលិក/និស្សិត</label>
+              <select id="searchHistoryEmp" class="form-control"></select>
+            </div>
+            <div class="form-group">
+              <label>ស្ថានភាព (Status Filter)</label>
+              <select id="searchHistoryStatus" class="form-control">
+                <option value="ALL">ទាំងអស់ (ALL)</option>
+                <option value="Present">វត្តមាន (Present)</option>
+                <option value="Absent">អវត្តមាន (Absent)</option>
+                <option value="Late">មកយឺត (Late)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ចាប់ពីថ្ងៃ (Start Date)</label>
+              <input type="date" id="searchHistoryStart" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>ដល់ថ្ងៃ (End Date)</label>
+              <input type="date" id="searchHistoryEnd" class="form-control">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="viewStudentHistory()"><i class="fa-solid fa-search"></i> ស្វែងរកទិន្នន័យ</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>កាលបរិច្ឆេទ</th><th>អត្តលេខ</th><th>ឈ្មោះ</th><th>ម៉ោងចូល</th><th>ម៉ោងចេញ</th><th>ស្ថានភាព</th></tr></thead>
+            <tbody id="historyTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- KHMER DAILY REPORT SECTION -->
       <section id="reports" class="view-section">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h3>របាយការណ៍វត្តមានប្រចាំថ្ងៃ</h3>
+          <h3>របាយការណ៍វត្តមានប្រចាំថ្ងៃ (ភាសាខ្មែរ)</h3>
           <div style="display: flex; gap: 10px;">
             <button class="btn btn-outline" onclick="ReportModule.copyText()"><i class="fa-solid fa-copy"></i> ចម្លងអត្ថបទ</button>
             <button class="btn btn-primary" onclick="ReportModule.exportPDF()"><i class="fa-solid fa-file-pdf"></i> ទាញយក PDF</button>
             <button class="btn btn-primary" style="background-color: #16a34a;" onclick="ReportModule.exportExcel()"><i class="fa-solid fa-file-excel"></i> ទាញយក Excel</button>
           </div>
         </div>
-        <div class="report-paper" id="khmerReportPaper">
-          <!-- Khmer Report Render Output -->
+        <div class="report-paper" id="khmerReportPaper"></div>
+      </section>
+
+      <!-- MONTHLY REPORTS SECTION -->
+      <section id="monthly" class="view-section">
+        <h2><i class="fa-solid fa-calendar-days"></i> របាយការណ៍វត្តមានប្រចាំខែ</h2>
+        <div style="display: flex; gap: 12px; margin: 16px 0; align-items: center; flex-wrap: wrap;">
+          <label>ជ្រើសរើសខែ៖</label>
+          <input type="month" id="monthlyReportMonth" class="form-control" style="width: auto;">
+          <button class="btn btn-primary" onclick="generateMonthlyReport()"><i class="fa-solid fa-arrows-rotate"></i> ទាញយកទិន្នន័យ</button>
+          <button class="btn btn-outline" onclick="downloadMonthlyCSV()"><i class="fa-solid fa-file-csv"></i> ទាញយក CSV</button>
+          <button class="btn btn-outline" onclick="exportMonthlyReportPDF()"><i class="fa-solid fa-file-pdf"></i> ទាញយក PDF</button>
+          <button class="btn btn-outline" onclick="exportDailyReportPDF()"><i class="fa-solid fa-file-pdf"></i> Daily PDF</button>
+          <button class="btn btn-outline" onclick="saveTextFile()"><i class="fa-solid fa-file-lines"></i> រក្សាទុកជា .TXT</button>
+          <button class="btn btn-outline" onclick="copyCSV()"><i class="fa-solid fa-copy"></i> ចម្លង RAW CSV</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>អត្តលេខ</th><th>ឈ្មោះ</th><th>វត្តមានសរុប (ថ្ងៃ)</th><th>អវត្តមានសរុប (ថ្ងៃ)</th><th>មកយឺតសរុប (ថ្ងៃ)</th></tr></thead>
+            <tbody id="monthlyTable"></tbody>
+          </table>
         </div>
       </section>
 
-      <!-- 6. ANALYTICS VIEW -->
+      <!-- LEADERBOARD SECTION -->
+      <section id="leaderboard" class="view-section">
+        <h2><i class="fa-solid fa-trophy" style="color: var(--benefit-gold);"></i> តារាងចំណាត់ថ្នាក់វត្តមានល្អបំផុត (#section-leaderboard)</h2>
+        <div class="table-container" style="margin-top: 16px;">
+          <table>
+            <thead><tr><th>ចំណាត់ថ្នាក់</th><th>អត្តលេខ</th><th>ឈ្មោះ</th><th>ភាគរយវត្តមាន</th></tr></thead>
+            <tbody id="leaderboardTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ANALYTICS SECTION -->
       <section id="analytics" class="view-section">
         <div style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
@@ -500,9 +584,31 @@
         </div>
       </section>
 
-      <!-- 7. SETTINGS VIEW -->
+      <!-- SETTINGS & SECURITY SECTION -->
       <section id="settings" class="view-section">
-        <!-- Managed Dynamically -->
+        <h2>ការកំណត់ប្រព័ន្ធ & សុវត្ថិភាព</h2>
+
+        <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); margin: 16px 0; max-width: 500px;">
+          <h4><i class="fa-solid fa-key"></i> ផ្លាស់ប្តូរលេខកូដសម្ងាត់ Admin (Security)</h4>
+          <div class="form-group" style="margin-top: 8px;">
+            <label>លេខកូដសម្ងាត់ថ្មី</label>
+            <input type="password" id="newAdminPass" class="form-control" placeholder="បញ្ចូលលេខកូដសម្ងាត់ថ្មី">
+          </div>
+          <button class="btn btn-primary" onclick="changeAdminPassword()">រក្សាទុកលេខកូដ</button>
+        </div>
+
+        <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); margin: 16px 0; max-width: 500px;">
+          <h4><i class="fa-solid fa-bell"></i> កំណត់ការរំលឹកស្វ័យប្រវត្តិ & លក្ខខណ្ឌអវត្តមាន</h4>
+          <div class="form-group" style="margin-top: 8px;">
+            <label>ម៉ោងរំលឹកកត់វត្តមានស្វ័យប្រវត្តិ</label>
+            <input type="time" id="cfgReminderTime" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>លក្ខខណ្ឌអវត្តមានលើសកំណត់ (Absence Threshold គិតជាថ្ងៃ)</label>
+            <input type="number" id="cfgAbsenceThreshold" class="form-control" placeholder="ឧ. 3">
+          </div>
+          <button class="btn btn-primary" onclick="saveReminderConfig()">រក្សាទុកការកំណត់រំលឹក</button>
+        </div>
       </section>
 
     </div>
@@ -695,27 +801,36 @@
        APPLICATION STATE & CONFIGURATION
        ========================================================================== */
     const State = {
+      isAdminMode: true,
+      adminPassword: '123',
+      reminderTime: '08:00',
+      absenceThreshold: 3,
       employees: [],
       attendance: [],
       config: {
         companyName: 'សាកលវិទ្យាល័យ / Enterprise System',
         standardCheckout: '17:00',
         benefitCheckout: '15:30',
-        lateThreshold: '08:15',
-        reminderTime: '08:00',
-        reminderToggle: 'OFF',
-        absenceThreshold: 3
+        lateThreshold: '08:15'
       }
     };
 
     /* ==========================================================================
-       SYSTEM UTILITIES & TOAST NOTIFICATIONS
+       SYSTEM UTILITIES & NAVIGATION
        ========================================================================== */
     class System {
-      static init() {
+      static async init() {
         this.updateClock();
         setInterval(() => this.updateClock(), 1000);
+        
+        const todayStr = new Date().toISOString().split('T')[0];
+        if (document.getElementById('dashDate')) document.getElementById('dashDate').value = todayStr;
+        if (document.getElementById('monthlyReportMonth')) document.getElementById('monthlyReportMonth').value = new Date().toISOString().slice(0,7);
+        if (document.getElementById('searchHistoryStart')) document.getElementById('searchHistoryStart').value = todayStr;
+        if (document.getElementById('searchHistoryEnd')) document.getElementById('searchHistoryEnd').value = todayStr;
+
         this.setupNavigation();
+        await EmployeeApp.render();
       }
 
       static updateClock() {
@@ -744,6 +859,8 @@
             if(targetView === 'attendance') AttendanceUI.renderAttendanceList();
             if(targetView === 'reports') ReportModule.renderKhmerReport();
             if(targetView === 'analytics') AnalyticsModule.render();
+            if(targetView === 'leaderboard') renderLeaderboard();
+            if(targetView === 'monthly') generateMonthlyReport();
           });
         });
       }
@@ -753,7 +870,7 @@
         this.toast('បានផ្លាស់ប្តូរ Theme ទៅជា ' + themeName);
       }
 
-      static toast(msg, type = 'success') {
+      static toast(msg) {
         const box = document.getElementById('toastBox');
         if (!box) return;
         const toast = document.createElement('div');
@@ -765,13 +882,158 @@
     }
 
     /* ==========================================================================
+       SECURITY & VIEW MODE
+       ========================================================================== */
+    function toggleViewMode() {
+      State.isAdminMode = !State.isAdminMode;
+      const badge = document.getElementById('viewModeBadge');
+      if (State.isAdminMode) {
+        badge.innerText = 'Admin Mode';
+        badge.className = 'badge badge-admin';
+        System.toast('បានផ្លាស់ប្តូរទៅជា Admin Mode');
+      } else {
+        badge.innerText = 'Read-only Mode';
+        badge.className = 'badge badge-present';
+        System.toast('បានផ្លាស់ប្តូរទៅជា Read-only Mode');
+      }
+    }
+
+    function changeAdminPassword() {
+      const pass = document.getElementById('newAdminPass').value;
+      if (!pass) return System.toast('សូមបញ្ចូលលេខកូដសម្ងាត់!');
+      State.adminPassword = pass;
+      System.toast('បានផ្លាស់ប្តូរលេខកូដសម្ងាត់ Admin រួចរាល់!');
+      document.getElementById('newAdminPass').value = '';
+    }
+
+    /* ==========================================================================
+       NOTIFICATION & REMINDER
+       ========================================================================== */
+    function requestNotificationPermission() {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            new Notification('ប្រព័ន្ធគ្រប់គ្រងវត្តមាន', { body: 'សិទ្ធិផ្ញើការជូនដំណឹងត្រូវបានបើក!' });
+          } else {
+            System.toast('សិទ្ធិផ្ញើការជូនដំណឹងត្រូវបានបដិសេធ');
+          }
+        });
+      } else {
+        System.toast('ឧបករណ៍នេះមិនគាំទ្រ Notification ទេ');
+      }
+    }
+
+    function saveReminderConfig() {
+      State.reminderTime = document.getElementById('cfgReminderTime').value;
+      State.absenceThreshold = parseInt(document.getElementById('cfgAbsenceThreshold').value) || 3;
+      System.toast('បានរក្សាទុកការកំណត់ការរំលឹកស្វ័យប្រវត្តិ!');
+    }
+
+    /* ==========================================================================
+       CSV IMPORT ENGINE
+       ========================================================================== */
+    function importStudentsFromCSV() {
+      const input = document.getElementById('csvStudentInput');
+      if (!input.files[0]) return System.toast('សូមជ្រើសរើសឯកសារ CSV!');
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const lines = e.target.result.split('\n');
+        for (let index = 0; index < lines.length; index++) {
+          const line = lines[index];
+          if (index === 0 || !line.trim()) continue;
+          const [id, name, dept] = line.split(',');
+          if (id && name) {
+            const empData = {
+              id: 'EMP-' + Date.now() + '-' + index,
+              code: id.trim(),
+              name: name.trim(),
+              major: (dept || 'General').trim(),
+              position: 'និស្សិត / បុគ្គលិក',
+              dept: (dept || 'General').trim(),
+              benefitDays: []
+            };
+            await Database.save('employees', empData);
+          }
+        }
+        System.toast('នាំចូលបញ្ជីឈ្មោះពី CSV រួចរាល់!');
+        await EmployeeApp.render();
+      };
+      reader.readAsText(input.files[0]);
+    }
+
+    function importAttendanceFromCSV() {
+      const input = document.getElementById('csvAttInput');
+      if (!input.files[0]) return System.toast('សូមជ្រើសរើសឯកសារ CSV!');
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const lines = e.target.result.split('\n');
+        for (let index = 0; index < lines.length; index++) {
+          const line = lines[index];
+          if (index === 0 || !line.trim()) continue;
+          const [date, empId, checkIn, checkOut, status] = line.split(',');
+          if (date && empId) {
+            const emp = State.employees.find(e => e.code === empId.trim() || e.id === empId.trim()) || { name: 'Unknown' };
+            const attData = {
+              id: 'ATT-' + Date.now() + '-' + index,
+              date: date.trim(),
+              empId: emp.id || empId.trim(),
+              empCode: empId.trim(),
+              empName: emp.name,
+              checkIn: checkIn ? checkIn.trim() : '--:--',
+              checkOut: checkOut ? checkOut.trim() : '--:--',
+              status: (status || 'Present').trim()
+            };
+            await Database.save('attendance', attData);
+          }
+        }
+        System.toast('នាំចូលប្រវត្តិកត់ត្រាវត្តមានពី CSV រួចរាល់!');
+        DashboardModule.render();
+      };
+      reader.readAsText(input.files[0]);
+    }
+
+    /* ==========================================================================
+       BULK ATTENDANCE MARKING
+       ========================================================================== */
+    async function markAllStatus(statusCode) {
+      if (!State.isAdminMode) return System.toast('អ្នកមិនមានសិទ្ធិ Admin ឡើយ!');
+      const date = document.getElementById('dashDate').value;
+      const statusMap = { 'P': 'Present', 'A': 'Absent' };
+      const status = statusMap[statusCode] || 'Present';
+
+      for (const emp of State.employees) {
+        let att = State.attendance.find(a => a.empId === emp.id && a.date === date);
+        if (att) {
+          att.status = status;
+        } else {
+          att = {
+            id: 'ATT-' + Date.now() + '-' + Math.floor(Math.random()*1000),
+            date: date,
+            empId: emp.id,
+            empCode: emp.code || emp.id,
+            empName: emp.name,
+            major: emp.major || emp.dept,
+            dept: emp.dept || emp.major,
+            checkIn: status === 'Present' ? '08:00' : '--:--',
+            checkOut: status === 'Present' ? '17:00' : '--:--',
+            status: status
+          };
+        }
+        await Database.save('attendance', att);
+      }
+      System.toast(`បានកំណត់ស្ថានភាព (${status}) ជូនបុគ្គលិកទាំងអស់!`);
+      DashboardModule.render();
+    }
+
+    /* ==========================================================================
        EMPLOYEE / STUDENT MODULE
        ========================================================================== */
     class EmployeeApp {
       static async render() {
         State.employees = await Database.getAll('employees');
         
-        // Auto-seed sample data if database is empty on first boot
         if (State.employees.length === 0) {
           await this.seedSampleData(false);
           State.employees = await Database.getAll('employees');
@@ -827,6 +1089,7 @@
         });
 
         this.renderBenefitSchedule();
+        populateHistoryOptions();
         DashboardModule.render();
       }
 
@@ -842,7 +1105,6 @@
           await Database.save('employees', emp);
         }
 
-        // Seed Sample Today Attendance
         const todayStr = new Date().toISOString().split('T')[0];
         const sampleAtt = [
           { id: 'ATT-201', empId: 'EMP-101', empCode: 'STU-001', empName: 'សុខ ដារ៉ា', major: 'វិទ្យាសាស្ត្រកុំព្យូទ័រ (Computer Science)', dept: 'វិទ្យាសាស្ត្រកុំព្យូទ័រ', date: todayStr, checkIn: '07:55', checkOut: '17:00', status: 'Present' },
@@ -888,7 +1150,7 @@
       }
 
       static async save() {
-        const id = document.getElementById('empId').value || 'ID-' + Date.now();
+        const id = document.getElementById('empId').value || 'EMP-' + Date.now();
         const code = document.getElementById('empCode').value;
         const name = document.getElementById('empName').value;
         const major = document.getElementById('empMajor').value;
@@ -897,7 +1159,7 @@
         const parentPhone = document.getElementById('empParentPhone') ? document.getElementById('empParentPhone').value : '';
 
         if (!code || !name || !major) {
-          System.toast('សូមបំពេញព័ត៌មានចាំបាច់ឱ្យបានគ្រប់!', 'error');
+          System.toast('សូមបំពេញព័ត៌មានចាំបាច់ឱ្យបានគ្រប់!');
           return;
         }
 
@@ -910,14 +1172,14 @@
         await Database.save('employees', empData);
         System.toast('រក្សាទុកបានជោគជ័យ!');
         this.closeModal();
-        this.render();
+        await this.render();
       }
 
       static async delete(id) {
         if (confirm('តើអ្នកពិតជាចង់លុបទិន្នន័យនេះមែនទេ?')) {
           await Database.delete('employees', id);
           System.toast('បានលុបទិន្នន័យចេញពីប្រព័ន្ធ');
-          this.render();
+          await this.render();
         }
       }
 
@@ -950,12 +1212,12 @@
         const empId = document.getElementById('manualEmpSelect').value;
         const status = document.getElementById('manualStatusSelect').value;
         if (!empId) {
-          System.toast('សូមជ្រើសរើសឈ្មោះ!', 'error');
+          System.toast('សូមជ្រើសរើសឈ្មោះ!');
           return;
         }
 
         const emp = State.employees.find(e => e.id === empId);
-        const todayStr = document.getElementById('attLogDateFilter')?.value || new Date().toISOString().split('T')[0];
+        const todayStr = document.getElementById('dashDate')?.value || new Date().toISOString().split('T')[0];
         const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
         
         let attRecord = State.attendance.find(a => a.empId === empId && a.date === todayStr);
@@ -1012,20 +1274,20 @@
           document.getElementById('manualEmpSelect').value = emp.id;
           await this.manualCheck(true);
         } else {
-          System.toast('រកមិនឃើញទិន្នន័យតាមរយៈ QR នេះទេ!', 'error');
+          System.toast('រកមិនឃើញទិន្នន័យតាមរយៈ QR នេះទេ!');
         }
       }
     }
 
     /* ==========================================================================
-       INTEGRATED EDITABLE ATTENDANCE UI CLASS
+       EDITABLE ATTENDANCE UI
        ========================================================================== */
     class AttendanceUI {
       static async renderAttendanceList() {
         const tbody = document.getElementById('attendanceListBody');
         if (!tbody) return;
 
-        const date = document.getElementById('attLogDateFilter')?.value || new Date().toISOString().split('T')[0];
+        const date = document.getElementById('dashDate')?.value || new Date().toISOString().split('T')[0];
         const query = document.getElementById('attSearchInput')?.value.toLowerCase().trim() || '';
         
         State.attendance = await Database.getAll('attendance');
@@ -1033,9 +1295,7 @@
         
         tbody.innerHTML = '';
 
-        // Synchronize list to include ALL members for the chosen date so user can easily pick time
-        const allEmps = State.employees;
-        allEmps.forEach(emp => {
+        State.employees.forEach(emp => {
           if (query && !emp.name.toLowerCase().includes(query) && !(emp.code && emp.code.toLowerCase().includes(query))) {
             return;
           }
@@ -1057,49 +1317,28 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td><strong>${att.empName}</strong> (${att.empCode || att.empId})</td>
-            
             <td>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <input type="time" class="inline-input" style="width: 120px;" 
                        value="${att.checkIn && att.checkIn !== '--:--' ? att.checkIn : ''}" 
                        onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', this.value, '${date}')">
-                <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" 
-                        title="ជ្រើសរើសម៉ោងបច្ចុប្បន្ន" 
-                        onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkIn', '${date}')">
-                  <i class="fa-solid fa-clock"></i>
-                </button>
-                <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
-                        title="សម្អាតម៉ោងចូល" 
-                        onclick="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', '--:--', '${date}')">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkIn', '${date}')"><i class="fa-solid fa-clock"></i></button>
               </div>
             </td>
-
             <td>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <input type="time" class="inline-input" style="width: 120px;" 
                        value="${att.checkOut && att.checkOut !== '--:--' ? att.checkOut : ''}" 
                        onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', this.value, '${date}')">
-                <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" 
-                        title="ជ្រើសរើសម៉ោងបច្ចុប្បន្ន" 
-                        onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkOut', '${date}')">
-                  <i class="fa-solid fa-clock"></i>
-                </button>
-                <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
-                        title="សម្អាតម៉ោងចេញ" 
-                        onclick="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', '--:--', '${date}')">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkOut', '${date}')"><i class="fa-solid fa-clock"></i></button>
               </div>
             </td>
-
             <td>
               <select class="inline-input" onchange="AttendanceUI.updateStatusLive('${emp.id}', this.value, '${date}')">
-                <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>វត្តមាន (Present)</option>
-                <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>មកយឺត (Late)</option>
-                <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>សុំច្បាប់ (Leave)</option>
-                <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>អវត្តមាន (Absent)</option>
+                <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>Present</option>
+                <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>Late</option>
+                <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>Leave</option>
+                <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>Absent</option>
               </select>
             </td>
             <td>
@@ -1175,10 +1414,7 @@
       }
 
       static async deleteRecord(id) {
-        if (id.startsWith('TEMP-')) {
-          System.toast('គ្មានកំណត់ត្រាត្រូវលុបទេ');
-          return;
-        }
+        if (id.startsWith('TEMP-')) return;
         if (confirm('តើអ្នកពិតជាចង់លុបប័ណ្ណវត្តមាននេះមែនទេ?')) {
           await Database.delete('attendance', id);
           State.attendance = await Database.getAll('attendance');
@@ -1190,22 +1426,22 @@
     }
 
     /* ==========================================================================
-       DASHBOARD & DATE FILTERING ENGINE
+       DASHBOARD ENGINE
        ========================================================================== */
     class DashboardModule {
       static async render() {
         State.attendance = await Database.getAll('attendance');
-        const filterDate = document.getElementById('dashDateFilter')?.value || new Date().toISOString().split('T')[0];
+        const filterDate = document.getElementById('dashDate')?.value || new Date().toISOString().split('T')[0];
         const query = document.getElementById('dashSearchInput')?.value.toLowerCase().trim() || '';
 
         const filteredAtt = State.attendance.filter(a => a.date === filterDate);
 
-        if(document.getElementById('dashTotalEmp')) document.getElementById('dashTotalEmp').innerText = State.employees.length;
+        if(document.getElementById('dashTotal')) document.getElementById('dashTotal').innerText = State.employees.length;
         if(document.getElementById('dashPresent')) document.getElementById('dashPresent').innerText = filteredAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
         if(document.getElementById('dashLate')) document.getElementById('dashLate').innerText = filteredAtt.filter(a => a.status === 'Late').length;
         if(document.getElementById('dashAbsent')) document.getElementById('dashAbsent').innerText = filteredAtt.filter(a => a.status === 'Leave' || a.status === 'Absent').length;
 
-        const tbody = document.getElementById('dashRecentTable');
+        const tbody = document.getElementById('dashTable');
         if (tbody) {
           tbody.innerHTML = '';
 
@@ -1228,55 +1464,26 @@
                 <td><strong>${emp.code || emp.id}</strong></td>
                 <td><strong>${emp.name}</strong></td>
                 <td><span style="color:var(--primary); font-weight:600;">${emp.major || emp.dept}</span></td>
-                
                 <td>
-                  <div style="display: flex; align-items: center; gap: 6px;">
-                    <input type="time" class="inline-input" style="width: 120px; color: #10b981;" 
-                           value="${checkInVal !== '--:--' ? checkInVal : ''}" 
-                           onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', this.value, '${filterDate}')">
-                    <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" 
-                            title="ជ្រើសរើសម៉ោងបច្ចុប្បន្ន" 
-                            onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkIn', '${filterDate}')">
-                      <i class="fa-solid fa-clock"></i>
-                    </button>
-                    <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
-                            title="សម្អាតម៉ោងចូល" 
-                            onclick="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', '--:--', '${filterDate}')">
-                      <i class="fa-solid fa-xmark"></i>
-                    </button>
-                  </div>
+                  <input type="time" class="inline-input" style="width: 110px; color: #10b981;" 
+                         value="${checkInVal !== '--:--' ? checkInVal : ''}" 
+                         onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', this.value, '${filterDate}')">
                 </td>
-
                 <td>
-                  <div style="display: flex; align-items: center; gap: 6px;">
-                    <input type="time" class="inline-input" style="width: 120px; color: #f59e0b;" 
-                           value="${checkOutVal !== '--:--' ? checkOutVal : ''}" 
-                           onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', this.value, '${filterDate}')">
-                    <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" 
-                            title="ជ្រើសរើសម៉ោងបច្ចុប្បន្ន" 
-                            onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkOut', '${filterDate}')">
-                      <i class="fa-solid fa-clock"></i>
-                    </button>
-                    <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
-                            title="សម្អាតម៉ោងចេញ" 
-                            onclick="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', '--:--', '${filterDate}')">
-                      <i class="fa-solid fa-xmark"></i>
-                    </button>
-                  </div>
+                  <input type="time" class="inline-input" style="width: 110px; color: #f59e0b;" 
+                         value="${checkOutVal !== '--:--' ? checkOutVal : ''}" 
+                         onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', this.value, '${filterDate}')">
                 </td>
-
                 <td>
                   <select class="inline-input" onchange="AttendanceUI.updateStatusLive('${emp.id}', this.value, '${filterDate}')">
-                    <option value="Present" ${statusVal === 'Present' ? 'selected' : ''}>Present (វត្តមាន)</option>
-                    <option value="Late" ${statusVal === 'Late' ? 'selected' : ''}>Late (មកយឺត)</option>
-                    <option value="Leave" ${statusVal === 'Leave' ? 'selected' : ''}>Leave (សុំច្បាប់)</option>
-                    <option value="Absent" ${statusVal === 'Absent' ? 'selected' : ''}>Absent (អវត្តមាន)</option>
+                    <option value="Present" ${statusVal === 'Present' ? 'selected' : ''}>Present</option>
+                    <option value="Late" ${statusVal === 'Late' ? 'selected' : ''}>Late</option>
+                    <option value="Leave" ${statusVal === 'Leave' ? 'selected' : ''}>Leave</option>
+                    <option value="Absent" ${statusVal === 'Absent' ? 'selected' : ''}>Absent</option>
                   </select>
                 </td>
                 <td>
-                  <button class="btn btn-danger btn-sm" onclick="AttendanceUI.deleteRecord('${attId}')">
-                    <i class="fa-solid fa-trash"></i> លុប
-                  </button>
+                  <button class="btn btn-danger btn-sm" onclick="AttendanceUI.deleteRecord('${attId}')"><i class="fa-solid fa-trash"></i></button>
                 </td>
               `;
               tbody.appendChild(tr);
@@ -1291,7 +1498,6 @@
         const container = document.getElementById('dashboardBenefitList');
         if (container) {
           container.innerHTML = '';
-
           if (benefitEmps.length === 0) {
             container.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary);">គ្មានបុគ្គលិក/និស្សិតទទួលបានសិទ្ធិចេញមុនថ្ងៃនេះទេ</span>`;
           } else {
@@ -1306,45 +1512,171 @@
           }
         }
       }
-
-      static async updateRecord(id, field, value) {
-        const record = State.attendance.find(a => a.id === id);
-        if (record) {
-          record[field] = value || '--:--';
-          await Database.save('attendance', record);
-          System.toast('បានធ្វើបច្ចុប្បន្នភាពទិន្នន័យវត្តមានរួចរាល់!');
-          this.render();
-        }
-      }
-
-      static async deleteRecord(id) {
-        if (id.startsWith('TEMP-')) return;
-        if (confirm('តើអ្នកពិតជាចង់លុបទិន្នន័យវត្តមាននេះមែនទេ?')) {
-          await Database.delete('attendance', id);
-          System.toast('បានលុបវត្តមានជោគជ័យ!');
-          this.render();
-        }
-      }
     }
 
     /* ==========================================================================
-       KHMER REPORT GENERATION ENGINE (SORTED BY ID ASCENDING)
+       DATE HELPERS
+       ========================================================================== */
+    function shiftDate(elementId, offset) {
+      const el = document.getElementById(elementId);
+      if (!el || !el.value) return;
+      const d = new Date(el.value);
+      d.setDate(d.getDate() + offset);
+      el.value = d.toISOString().split('T')[0];
+      DashboardModule.render();
+    }
+
+    function setToday(elementId) {
+      const el = document.getElementById(elementId);
+      if (el) el.value = new Date().toISOString().split('T')[0];
+    }
+
+    /* ==========================================================================
+       ADVANCED HISTORY SEARCH
+       ========================================================================== */
+    function populateHistoryOptions() {
+      const select = document.getElementById('searchHistoryEmp');
+      if (!select) return;
+      select.innerHTML = '<option value="">-- បុគ្គលិកទាំងអស់ --</option>';
+      State.employees.forEach(emp => {
+        const opt = document.createElement('option');
+        opt.value = emp.id;
+        opt.innerText = `${emp.code || emp.id} - ${emp.name}`;
+        select.appendChild(opt);
+      });
+    }
+
+    function viewStudentHistory() {
+      const empId = document.getElementById('searchHistoryEmp').value;
+      const status = document.getElementById('searchHistoryStatus').value;
+      const start = document.getElementById('searchHistoryStart').value;
+      const end = document.getElementById('searchHistoryEnd').value;
+
+      let results = State.attendance;
+      if (empId) results = results.filter(a => a.empId === empId);
+      if (status !== 'ALL') results = results.filter(a => a.status === status);
+      if (start) results = results.filter(a => a.date >= start);
+      if (end) results = results.filter(a => a.date <= end);
+
+      const tbody = document.getElementById('historyTable');
+      tbody.innerHTML = '';
+
+      results.forEach(a => {
+        const emp = State.employees.find(e => e.id === a.empId) || { name: a.empName || 'N/A' };
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${a.date}</td><td>${a.empCode || a.empId}</td><td>${emp.name}</td><td>${a.checkIn}</td><td>${a.checkOut}</td><td><span class="badge badge-present">${a.status}</span></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* ==========================================================================
+       MONTHLY REPORTS & LEADERBOARD
+       ========================================================================== */
+    function generateMonthlyReport() {
+      const month = document.getElementById('monthlyReportMonth').value;
+      const tbody = document.getElementById('monthlyTable');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      State.employees.forEach(emp => {
+        const records = State.attendance.filter(a => a.empId === emp.id && a.date.startsWith(month));
+        const presentCount = records.filter(r => r.status === 'Present').length;
+        const absentCount = records.filter(r => r.status === 'Absent' || r.status === 'Leave').length;
+        const lateCount = records.filter(r => r.status === 'Late').length;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${emp.code || emp.id}</td><td>${emp.name}</td><td>${presentCount}</td><td>${absentCount}</td><td>${lateCount}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderLeaderboard() {
+      const tbody = document.getElementById('leaderboardTable');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const scores = State.employees.map(emp => {
+        const records = State.attendance.filter(a => a.empId === emp.id);
+        const present = records.filter(r => r.status === 'Present' || r.status === 'Late').length;
+        const total = records.length || 1;
+        return { emp, rate: Math.round((present / total) * 100) };
+      });
+
+      scores.sort((a, b) => b.rate - a.rate);
+
+      scores.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>🏆 #${idx + 1}</td><td>${item.emp.code || item.emp.id}</td><td>${item.emp.name}</td><td><strong>${item.rate}%</strong></td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* ==========================================================================
+       EXPORTING & FORMATTING
+       ========================================================================== */
+    function downloadMonthlyCSV() {
+      let csv = "ID,Name,Present,Absent,Late\n";
+      State.employees.forEach(emp => {
+        const records = State.attendance.filter(a => a.empId === emp.id);
+        const p = records.filter(r => r.status === 'Present').length;
+        const a = records.filter(r => r.status === 'Absent' || r.status === 'Leave').length;
+        const l = records.filter(r => r.status === 'Late').length;
+        csv += `${emp.code || emp.id},${emp.name},${p},${a},${l}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Monthly_Report.csv';
+      a.click();
+    }
+
+    function exportMonthlyReportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("Monthly Attendance Report", 10, 10);
+      let y = 20;
+      State.employees.forEach(emp => {
+        doc.text(`${emp.code || emp.id} - ${emp.name}`, 10, y);
+        y += 10;
+      });
+      doc.save('Monthly_Report.pdf');
+    }
+
+    function exportDailyReportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("Daily Attendance Report", 10, 10);
+      doc.save('Daily_Report.pdf');
+    }
+
+    function saveTextFile() {
+      let txt = "=== Attendance Report ===\n";
+      State.attendance.forEach(a => { txt += `${a.date} | ${a.empCode || a.empId} | ${a.status}\n`; });
+      const blob = new Blob([txt], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Report.txt';
+      a.click();
+    }
+
+    function copyCSV() {
+      let csv = "Date,EmpID,CheckIn,CheckOut,Status\n";
+      State.attendance.forEach(a => { csv += `${a.date},${a.empCode || a.empId},${a.checkIn},${a.checkOut},${a.status}\n`; });
+      navigator.clipboard.writeText(csv);
+      System.toast('បានចម្លង RAW CSV ទៅ Clipboard!');
+    }
+
+    /* ==========================================================================
+       KHMER REPORT GENERATION ENGINE
        ========================================================================== */
     class ReportModule {
       static renderKhmerReport() {
-        const reportDate = document.getElementById('reportDateFilter')?.value || new Date().toISOString().split('T')[0];
-        
+        const reportDate = document.getElementById('dashDate')?.value || new Date().toISOString().split('T')[0];
         const dateParts = reportDate.split('-');
         const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
 
         const dayAtt = State.attendance.filter(a => a.date === reportDate);
-
-        // Sort attendance records by ID or Code ascending
-        dayAtt.sort((a, b) => {
-          const idA = String(a.empCode || a.empId || '');
-          const idB = String(b.empCode || b.empId || '');
-          return idA.localeCompare(idB, undefined, { numeric: true, sensitivity: 'base' });
-        });
+        dayAtt.sort((a, b) => String(a.empCode || a.empId).localeCompare(String(b.empCode || b.empId)));
 
         const presentList = dayAtt.filter(a => a.status === 'Present' || a.status === 'Late');
         const lateList = dayAtt.filter(a => a.status === 'Late');
@@ -1370,9 +1702,7 @@
           });
         }
 
-        reportStr += `\n`;
-
-        reportStr += `🔴 ២. បញ្ជីឈ្មោះសមាជិកអវត្តមាន (${padZero(absentList.length)} នាក់)\n`;
+        reportStr += `\n🔴 ២. បញ្ជីឈ្មោះសមាជិកអវត្តមាន (${padZero(absentList.length)} នាក់)\n`;
         if (absentList.length === 0) {
           reportStr += `  (គ្មានសមាជិកអវត្តមាន)\n`;
         } else {
@@ -1395,10 +1725,10 @@
       }
 
       static exportExcel() {
-        const reportDate = document.getElementById('reportDateFilter')?.value || new Date().toISOString().split('T')[0];
+        const reportDate = document.getElementById('dashDate')?.value || new Date().toISOString().split('T')[0];
         const data = State.attendance.filter(a => a.date === reportDate);
         if (data.length === 0) {
-          System.toast('គ្មានទិន្នន័យសម្រាប់ Export ទេ!', 'error');
+          System.toast('គ្មានទិន្នន័យសម្រាប់ Export ទេ!');
           return;
         }
         const ws = XLSX.utils.json_to_sheet(data);
@@ -1419,90 +1749,27 @@
     }
 
     /* ==========================================================================
-       ANALYTICS & CHART ENGINE
+       ANALYTICS & QR MODAL
        ========================================================================== */
     class AnalyticsModule {
       static render() {
-        const startDate = document.getElementById('analyticsStart')?.value;
-        const endDate = document.getElementById('analyticsEnd')?.value;
-
-        let filteredAtt = State.attendance;
-        if (startDate && endDate) {
-          filteredAtt = State.attendance.filter(a => a.date >= startDate && a.date <= endDate);
-        }
-
-        const total = filteredAtt.length;
-        const presentCount = filteredAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
-        const rate = total > 0 ? Math.round((presentCount / total) * 100) : 0;
-
-        const rateEl = document.getElementById('ratePercent');
-        const barEl = document.getElementById('progressBar');
-        if(rateEl) rateEl.innerText = `${rate}%`;
-        if(barEl) barEl.style.width = `${rate}%`;
-
-        const ctx1 = document.getElementById('attendanceChart')?.getContext('2d');
-        const ctx2 = document.getElementById('deptChart')?.getContext('2d');
-
-        if(!ctx1 || !ctx2) return;
-
-        if (window.myChart1) window.myChart1.destroy();
-        if (window.myChart2) window.myChart2.destroy();
-
-        window.myChart1 = new Chart(ctx1, {
-          type: 'bar',
-          data: {
-            labels: ['វត្តមាន', 'មកយឺត', 'សុំច្បាប់ / អវត្តមាន'],
-            datasets: [{
-              label: 'ស្ថិតិវត្តមានទូទៅ',
-              data: [
-                filteredAtt.filter(a => a.status === 'Present').length,
-                filteredAtt.filter(a => a.status === 'Late').length,
-                filteredAtt.filter(a => a.status === 'Leave' || a.status === 'Absent').length
-              ],
-              backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
-            }]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-        });
-
-        const majorCounts = {};
-        State.employees.forEach(e => {
-          const key = e.major || e.dept || 'ផ្សេងៗ';
-          majorCounts[key] = (majorCounts[key] || 0) + 1;
-        });
-
-        window.myChart2 = new Chart(ctx2, {
-          type: 'pie',
-          data: {
-            labels: Object.keys(majorCounts).length ? Object.keys(majorCounts) : ['គ្មានទិន្នន័យ'],
-            datasets: [{
-              data: Object.values(majorCounts).length ? Object.values(majorCounts) : [1],
-              backgroundColor: ['#3b82f6', '#ec4899', '#8b5cf6', '#14b8a6', '#f97316', '#eab308', '#6366f1']
-            }]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-        });
+        const total = State.attendance.length;
+        const presentCount = State.attendance.filter(a => a.status === 'Present' || a.status === 'Late').length;
+        const rate = total ? Math.round((presentCount / total) * 100) : 0;
+        
+        if (document.getElementById('ratePercent')) document.getElementById('ratePercent').innerText = `${rate}%`;
+        if (document.getElementById('progressBar')) document.getElementById('progressBar').style.width = `${rate}%`;
       }
     }
 
-    /* ==========================================================================
-       QR CODE GENERATOR MODAL FUNCTIONS
-       ========================================================================== */
-    function openQRModal(empId) {
-      const emp = State.employees.find(e => e.id === empId);
+    function openQRModal(id) {
+      const emp = State.employees.find(e => e.id === id);
       if (!emp) return;
-
       document.getElementById('qrModalTitle').innerText = emp.name;
-      document.getElementById('qrModalSub').innerText = `ID: #${emp.code || emp.id}`;
-      
-      const qrBox = document.getElementById('qrcodeCanvas');
-      qrBox.innerHTML = '';
-      new QRCode(qrBox, {
-        text: emp.code || emp.id,
-        width: 128,
-        height: 128
-      });
-
+      document.getElementById('qrModalSub').innerText = `ID: ${emp.code || emp.id}`;
+      const box = document.getElementById('qrcodeCanvas');
+      box.innerHTML = '';
+      new QRCode(box, { text: emp.code || emp.id, width: 128, height: 128 });
       document.getElementById('qrModal').classList.add('active');
     }
 
@@ -1511,220 +1778,9 @@
     }
 
     /* ==========================================================================
-       BACKUP & RESTORE JSON ENGINE
+       BOOTSTRAP INITIALIZATION
        ========================================================================== */
-    async function exportDatabaseJSON() {
-      const employees = await Database.getAll('employees');
-      const attendance = await Database.getAll('attendance');
-      
-      const backupData = {
-        version: DB_VERSION,
-        exportDate: new Date().toISOString(),
-        config: State.config,
-        employees: employees,
-        attendance: attendance
-      };
-
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `attendance_backup_${new Date().toISOString().split('T')[0]}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-      System.toast('បានទាញយកទិន្នន័យ Backup (JSON) រួចរាល់!');
-    }
-
-    async function importDatabaseJSON(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = async function(e) {
-        try {
-          const content = JSON.parse(e.target.result);
-          if (!content.employees || !content.attendance) {
-            throw new Error('Invalid Format');
-          }
-
-          const db = await Database.getStore();
-          
-          const tx1 = db.transaction('employees', 'readwrite');
-          const empStore = tx1.objectStore('employees');
-          empStore.clear();
-          content.employees.forEach(emp => empStore.put(emp));
-
-          const tx2 = db.transaction('attendance', 'readwrite');
-          const attStore = tx2.objectStore('attendance');
-          attStore.clear();
-          content.attendance.forEach(att => attStore.put(att));
-
-          if (content.config) {
-            State.config = content.config;
-          }
-
-          System.toast('បានស្តារទិន្នន័យ (Restore) ពីឯកសារ JSON ជោគជ័យ!');
-          setTimeout(() => location.reload(), 1000);
-        } catch (err) {
-          System.toast('ឯកសារ JSON មិនត្រឹមត្រូវ (Invalid Format)!', 'error');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    /* ==========================================================================
-       CLEAR ALL DATA (Bulk Delete Engine)
-       ========================================================================== */
-    async function clearAllData() {
-      if (confirm('តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់ (បុគ្គលិក និងកំណត់ត្រាវត្តមាន) ចេញពីប្រព័ន្ធមែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់វិញបានឡើយ!')) {
-        const db = await Database.getStore();
-        const tx1 = db.transaction('employees', 'readwrite');
-        tx1.objectStore('employees').clear();
-        const tx2 = db.transaction('attendance', 'readwrite');
-        tx2.objectStore('attendance').clear();
-
-        System.toast('បានលុបទិន្នន័យទាំងអស់ចេញពីប្រព័ន្ធដោយជោគជ័យ!');
-        setTimeout(() => location.reload(), 1000);
-      }
-    }
-
-    /* ==========================================================================
-       SYSTEM INITIALIZATION
-       ========================================================================== */
-    window.addEventListener('DOMContentLoaded', async () => {
-      System.init();
-      State.employees = await Database.getAll('employees');
-      if (State.employees.length === 0) {
-        await EmployeeApp.seedSampleData(false);
-      }
-      State.attendance = await Database.getAll('attendance');
-      
-      injectUIUpdates();
-      await EmployeeApp.render();
-      await DashboardModule.render();
-      await AttendanceUI.renderAttendanceList();
-    });
-
-    /* INJECT TIME CONFIGURATION & DATE FILTERS DYNAMICALLY */
-    function injectUIUpdates() {
-      const settingsView = document.getElementById('settings');
-      if (settingsView) {
-        settingsView.innerHTML = `
-          <div class="stat-card" style="flex-direction: column; align-items: flex-start; max-width: 650px;">
-            <h3><i class="fa-solid fa-clock"></i> ការកំណត់ម៉ោងធ្វើការ (Time Settings)</h3>
-            <br>
-            <div class="form-group" style="width: 100%;">
-              <label>ឈ្មោះក្រុមហ៊ុន/ស្ថាប័ន</label>
-              <input type="text" class="form-control" id="cfgCompanyName" value="${State.config.companyName}">
-            </div>
-            <div class="form-row" style="width: 100%;">
-              <div class="form-group">
-                <label>ម៉ោងចូលធ្វើការ (Check-In)</label>
-                <input type="time" class="form-control" id="cfgCheckIn" value="08:00">
-              </div>
-              <div class="form-group">
-                <label>ម៉ោងរាប់ថាយឺត (Late Threshold)</label>
-                <input type="time" class="form-control" id="cfgLateThreshold" value="${State.config.lateThreshold}">
-              </div>
-            </div>
-            <div class="form-row" style="width: 100%;">
-              <div class="form-group">
-                <label>ម៉ោងចេញធម្មតា (Regular Check-Out)</label>
-                <input type="time" class="form-control" id="cfgStandardCheckout" value="${State.config.standardCheckout}">
-              </div>
-              <div class="form-group">
-                <label>ម៉ោងចេញពិសេស (Special Benefit Check-Out)</label>
-                <input type="time" class="form-control" id="cfgBenefitCheckout" value="${State.config.benefitCheckout}">
-              </div>
-            </div>
-            <button class="btn btn-primary" onclick="saveAdvancedSettings()"><i class="fa-solid fa-floppy-disk"></i> រក្សាទុកការកំណត់</button>
-            
-            <hr style="width:100%; margin: 24px 0; border: 0; border-top: 1px solid var(--border);">
-            
-            <h3><i class="fa-solid fa-database"></i> បម្រុងទុក និង ស្តារទិន្នន័យ (Backup & Restore JSON)</h3>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 8px 0 14px 0;">ទាញយកទិន្នន័យទាំងអស់ទុកជាឯកសារ JSON ឬផ្ទុកឯកសារចាស់មកវិញដើម្បីស្តារទិន្នន័យ។</p>
-            <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
-              <button class="btn btn-primary" onclick="exportDatabaseJSON()"><i class="fa-solid fa-download"></i> Export Backup (JSON)</button>
-              <label class="btn btn-outline" style="cursor: pointer; margin-bottom: 0;">
-                <i class="fa-solid fa-upload"></i> Import / Restore JSON
-                <input type="file" id="importJsonFile" accept=".json" onchange="importDatabaseJSON(event)" style="display: none;">
-              </label>
-            </div>
-
-            <hr style="width:100%; margin: 24px 0; border: 0; border-top: 1px solid var(--border);">
-            
-            <h3 style="color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> តំបន់គ្រោះថ្នាក់ (Danger Zone)</h3>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 8px 0 14px 0;">លុបទិន្នន័យបុគ្គលិក និងកំណត់ត្រាវត្តមានទាំងអស់ចេញពី Local Database នៃប្រព័ន្ធ។</p>
-            <button class="btn btn-danger" onclick="clearAllData()"><i class="fa-solid fa-trash-can"></i> លុបទិន្នន័យទាំងអស់ (Delete All Data)</button>
-          </div>
-        `;
-      }
-
-      const dashHeader = document.querySelector('#dashboard .dashboard-grid');
-      if (dashHeader && !document.getElementById('dashDateFilter')) {
-        const dateFilterDiv = document.createElement('div');
-        dateFilterDiv.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;";
-        dateFilterDiv.innerHTML = `
-          <h3>ផ្ទាំងព័ត៌មានទូទៅ</h3>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <label style="font-weight: 600;">ជ្រើសរើសកាលបរិច្ឆេទ៖</label>
-            <input type="date" class="form-control" id="dashDateFilter" value="${new Date().toISOString().split('T')[0]}" onchange="DashboardModule.render()" style="width: auto;">
-          </div>
-        `;
-        dashHeader.parentNode.insertBefore(dateFilterDiv, dashHeader);
-      }
-
-      const attView = document.getElementById('attendance');
-      if (attView && !document.getElementById('attLogDateFilter')) {
-        const filterDiv = document.createElement('div');
-        filterDiv.style.cssText = "display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;";
-        filterDiv.innerHTML = `
-          <h3>កត់ត្រាវត្តមានប្រចាំថ្ងៃ</h3>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <label style="font-weight: 600;">កាលបរិច្ឆេទកត់ត្រា៖</label>
-            <input type="date" class="form-control" id="attLogDateFilter" value="${new Date().toISOString().split('T')[0]}" onchange="AttendanceUI.renderAttendanceList()" style="width: auto;">
-          </div>
-        `;
-        attView.insertBefore(filterDiv, attView.firstChild);
-      }
-
-      const reportHeader = document.querySelector('#reports div');
-      if (reportHeader && !document.getElementById('reportDateFilter')) {
-        const datePickerDiv = document.createElement('div');
-        datePickerDiv.style.cssText = "display: flex; align-items: center; gap: 10px; margin-right: 15px;";
-        datePickerDiv.innerHTML = `
-          <label style="font-weight: 600;">ជ្រើសរើសថ្ងៃ៖</label>
-          <input type="date" class="form-control" id="reportDateFilter" value="${new Date().toISOString().split('T')[0]}" onchange="ReportModule.renderKhmerReport()" style="width: auto;">
-        `;
-        reportHeader.children[1].insertBefore(datePickerDiv, reportHeader.children[1].firstChild);
-      }
-
-      const analyticsView = document.getElementById('analytics');
-      if (analyticsView && !document.getElementById('analyticsStart')) {
-        const filterDiv = document.createElement('div');
-        filterDiv.style.cssText = "display: flex; align-items: center; gap: 12px; margin-bottom: 20px;";
-        filterDiv.innerHTML = `
-          <h3>ការវិភាគទិន្នន័យ</h3>
-          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
-            <label style="font-weight: 600;">ចាប់ពី៖</label>
-            <input type="date" class="form-control" id="analyticsStart" value="${new Date().toISOString().split('T')[0]}" style="width: auto;">
-            <label style="font-weight: 600;">ដល់៖</label>
-            <input type="date" class="form-control" id="analyticsEnd" value="${new Date().toISOString().split('T')[0]}" style="width: auto;">
-            <button class="btn btn-primary" onclick="AnalyticsModule.render()"><i class="fa-solid fa-filter"></i> Filter</button>
-          </div>
-        `;
-        analyticsView.insertBefore(filterDiv, analyticsView.firstChild);
-      }
-    }
-
-    function saveAdvancedSettings() {
-      State.config.companyName = document.getElementById('cfgCompanyName').value;
-      State.config.checkIn = document.getElementById('cfgCheckIn').value;
-      State.config.lateThreshold = document.getElementById('cfgLateThreshold').value;
-      State.config.standardCheckout = document.getElementById('cfgStandardCheckout').value;
-      State.config.benefitCheckout = document.getElementById('cfgBenefitCheckout').value;
-      System.toast('បានរក្សាទុកការកំណត់ម៉ោងធ្វើការរួចរាល់!');
-    }
+    window.addEventListener('DOMContentLoaded', () => { System.init(); });
   </script>
 </body>
 </html>
