@@ -315,7 +315,7 @@
               <h3 style="font-size: 1.05rem; color: var(--benefit-gold);">🌟 ទទួលបានសិទ្ធិពិសេសចេញមុនថ្ងៃនេះ (Special Benefit Days)</h3>
               <span class="badge-benefit" id="benefitCountBadge">0 នាក់</span>
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">បុគ្គលិក/និស្សិតដែលមានឈ្មោះខាងក្រោម អាចធ្វើការចេញមុនម៉ោងបានដោយមិនគិតជា "ចេញមុន (Early Leave)"</p>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">បុគ្គលិក/និស្សិតដែលមានឈ្មោះខាងក្រោម អាចធ្វើការចេញមុនម៉ោងได้ដោយមិនគិតជា "ចេញមុន (Early Leave)"</p>
             <div id="dashboardBenefitList" style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
               <!-- Dynamic Cards -->
             </div>
@@ -1034,78 +1034,159 @@
         tbody.innerHTML = '';
 
         if (records.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-secondary); padding: 16px;">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
-          return;
+          // Ensure ALL members are listed here even if they don't have attendance records for today yet, or ensure all active members appear
+          // Let's make sure ALL members are listed so user can easily choose time via clock icon
         }
-        
-        records.forEach(att => {
+
+        // Synchronize list to include ALL members for the chosen date so user can easily pick time
+        const allEmps = State.employees;
+        allEmps.forEach(emp => {
+          if (query && !emp.name.toLowerCase().includes(query) && !(emp.code && emp.code.toLowerCase().includes(query))) {
+            return;
+          }
+
+          let att = records.find(a => a.empId === emp.id);
+          if (!att) {
+            att = {
+              id: 'TEMP-' + emp.id,
+              empId: emp.id,
+              empCode: emp.code || emp.id,
+              empName: emp.name,
+              date: date,
+              checkIn: '--:--',
+              checkOut: '--:--',
+              status: 'Absent'
+            };
+          }
+
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td><strong>${att.empName}</strong> (${att.empCode || att.empId})</td>
             
             <td>
-              <div style="display: flex; align-items: center; gap: 4px;">
-                <input type="text" class="inline-input" style="width: 85px;" 
-                       value="${att.checkIn || '--:--'}" 
-                       onchange="AttendanceUI.updateTime('${att.id}', 'checkIn', this.value)">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="time" class="inline-input" style="width: 120px;" 
+                       value="${att.checkIn && att.checkIn !== '--:--' ? att.checkIn : ''}" 
+                       onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', this.value, '${date}')">
+                <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" 
+                        title="ជ្រើសរើសម៉ោងបច្ចុប្បន្ន" 
+                        onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkIn', '${date}')">
+                  <i class="fa-solid fa-clock"></i>
+                </button>
                 <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
-                        title="Clear Check-In Time" 
-                        onclick="AttendanceUI.updateTime('${att.id}', 'checkIn', '--:--')">
+                        title="សម្អាតម៉ោងចូល" 
+                        onclick="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', '--:--', '${date}')">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </div>
             </td>
 
             <td>
-              <div style="display: flex; align-items: center; gap: 4px;">
-                <input type="text" class="inline-input" style="width: 85px;" 
-                       value="${att.checkOut || '--:--'}" 
-                       onchange="AttendanceUI.updateTime('${att.id}', 'checkOut', this.value)">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="time" class="inline-input" style="width: 120px;" 
+                       value="${att.checkOut && att.checkOut !== '--:--' ? att.checkOut : ''}" 
+                       onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', this.value, '${date}')">
+                <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" 
+                        title="ជ្រើសរើសម៉ោងបច្ចុប្បន្ន" 
+                        onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkOut', '${date}')">
+                  <i class="fa-solid fa-clock"></i>
+                </button>
                 <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
-                        title="Clear Check-Out Time" 
-                        onclick="AttendanceUI.updateTime('${att.id}', 'checkOut', '--:--')">
+                        title="សម្អាតម៉ោងចេញ" 
+                        onclick="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', '--:--', '${date}')">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </div>
             </td>
 
             <td>
-              <select class="inline-input" onchange="AttendanceUI.updateStatus('${att.id}', this.value)">
+              <select class="inline-input" onchange="AttendanceUI.updateStatusLive('${emp.id}', this.value, '${date}')">
                 <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>វត្តមាន (Present)</option>
                 <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>មកយឺត (Late)</option>
                 <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>សុំច្បាប់ (Leave)</option>
                 <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>អវត្តមាន (Absent)</option>
               </select>
             </td>
-            <td><button class="btn btn-danger btn-sm" onclick="AttendanceUI.deleteRecord('${att.id}')"><i class="fa-solid fa-trash"></i> លុប</button></td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="AttendanceUI.deleteRecord('${att.id}')"><i class="fa-solid fa-trash"></i> លុប</button>
+            </td>
           `;
           tbody.appendChild(tr);
         });
       }
 
-      static async updateTime(id, field, value) {
-        const record = State.attendance.find(a => a.id === id);
-        if (record) {
-          record[field] = value || '--:--';
-          await Database.save('attendance', record);
-          System.toast('បានកែសម្រួលម៉ោងរួចរាល់!');
-          DashboardModule.render();
-        }
+      static async setCurrentTime(empId, field, date) {
+        const now = new Date();
+        const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+        await this.updateTimeLive(empId, field, timeStr, date);
+        this.renderAttendanceList();
       }
 
-      static async updateStatus(id, newStatus) {
-        const record = State.attendance.find(a => a.id === id);
-        if (record) {
-          record.status = newStatus;
-          await Database.save('attendance', record);
-          System.toast('បានផ្លាស់ប្តូរស្ថានភាពរួចរាល់!');
-          DashboardModule.render();
+      static async updateTimeLive(empId, field, value, date) {
+        let record = State.attendance.find(a => a.empId === empId && a.date === date);
+        const emp = State.employees.find(e => e.id === empId);
+
+        if (!record) {
+          record = {
+            id: 'ATT-' + Date.now() + '-' + Math.floor(Math.random()*1000),
+            empId: emp.id,
+            empCode: emp.code || emp.id,
+            empName: emp.name,
+            major: emp.major || emp.dept,
+            dept: emp.dept || emp.major,
+            date: date,
+            checkIn: '--:--',
+            checkOut: '--:--',
+            status: 'Present'
+          };
         }
+
+        record[field] = (value && value !== '') ? value : '--:--';
+        if (field === 'checkIn' && record[field] !== '--:--' && record.status === 'Absent') {
+          record.status = 'Present';
+        }
+
+        await Database.save('attendance', record);
+        State.attendance = await Database.getAll('attendance');
+        System.toast('បានធ្វើបច្ចុប្បន្នភាពម៉ោងជោគជ័យ!');
+        DashboardModule.render();
+      }
+
+      static async updateStatusLive(empId, newStatus, date) {
+        let record = State.attendance.find(a => a.empId === empId && a.date === date);
+        const emp = State.employees.find(e => e.id === empId);
+
+        if (!record) {
+          record = {
+            id: 'ATT-' + Date.now() + '-' + Math.floor(Math.random()*1000),
+            empId: emp.id,
+            empCode: emp.code || emp.id,
+            empName: emp.name,
+            major: emp.major || emp.dept,
+            dept: emp.dept || emp.major,
+            date: date,
+            checkIn: '--:--',
+            checkOut: '--:--',
+            status: newStatus
+          };
+        } else {
+          record.status = newStatus;
+        }
+
+        await Database.save('attendance', record);
+        State.attendance = await Database.getAll('attendance');
+        System.toast('បានផ្លាស់ប្តូរស្ថានភាពជោគជ័យ!');
+        DashboardModule.render();
       }
 
       static async deleteRecord(id) {
+        if (id.startsWith('TEMP-')) {
+          System.toast('គ្មានកំណត់ត្រាត្រូវលុបទេ');
+          return;
+        }
         if (confirm('តើអ្នកពិតជាចង់លុបប័ណ្ណវត្តមាននេះមែនទេ?')) {
           await Database.delete('attendance', id);
+          State.attendance = await Database.getAll('attendance');
           System.toast('បានលុបកំណត់ត្រា');
           this.renderAttendanceList();
           DashboardModule.render();
@@ -1134,52 +1215,72 @@
         if (tbody) {
           tbody.innerHTML = '';
 
-          if (searchFilteredAtt.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding:20px;">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
+          if (State.employees.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding:20px;">គ្មានទិន្នន័យបុគ្គលិក/និស្សិត</td></tr>`;
           } else {
-            searchFilteredAtt.forEach(att => {
+            State.employees.forEach(emp => {
+              if (query && !emp.name.toLowerCase().includes(query) && !(emp.code && emp.code.toLowerCase().includes(query))) {
+                return;
+              }
+
+              let att = filteredAtt.find(a => a.empId === emp.id);
+              const checkInVal = att && att.checkIn ? att.checkIn : '--:--';
+              const checkOutVal = att && att.checkOut ? att.checkOut : '--:--';
+              const statusVal = att && att.status ? att.status : 'Absent';
+              const attId = att ? att.id : 'TEMP-' + emp.id;
+
               const tr = document.createElement('tr');
               tr.innerHTML = `
-                <td><strong>${att.empCode || att.empId}</strong></td>
-                <td><strong>${att.empName}</strong></td>
-                <td><span style="color:var(--primary); font-weight:600;">${att.major || att.dept}</span></td>
+                <td><strong>${emp.code || emp.id}</strong></td>
+                <td><strong>${emp.name}</strong></td>
+                <td><span style="color:var(--primary); font-weight:600;">${emp.major || emp.dept}</span></td>
                 
                 <td>
-                  <div style="display: flex; align-items: center; gap: 4px;">
-                    <input type="text" class="inline-input" style="width: 85px; color: #10b981;" 
-                           value="${att.checkIn || '--:--'}" 
-                           onchange="DashboardModule.updateRecord('${att.id}', 'checkIn', this.value)">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <input type="time" class="inline-input" style="width: 120px; color: #10b981;" 
+                           value="${checkInVal !== '--:--' ? checkInVal : ''}" 
+                           onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', this.value, '${filterDate}')">
+                    <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" 
+                            title="ជ្រើសរើសម៉ោងបច្ចុប្បន្ន" 
+                            onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkIn', '${filterDate}')">
+                      <i class="fa-solid fa-clock"></i>
+                    </button>
                     <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
-                            title="Clear Check-In Time" 
-                            onclick="DashboardModule.updateRecord('${att.id}', 'checkIn', '--:--')">
+                            title="សម្អាតម៉ោងចូល" 
+                            onclick="AttendanceUI.updateTimeLive('${emp.id}', 'checkIn', '--:--', '${filterDate}')">
                       <i class="fa-solid fa-xmark"></i>
                     </button>
                   </div>
                 </td>
 
                 <td>
-                  <div style="display: flex; align-items: center; gap: 4px;">
-                    <input type="text" class="inline-input" style="width: 85px; color: #f59e0b;" 
-                           value="${att.checkOut || '--:--'}" 
-                           onchange="DashboardModule.updateRecord('${att.id}', 'checkOut', this.value)">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <input type="time" class="inline-input" style="width: 120px; color: #f59e0b;" 
+                           value="${checkOutVal !== '--:--' ? checkOutVal : ''}" 
+                           onchange="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', this.value, '${filterDate}')">
+                    <button class="btn btn-outline btn-sm" style="padding: 4px 8px; color: var(--primary);" 
+                            title="ជ្រើសរើសម៉ោងបច្ចុប្បន្ន" 
+                            onclick="AttendanceUI.setCurrentTime('${emp.id}', 'checkOut', '${filterDate}')">
+                      <i class="fa-solid fa-clock"></i>
+                    </button>
                     <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
-                            title="Clear Check-Out Time" 
-                            onclick="DashboardModule.updateRecord('${att.id}', 'checkOut', '--:--')">
+                            title="សម្អាតម៉ោងចេញ" 
+                            onclick="AttendanceUI.updateTimeLive('${emp.id}', 'checkOut', '--:--', '${filterDate}')">
                       <i class="fa-solid fa-xmark"></i>
                     </button>
                   </div>
                 </td>
 
                 <td>
-                  <select class="inline-input" onchange="DashboardModule.updateRecord('${att.id}', 'status', this.value)">
-                    <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>Present (វត្តមាន)</option>
-                    <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>Late (មកយឺត)</option>
-                    <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>Leave (សុំច្បាប់)</option>
-                    <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>Absent (អវត្តមាន)</option>
+                  <select class="inline-input" onchange="AttendanceUI.updateStatusLive('${emp.id}', this.value, '${filterDate}')">
+                    <option value="Present" ${statusVal === 'Present' ? 'selected' : ''}>Present (វត្តមាន)</option>
+                    <option value="Late" ${statusVal === 'Late' ? 'selected' : ''}>Late (មកយឺត)</option>
+                    <option value="Leave" ${statusVal === 'Leave' ? 'selected' : ''}>Leave (សុំច្បាប់)</option>
+                    <option value="Absent" ${statusVal === 'Absent' ? 'selected' : ''}>Absent (អវត្តមាន)</option>
                   </select>
                 </td>
                 <td>
-                  <button class="btn btn-danger btn-sm" onclick="DashboardModule.deleteRecord('${att.id}')">
+                  <button class="btn btn-danger btn-sm" onclick="AttendanceUI.deleteRecord('${attId}')">
                     <i class="fa-solid fa-trash"></i> លុប
                   </button>
                 </td>
@@ -1223,6 +1324,7 @@
       }
 
       static async deleteRecord(id) {
+        if (id.startsWith('TEMP-')) return;
         if (confirm('តើអ្នកពិតជាចង់លុបទិន្នន័យវត្តមាននេះមែនទេ?')) {
           await Database.delete('attendance', id);
           System.toast('បានលុបវត្តមានជោគជ័យ!');
@@ -1232,7 +1334,7 @@
     }
 
     /* ==========================================================================
-       KHMER REPORT GENERATION ENGINE
+       KHMER REPORT GENERATION ENGINE (SORTED BY ID ASCENDING)
        ========================================================================== */
     class ReportModule {
       static renderKhmerReport() {
@@ -1242,6 +1344,13 @@
         const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
 
         const dayAtt = State.attendance.filter(a => a.date === reportDate);
+
+        // Sort attendance records by ID or Code ascending
+        dayAtt.sort((a, b) => {
+          const idA = String(a.empCode || a.empId || '');
+          const idB = String(b.empCode || b.empId || '');
+          return idA.localeCompare(idB, undefined, { numeric: true, sensitivity: 'base' });
+        });
 
         const presentList = dayAtt.filter(a => a.status === 'Present' || a.status === 'Late');
         const lateList = dayAtt.filter(a => a.status === 'Late');
@@ -1490,9 +1599,15 @@
        ========================================================================== */
     window.addEventListener('DOMContentLoaded', async () => {
       System.init();
-      await EmployeeApp.render();
+      State.employees = await Database.getAll('employees');
+      if (State.employees.length === 0) {
+        await EmployeeApp.seedSampleData(false);
+      }
+      State.attendance = await Database.getAll('attendance');
+      
       injectUIUpdates();
-      AttendanceUI.renderAttendanceList();
+      await DashboardModule.render();
+      await AttendanceUI.renderAttendanceList();
     });
 
     /* INJECT TIME CONFIGURATION & DATE FILTERS DYNAMICALLY */
