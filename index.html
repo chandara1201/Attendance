@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន | Enterprise Attendance Management System</title>
+  <title>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន Enterprise v2.0 | Attendance Management System</title>
   
   <!-- Google Fonts for Khmer & English -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -122,46 +122,51 @@
 
     /* LAYOUT: SIDEBAR & MAIN AREA */
     aside.sidebar { width: 280px; background-color: var(--bg-sidebar); color: var(--text-sidebar); display: flex; flex-direction: column; transition: var(--transition); z-index: 100; border-right: 1px solid var(--border); }
-    .brand { padding: 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .brand img { height: 36px; width: 36px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
-    .brand h2 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; }
+    aside.sidebar.collapsed { width: 0; min-width: 0; overflow: hidden; border-right: none; }
+    
+    .brand { padding: 20px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .brand img { height: 38px; width: 38px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+    .brand h2 { font-size: 1.05rem; font-weight: 700; letter-spacing: 0.5px; }
 
     .nav-menu { list-style: none; padding: 16px 12px; flex: 1; overflow-y: auto; }
     .nav-item { margin-bottom: 4px; }
-    .nav-link { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: inherit; text-decoration: none; border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 500; transition: var(--transition); }
+    .nav-link { display: flex; align-items: center; gap: 14px; padding: 12px 16px; color: inherit; text-decoration: none; border-radius: var(--radius-sm); font-size: 0.92rem; font-weight: 500; transition: var(--transition); }
     .nav-link:hover, .nav-link.active { background-color: var(--sidebar-active); color: #fff; }
-    .nav-link i { font-size: 1.2rem; width: 24px; text-align: center; }
+    .nav-link i { font-size: 1.15rem; width: 24px; text-align: center; }
 
     main.content-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
     /* TOP NAVBAR */
-    header.navbar { height: 70px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; z-index: 90; }
-    .header-left { display: flex; align-items: center; gap: 20px; }
-    .clock-display { font-size: 1.1rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.03); padding: 6px 14px; border-radius: var(--radius-md); }
-    .header-right { display: flex; align-items: center; gap: 16px; }
+    header.navbar { height: 70px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; z-index: 90; }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .toggle-sidebar-btn { background: transparent; border: 1px solid var(--border); padding: 8px 12px; border-radius: var(--radius-sm); color: var(--text-primary); cursor: pointer; font-size: 1.1rem; }
+    .toggle-sidebar-btn:hover { background: rgba(0,0,0,0.05); }
+    .clock-display { font-size: 1.05rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.03); padding: 6px 14px; border-radius: var(--radius-md); }
+    .header-right { display: flex; align-items: center; gap: 14px; }
 
-    .btn { padding: 10px 20px; border-radius: var(--radius-sm); border: none; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+    .btn { padding: 9px 18px; border-radius: var(--radius-sm); border: none; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; }
     .btn-primary { background-color: var(--primary); color: #fff; }
     .btn-primary:hover { background-color: var(--primary-hover); }
     .btn-danger { background-color: #ef4444; color: #fff; }
     .btn-danger:hover { background-color: #dc2626; }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
     .btn-outline:hover { background: rgba(0,0,0,0.05); }
+    .btn-sm { padding: 5px 10px; font-size: 0.8rem; }
 
     /* VIEW CONTAINER */
-    .view-container { flex: 1; padding: 28px; overflow-y: auto; }
+    .view-container { flex: 1; padding: 24px 28px; overflow-y: auto; }
     .view-section { display: none; }
     .view-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     /* DASHBOARD GRID & CARDS */
-    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 28px; }
-    .stat-card { background-color: var(--bg-card); border: 1px solid var(--border); padding: 20px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 16px; transition: var(--transition); }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 24px; }
+    .stat-card { background-color: var(--bg-card); border: 1px solid var(--border); padding: 18px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 16px; transition: var(--transition); }
     .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-    .stat-icon { width: 54px; height: 54px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: rgba(0,0,0,0.04); }
-    .stat-info h4 { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-info h2 { font-size: 1.8rem; font-weight: 700; margin-top: 4px; }
+    .stat-icon { width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: rgba(0,0,0,0.04); }
+    .stat-info h4 { font-size: 0.82rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-info h2 { font-size: 1.7rem; font-weight: 700; margin-top: 4px; }
 
     /* PROGRESS & ANALYTICS WIDGETS */
     .progress-bar-bg { width: 100%; height: 10px; background: rgba(0,0,0,0.1); border-radius: 5px; overflow: hidden; margin: 10px 0 16px 0; }
@@ -170,13 +175,25 @@
     /* SPECIAL BENEFIT WIDGET & BADGES */
     .benefit-card-highlight { background: linear-gradient(135deg, var(--bg-card) 0%, var(--benefit-bg) 100%); border: 2px solid var(--benefit-gold); box-shadow: var(--shadow-glow); }
     .badge-benefit { background-color: var(--benefit-gold); color: #fff; padding: 4px 10px; border-radius: var(--radius-xl); font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; animation: pulse 2s infinite; }
+    .badge-status { padding: 4px 10px; border-radius: var(--radius-xl); font-size: 0.78rem; font-weight: 600; display: inline-block; }
+    .badge-status.Present { background: #d1fae5; color: #065f46; }
+    .badge-status.Late { background: #fef3c7; color: #92400e; }
+    .badge-status.Leave { background: #e0e7ff; color: #3730a3; }
+    .badge-status.Absent { background: #fee2e2; color: #991b1b; }
+    .badge-status.EarlyLeave { background: #ffedd5; color: #c2410c; }
     
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(217, 119, 6, 0); } 100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); } }
+
+    /* SEARCH BAR TOOLBAR */
+    .toolbar-container { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 16px; background: var(--bg-card); padding: 14px 18px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+    .search-box { position: relative; min-width: 260px; flex: 1; max-width: 400px; }
+    .search-box input { width: 100%; padding: 8px 14px 8px 36px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-main); color: var(--text-primary); font-size: 0.88rem; }
+    .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
 
     /* TABLES & DATA GRIDS */
     .table-container { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
     table { width: 100%; border-collapse: collapse; text-align: left; }
-    th, td { padding: 14px 18px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    th, td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 0.88rem; vertical-align: middle; }
     th { background-color: rgba(0,0,0,0.02); font-weight: 600; color: var(--text-secondary); }
     tr:hover { background-color: rgba(0,0,0,0.015); }
 
@@ -185,23 +202,23 @@
     .modal-overlay.active { display: flex; }
     .modal-content { background: var(--bg-card); width: 100%; max-width: 650px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); overflow: hidden; animation: popUp 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     @keyframes popUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
     .modal-body { padding: 24px; max-height: 75vh; overflow-y: auto; }
     .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
 
     /* FORMS & INPUTS */
-    .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
-    .form-control { width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background-color: var(--bg-main); color: var(--text-primary); font-size: 0.9rem; transition: var(--transition); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+    .form-control { width: 100%; padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background-color: var(--bg-main); color: var(--text-primary); font-size: 0.88rem; transition: var(--transition); }
     .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
     /* EDITABLE INLINE INPUT STYLES */
-    .inline-input { padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background-color: var(--bg-main); color: var(--text-primary); font-size: 0.85rem; font-weight: 600; }
+    .inline-input { padding: 5px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); background-color: var(--bg-main); color: var(--text-primary); font-size: 0.84rem; font-weight: 600; }
     .inline-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); }
 
     /* REPORT VIEW SPECIFIC */
-    .report-paper { background: #fff; color: #000; padding: 40px; border-radius: var(--radius-sm); font-family: var(--font-mono); line-height: 1.6; border: 1px solid var(--border); box-shadow: var(--shadow-md); white-space: pre-wrap; font-size: 1rem; }
+    .report-paper { background: #fff; color: #000; padding: 36px; border-radius: var(--radius-sm); font-family: var(--font-mono); line-height: 1.6; border: 1px solid var(--border); box-shadow: var(--shadow-md); white-space: pre-wrap; font-size: 0.95rem; }
 
     /* PRINTABLE ID CARD MODAL SPECIFIC */
     .id-card { border: 2px dashed var(--primary); padding: 20px; border-radius: var(--radius-md); text-align: center; background: var(--bg-card); }
@@ -209,14 +226,14 @@
 
     /* TOAST NOTIFICATIONS */
     .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
-    .toast { background: var(--bg-card); color: var(--text-primary); border-left: 5px solid var(--primary); padding: 14px 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; min-width: 300px; animation: slideIn 0.3s forwards; }
+    .toast { background: var(--bg-card); color: var(--text-primary); border-left: 5px solid var(--primary); padding: 12px 18px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; min-width: 280px; animation: slideIn 0.3s forwards; }
     @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
   </style>
 </head>
 <body>
 
   <!-- SIDEBAR NAVIGATION -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="appSidebar">
     <div class="brand">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDh0_1M-Zvo3t2fpBiIE2WNocUo0GjOWPU15AOhSoh4g&s=10" alt="Logo">
       <h2>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន</h2>
@@ -237,6 +254,7 @@
     <!-- TOP NAVBAR -->
     <header class="navbar">
       <div class="header-left">
+        <button class="toggle-sidebar-btn" onclick="System.toggleSidebar()" title="Toggle Navigation Menu"><i class="fa-solid fa-bars"></i></button>
         <div class="clock-display" id="liveClock">
           <i class="fa-regular fa-clock"></i> <span id="clockTime">08:00:00 AM</span>
         </div>
@@ -290,25 +308,28 @@
         </div>
 
         <!-- SPECIAL BENEFIT WIDGET -->
-        <div class="stat-card benefit-card-highlight" style="margin-bottom: 28px;">
+        <div class="stat-card benefit-card-highlight" style="margin-bottom: 24px;">
           <div class="stat-icon" style="color: #d97706; font-size: 2rem;"><i class="fa-solid fa-star"></i></div>
           <div style="flex: 1;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <h3 style="font-size: 1.1rem; color: var(--benefit-gold);">🌟 ទទួលបានសិទ្ធិពិសេសចេញមុនថ្ងៃនេះ (Special Benefit Days)</h3>
+              <h3 style="font-size: 1.05rem; color: var(--benefit-gold);">🌟 ទទួលបានសិទ្ធិពិសេសចេញមុនថ្ងៃនេះ (Special Benefit Days)</h3>
               <span class="badge-benefit" id="benefitCountBadge">0 នាក់</span>
             </div>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">បុគ្គលិក/និស្សិតដែលមានឈ្មោះខាងក្រោម អាចធ្វើការចេញមុនម៉ោងបានដោយមិនគិតជា "ចេញមុន (Early Leave)"</p>
-            <div id="dashboardBenefitList" style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+            <div id="dashboardBenefitList" style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
               <!-- Dynamic Cards -->
             </div>
           </div>
         </div>
 
-        <!-- RECENT ACTIVITY TABLE (EDITABLE INLINE) -->
+        <!-- RECENT ACTIVITY TOOLBAR & TABLE -->
         <div class="table-container">
-          <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+          <div class="toolbar-container" style="border: none; margin-bottom: 0;">
             <span><i class="fa-solid fa-pen-to-square" style="color: var(--primary);"></i> វត្តមានថ្មីៗចុងក្រោយថ្ងៃនេះ (អាចកែសម្រួលផ្ទាល់បាន)</span>
-            <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">* ផ្លាស់ប្តូរម៉ោង ឬស្ថានភាព រួចប្រព័ន្ធនឹង Save ស្វ័យប្រវត្តិ</span>
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="dashSearchInput" placeholder="ស្វែងរកតាមឈ្មោះ ឬអត្តលេខ..." onkeyup="DashboardModule.render()">
+            </div>
           </div>
           <table>
             <thead>
@@ -331,9 +352,15 @@
 
       <!-- 2. EMPLOYEE / STUDENT MANAGEMENT VIEW -->
       <section id="employees" class="view-section">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h3>បញ្ជីឈ្មោះបុគ្គលិក / និស្សិតសរុប</h3>
-          <button class="btn btn-primary" onclick="EmployeeApp.openModal()"><i class="fa-solid fa-plus"></i> បន្ថែមថ្មី</button>
+        <div class="toolbar-container">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="empSearchInput" placeholder="ស្វែងរកបុគ្គលិកតាមឈ្មោះ ឬជំនាញ..." onkeyup="EmployeeApp.render()">
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-outline" onclick="EmployeeApp.seedSampleData()"><i class="fa-solid fa-wand-magic-sparkles"></i> បញ្ចូលទិន្នន័យគំរូ</button>
+            <button class="btn btn-primary" onclick="EmployeeApp.openModal()"><i class="fa-solid fa-plus"></i> បន្ថែមថ្មី</button>
+          </div>
         </div>
         <div class="table-container">
           <table>
@@ -387,8 +414,12 @@
 
         <!-- INTEGRATED EDITABLE ATTENDANCE TABLE -->
         <div class="table-container" style="margin-top: 24px;">
-          <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+          <div class="toolbar-container" style="border: none; margin-bottom: 0;">
             <span>បញ្ជីវត្តមានប្រចាំថ្ងៃ (អាចកែសម្រួលបាន)</span>
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="attSearchInput" placeholder="ស្វែងរកតាមឈ្មោះ..." onkeyup="AttendanceUI.renderAttendanceList()">
+            </div>
           </div>
           <table>
             <thead>
@@ -514,8 +545,6 @@
               <label>មុខជំនាញសាកលវិទ្យាល័យ / ផ្នែក</label>
               <select class="form-control" id="empMajor" required>
                 <option value="">-- ជ្រើសរើសមុខជំនាញ / ផ្នែក --</option>
-                
-                <!-- វិទ្យាសាស្ត្រ និង បច្ចេកវិទ្យា -->
                 <optgroup label="💻 វិទ្យាសាស្ត្រ និង បច្ចេកវិទ្យា (Science & Tech)">
                   <option value="វិទ្យាសាស្ត្រកុំព្យូទ័រ (Computer Science)">វិទ្យាសាស្ត្រកុំព្យូទ័រ (Computer Science)</option>
                   <option value="បច្ចេកវិទ្យាព័ត៌មាន (Information Technology)">បច្ចេកវិទ្យាព័ត៌មាន (Information Technology)</option>
@@ -524,59 +553,23 @@
                   <option value="វិទ្យាសាស្ត្រទិន្នន័យ & AI (Data Science & AI)">វិទ្យាសាស្ត្រទិន្នន័យ & AI (Data Science & AI)</option>
                   <option value="ប្រព័ន្ធបណ្តាញអ៊ីនធឺណិត (Network Engineering)">ប្រព័ន្ធបណ្តាញអ៊ីនធឺណិត (Network Engineering)</option>
                 </optgroup>
-
-                <!-- វិស្វកម្ម -->
                 <optgroup label="🏗️ វិស្វកម្ម (Engineering)">
                   <option value="វិស្វកម្មសំណង់ស៊ីវិល (Civil Engineering)">វិស្វកម្មសំណង់ស៊ីវិល (Civil Engineering)</option>
                   <option value="វិស្វកម្មអគ្គិសនី & អេឡិចត្រូនិក (Electrical Engineering)">វិស្វកម្មអគ្គិសនី & អេឡិចត្រូនិក (Electrical Engineering)</option>
                   <option value="វិស្វកម្មមេកានិច (Mechanical Engineering)">វិស្វកម្មមេកានិច (Mechanical Engineering)</option>
                   <option value="វិស្វកម្មស្ថាបត្យកម្ម (Architecture)">វិស្វកម្មស្ថាបត្យកម្ម (Architecture)</option>
-                  <option value="វិស្វកម្មបរិស្ថាន (Environmental Engineering)">វិស្វកម្មបរិស្ថាន (Environmental Engineering)</option>
                 </optgroup>
-
-                <!-- ធុរកិច្ច និង សេដ្ឋកិច្ច -->
                 <optgroup label="📈 ធុរកិច្ច និង សេដ្ឋកិច្ច (Business & Economics)">
                   <option value="គ្រប់គ្រងអាជីវកម្ម (Business Management)">គ្រប់គ្រងអាជីវកម្ម (Business Management)</option>
                   <option value="គណនេយ្យ និង ហិរញ្ញវត្ថុ (Accounting & Finance)">គណនេយ្យ និង ហិរញ្ញវត្ថុ (Accounting & Finance)</option>
                   <option value="ទីផ្សារ និង ពាណិជ្ជកម្មឌីជីថល (Digital Marketing)">ទីផ្សារ និង ពាណិជ្ជកម្មឌីជីថល (Digital Marketing)</option>
                   <option value="សេដ្ឋកិច្ចវិទ្យា (Economics)">សេដ្ឋកិច្ចវិទ្យា (Economics)</option>
-                  <option value="ពាណិជ្ជកម្មអន្តរជាតិ (International Business)">ពាណិជ្ជកម្មអន្តរជាតិ (International Business)</option>
-                  <option value="គ្រប់គ្រងសណ្ឋាគារ & ទេសចរណ៍ (Hospitality & Tourism)">គ្រប់គ្រងសណ្ឋាគារ & ទេសចរណ៍ (Hospitality & Tourism)</option>
                 </optgroup>
-
-                <!-- វិទ្យាសាស្ត្រសុខាភិបាល -->
-                <optgroup label="🩺 វិទ្យាសាស្ត្រសុខាភិបាល (Health Sciences)">
-                  <option value="វេជ្ជសាស្ត្រទូទៅ (General Medicine)">វេជ្ជសាស្ត្រទូទៅ (General Medicine)</option>
-                  <option value="ទន្តវជ្ជសាស្ត្រ (Dentistry)">ទន្តវជ្ជសាស្ត្រ (Dentistry)</option>
-                  <option value="ឱសថសាស្ត្រ (Pharmacy)">ឱសថសាស្ត្រ (Pharmacy)</option>
-                  <option value="គិលានុបដ្ឋាកសាស្ត្រ (Nursing)">គិលានុបដ្ឋាកសាស្ត្រ (Nursing)</option>
-                  <option value="បរិស្ថានសុខភាព (Public Health)">បរិស្ថានសុខភាព (Public Health)</option>
-                </optgroup>
-
-                <!-- សង្គមសាស្ត្រ និង ភាសាបរទេស -->
-                <optgroup label="🌐 សង្គមសាស្ត្រ និង ភាសាបរទេស (Humanities & Languages)">
-                  <option value="ទំនាក់ទំនងអន្តរជាតិ (International Relations)">ទំនាក់ទំនងអន្តរជាតិ (International Relations)</option>
-                  <option value="នីតិសាស្ត្រ / ច្បាប់ (Law)">នីតិសាស្ត្រ / ច្បាប់ (Law)</option>
-                  <option value="អក្សរសាស្ត្រអង់គ្លេស (English Literature/TEFL)">អក្សរសាស្ត្រអង់គ្លេស (English Literature/TEFL)</option>
-                  <option value="ភាសាចិន (Chinese Studies)">ភាសាចិន (Chinese Studies)</option>
-                  <option value="ចិត្តវិទ្យា (Psychology)">ចិត្តវិទ្យា (Psychology)</option>
-                  <option value="សារព័ត៌មាន & ប្រព័ន្ធផ្សព្វផ្សាយ (Media & Mass Comm)">សារព័ត៌មាន & ប្រព័ន្ធផ្សព្វផ្សាយ (Media & Mass Comm)</option>
-                </optgroup>
-
-                <!-- សិល្បៈ និង រចនា -->
-                <optgroup label="🎨 សិល្បៈ និង រចនា (Art & Design)">
-                  <option value="រចនាក្រាហ្វិក (Graphic Design)">រចនាក្រាហ្វិក (Graphic Design)</option>
-                  <option value="រចនាផ្ទៃក្នុង (Interior Design)">រចនាផ្ទៃក្នុង (Interior Design)</option>
-                  <option value="ផលិកម្មភាពយន្ត (Film Production)">ផលិកម្មភាពយន្ត (Film Production)</option>
-                </optgroup>
-                
-                <!-- ផ្នែកសាជីវកម្ម -->
                 <optgroup label="🏢 ផ្នែកសាជីវកម្ម / ក្រុមហ៊ុន (Corporate)">
                   <option value="IT & Software">IT & Software</option>
                   <option value="Human Resources">Human Resources</option>
                   <option value="Accounting">Accounting</option>
                   <option value="Marketing">Marketing</option>
-                  <option value="Operations">Operations</option>
                 </optgroup>
               </select>
             </div>
@@ -731,6 +724,11 @@
         if (clockEl) clockEl.innerText = now.toLocaleTimeString('en-US');
       }
 
+      static toggleSidebar() {
+        const sb = document.getElementById('appSidebar');
+        if (sb) sb.classList.toggle('collapsed');
+      }
+
       static setupNavigation() {
         document.querySelectorAll('.nav-link').forEach(link => {
           link.addEventListener('click', (e) => {
@@ -772,15 +770,30 @@
     class EmployeeApp {
       static async render() {
         State.employees = await Database.getAll('employees');
+        
+        // Auto-seed sample data if database is empty on first boot
+        if (State.employees.length === 0) {
+          await this.seedSampleData(false);
+          State.employees = await Database.getAll('employees');
+        }
+
         const tbody = document.getElementById('employeeTableBody');
         const select = document.getElementById('manualEmpSelect');
+        const query = document.getElementById('empSearchInput')?.value.toLowerCase().trim() || '';
+
         if (!tbody || !select) return;
 
         tbody.innerHTML = '';
         select.innerHTML = '';
 
-        if (State.employees.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding: 20px;">គ្មានទិន្នន័យឡើយ។ សូមចុច "បន្ថែមថ្មី" ដើម្បីបញ្ចូលទិន្នន័យ។</td></tr>`;
+        const filteredEmps = State.employees.filter(emp => 
+          emp.name.toLowerCase().includes(query) || 
+          (emp.code && emp.code.toLowerCase().includes(query)) ||
+          (emp.major && emp.major.toLowerCase().includes(query))
+        );
+
+        if (filteredEmps.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding: 20px;">គ្មានទិន្នន័យឡើយ។ ចុច "បន្ថែមថ្មី" ឬ "បញ្ចូលទិន្នន័យគំរូ"។</td></tr>`;
           select.innerHTML = `<option value="">-- គ្មានទិន្នន័យ --</option>`;
           this.renderBenefitSchedule();
           return;
@@ -788,7 +801,7 @@
 
         const daysMap = {0:'អាទិត្យ', 1:'ច័ន្ទ', 2:'អង្គារ', 3:'ពុធ', 4:'ព្រហ', 5:'សុក្រ', 6:'សៅរ៍'};
 
-        State.employees.forEach(emp => {
+        filteredEmps.forEach(emp => {
           const daysMapText = (emp.benefitDays || []).map(d => daysMap[d]).filter(Boolean).join(', ');
           
           const tr = document.createElement('tr');
@@ -800,9 +813,9 @@
             <td>${emp.position}</td>
             <td><span class="badge-benefit">${daysMapText || 'គ្មាន'}</span></td>
             <td>
-              <button class="btn btn-outline" style="padding: 4px 8px;" onclick="openQRModal('${emp.id}')"><i class="fa-solid fa-qrcode"></i></button>
-              <button class="btn btn-outline" style="padding: 4px 8px;" onclick="EmployeeApp.openModal('${emp.id}')"><i class="fa-solid fa-pen-to-square"></i> កែប្រែ</button>
-              <button class="btn btn-danger" style="padding: 4px 8px;" onclick="EmployeeApp.delete('${emp.id}')"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn btn-outline btn-sm" onclick="openQRModal('${emp.id}')"><i class="fa-solid fa-qrcode"></i></button>
+              <button class="btn btn-outline btn-sm" onclick="EmployeeApp.openModal('${emp.id}')"><i class="fa-solid fa-pen-to-square"></i> កែប្រែ</button>
+              <button class="btn btn-danger btn-sm" onclick="EmployeeApp.delete('${emp.id}')"><i class="fa-solid fa-trash"></i></button>
             </td>
           `;
           tbody.appendChild(tr);
@@ -815,6 +828,33 @@
 
         this.renderBenefitSchedule();
         DashboardModule.render();
+      }
+
+      static async seedSampleData(showToast = true) {
+        const samples = [
+          { id: 'EMP-101', code: 'STU-001', name: 'សុខ ដារ៉ា', major: 'វិទ្យាសាស្ត្រកុំព្យូទ័រ (Computer Science)', position: 'និស្សិតឆ្នាំទី ៣', dept: 'វិទ្យាសាស្ត្រកុំព្យូទ័រ (Computer Science)', benefitDays: [1, 3, 5] },
+          { id: 'EMP-102', code: 'STU-002', name: 'ចាន់ ស្រីនាង', major: 'បច្ចេកវិទ្យាព័ត៌មាន (Information Technology)', position: 'និស្សិតឆ្នាំទី ៤', dept: 'បច្ចេកវិទ្យាព័ត៌មាន (Information Technology)', benefitDays: [2, 4] },
+          { id: 'EMP-103', code: 'STU-003', name: 'កែវ មករា', major: 'គ្រប់គ្រងអាជីវកម្ម (Business Management)', position: 'និស្សិតឆ្នាំទី ៣', dept: 'គ្រប់គ្រងអាជីវកម្ម (Business Management)', benefitDays: [5] },
+          { id: 'EMP-104', code: 'STU-004', name: 'ម៉ៅ វ៉ាន់ដា', major: 'វិស្វកម្មសូហ្វវែរ (Software Engineering)', position: 'និស្សិតឆ្នាំទី ២', dept: 'វិស្វកម្មសូហ្វវែរ (Software Engineering)', benefitDays: [1, 4] }
+        ];
+
+        for (const emp of samples) {
+          await Database.save('employees', emp);
+        }
+
+        // Seed Sample Today Attendance
+        const todayStr = new Date().toISOString().split('T')[0];
+        const sampleAtt = [
+          { id: 'ATT-201', empId: 'EMP-101', empCode: 'STU-001', empName: 'សុខ ដារ៉ា', major: 'វិទ្យាសាស្ត្រកុំព្យូទ័រ (Computer Science)', dept: 'វិទ្យាសាស្ត្រកុំព្យូទ័រ', date: todayStr, checkIn: '07:55', checkOut: '17:00', status: 'Present' },
+          { id: 'ATT-202', empId: 'EMP-102', empCode: 'STU-002', empName: 'ចាន់ ស្រីនាង', major: 'បច្ចេកវិទ្យាព័ត៌មាន (Information Technology)', dept: 'បច្ចេកវិទ្យាព័ត៌មាន', date: todayStr, checkIn: '08:25', checkOut: '17:00', status: 'Late' }
+        ];
+
+        for (const att of sampleAtt) {
+          await Database.save('attendance', att);
+        }
+
+        if (showToast) System.toast('បានបញ្ចូលទិន្នន័យគំរូរួចរាល់!');
+        await this.render();
       }
 
       static openModal(id = null) {
@@ -857,7 +897,7 @@
         const parentPhone = document.getElementById('empParentPhone') ? document.getElementById('empParentPhone').value : '';
 
         if (!code || !name || !major) {
-          System.toast('សូមបំព័ត៌មានចាំបាច់ឱ្យបានគ្រប់!', 'error');
+          System.toast('សូមបំពេញព័ត៌មានចាំបាច់ឱ្យបានគ្រប់!', 'error');
           return;
         }
 
@@ -895,7 +935,7 @@
             <td>${emp.major || emp.dept}</td>
             <td><span class="badge-benefit">${daysText || 'គ្មានសិទ្ធិ'}</span></td>
             <td><strong style="color:var(--benefit-gold);">${State.config.benefitCheckout || '15:30'} PM</strong></td>
-            <td><button class="btn btn-outline" style="padding: 4px 8px;" onclick="EmployeeApp.openModal('${emp.id}')">កែប្រែ</button></td>
+            <td><button class="btn btn-outline btn-sm" onclick="EmployeeApp.openModal('${emp.id}')">កែប្រែ</button></td>
           `;
           tbody.appendChild(tr);
         });
@@ -916,7 +956,7 @@
 
         const emp = State.employees.find(e => e.id === empId);
         const todayStr = document.getElementById('attLogDateFilter')?.value || new Date().toISOString().split('T')[0];
-        const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false });
+        const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
         
         let attRecord = State.attendance.find(a => a.empId === empId && a.date === todayStr);
 
@@ -986,9 +1026,10 @@
         if (!tbody) return;
 
         const date = document.getElementById('attLogDateFilter')?.value || new Date().toISOString().split('T')[0];
+        const query = document.getElementById('attSearchInput')?.value.toLowerCase().trim() || '';
         
         State.attendance = await Database.getAll('attendance');
-        const records = State.attendance.filter(a => a.date === date);
+        const records = State.attendance.filter(a => a.date === date && (a.empName.toLowerCase().includes(query) || (a.empCode && a.empCode.toLowerCase().includes(query))));
         
         tbody.innerHTML = '';
 
@@ -1001,8 +1042,33 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td><strong>${att.empName}</strong> (${att.empCode || att.empId})</td>
-            <td><input type="text" class="inline-input" style="width: 110px;" value="${att.checkIn || '--:--'}" onchange="AttendanceUI.updateTime('${att.id}', 'checkIn', this.value)"></td>
-            <td><input type="text" class="inline-input" style="width: 110px;" value="${att.checkOut || '--:--'}" onchange="AttendanceUI.updateTime('${att.id}', 'checkOut', this.value)"></td>
+            
+            <td>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="text" class="inline-input" style="width: 85px;" 
+                       value="${att.checkIn || '--:--'}" 
+                       onchange="AttendanceUI.updateTime('${att.id}', 'checkIn', this.value)">
+                <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
+                        title="Clear Check-In Time" 
+                        onclick="AttendanceUI.updateTime('${att.id}', 'checkIn', '--:--')">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </td>
+
+            <td>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="text" class="inline-input" style="width: 85px;" 
+                       value="${att.checkOut || '--:--'}" 
+                       onchange="AttendanceUI.updateTime('${att.id}', 'checkOut', this.value)">
+                <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
+                        title="Clear Check-Out Time" 
+                        onclick="AttendanceUI.updateTime('${att.id}', 'checkOut', '--:--')">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </td>
+
             <td>
               <select class="inline-input" onchange="AttendanceUI.updateStatus('${att.id}', this.value)">
                 <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>វត្តមាន (Present)</option>
@@ -1011,7 +1077,7 @@
                 <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>អវត្តមាន (Absent)</option>
               </select>
             </td>
-            <td><button class="btn btn-danger" style="padding: 4px 8px;" onclick="AttendanceUI.deleteRecord('${att.id}')"><i class="fa-solid fa-trash"></i> លុប</button></td>
+            <td><button class="btn btn-danger btn-sm" onclick="AttendanceUI.deleteRecord('${att.id}')"><i class="fa-solid fa-trash"></i> លុប</button></td>
           `;
           tbody.appendChild(tr);
         });
@@ -1048,14 +1114,16 @@
     }
 
     /* ==========================================================================
-       DASHBOARD & DATE FILTERING ENGINE (WITH INLINE EDITING)
+       DASHBOARD & DATE FILTERING ENGINE
        ========================================================================== */
     class DashboardModule {
       static async render() {
         State.attendance = await Database.getAll('attendance');
         const filterDate = document.getElementById('dashDateFilter')?.value || new Date().toISOString().split('T')[0];
+        const query = document.getElementById('dashSearchInput')?.value.toLowerCase().trim() || '';
 
         const filteredAtt = State.attendance.filter(a => a.date === filterDate);
+        const searchFilteredAtt = filteredAtt.filter(a => a.empName.toLowerCase().includes(query) || (a.empCode && a.empCode.toLowerCase().includes(query)));
 
         if(document.getElementById('dashTotalEmp')) document.getElementById('dashTotalEmp').innerText = State.employees.length;
         if(document.getElementById('dashPresent')) document.getElementById('dashPresent').innerText = filteredAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
@@ -1066,25 +1134,42 @@
         if (tbody) {
           tbody.innerHTML = '';
 
-          if (filteredAtt.length === 0) {
+          if (searchFilteredAtt.length === 0) {
             tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding:20px;">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
           } else {
-            filteredAtt.forEach(att => {
+            searchFilteredAtt.forEach(att => {
               const tr = document.createElement('tr');
               tr.innerHTML = `
                 <td><strong>${att.empCode || att.empId}</strong></td>
                 <td><strong>${att.empName}</strong></td>
                 <td><span style="color:var(--primary); font-weight:600;">${att.major || att.dept}</span></td>
+                
                 <td>
-                  <input type="text" class="inline-input" style="width: 110px; color: #10b981;" 
-                         value="${att.checkIn || '--:--'}" 
-                         onchange="DashboardModule.updateRecord('${att.id}', 'checkIn', this.value)">
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <input type="text" class="inline-input" style="width: 85px; color: #10b981;" 
+                           value="${att.checkIn || '--:--'}" 
+                           onchange="DashboardModule.updateRecord('${att.id}', 'checkIn', this.value)">
+                    <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
+                            title="Clear Check-In Time" 
+                            onclick="DashboardModule.updateRecord('${att.id}', 'checkIn', '--:--')">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
                 </td>
+
                 <td>
-                  <input type="text" class="inline-input" style="width: 110px; color: #f59e0b;" 
-                         value="${att.checkOut || '--:--'}" 
-                         onchange="DashboardModule.updateRecord('${att.id}', 'checkOut', this.value)">
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <input type="text" class="inline-input" style="width: 85px; color: #f59e0b;" 
+                           value="${att.checkOut || '--:--'}" 
+                           onchange="DashboardModule.updateRecord('${att.id}', 'checkOut', this.value)">
+                    <button class="btn btn-outline btn-sm" style="color: #ef4444; border-color: transparent;" 
+                            title="Clear Check-Out Time" 
+                            onclick="DashboardModule.updateRecord('${att.id}', 'checkOut', '--:--')">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
                 </td>
+
                 <td>
                   <select class="inline-input" onchange="DashboardModule.updateRecord('${att.id}', 'status', this.value)">
                     <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>Present (វត្តមាន)</option>
@@ -1094,7 +1179,7 @@
                   </select>
                 </td>
                 <td>
-                  <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.8rem;" onclick="DashboardModule.deleteRecord('${att.id}')">
+                  <button class="btn btn-danger btn-sm" onclick="DashboardModule.deleteRecord('${att.id}')">
                     <i class="fa-solid fa-trash"></i> លុប
                   </button>
                 </td>
@@ -1118,8 +1203,8 @@
             benefitEmps.forEach(e => {
               const tag = document.createElement('div');
               tag.className = 'badge-benefit';
-              tag.style.fontSize = '0.85rem';
-              tag.style.padding = '6px 12px';
+              tag.style.fontSize = '0.82rem';
+              tag.style.padding = '5px 12px';
               tag.innerHTML = `<i class="fa-solid fa-user-check"></i> ${e.name} (${e.major || e.dept})`;
               container.appendChild(tag);
             });
@@ -1127,7 +1212,6 @@
         }
       }
 
-      /* INLINE DIRECT UPDATE FROM DASHBOARD */
       static async updateRecord(id, field, value) {
         const record = State.attendance.find(a => a.id === id);
         if (record) {
@@ -1138,7 +1222,6 @@
         }
       }
 
-      /* DELETE DIRECTLY FROM DASHBOARD */
       static async deleteRecord(id) {
         if (confirm('តើអ្នកពិតជាចង់លុបទិន្នន័យវត្តមាននេះមែនទេ?')) {
           await Database.delete('attendance', id);
@@ -1237,8 +1320,16 @@
        ========================================================================== */
     class AnalyticsModule {
       static render() {
-        const total = State.attendance.length;
-        const presentCount = State.attendance.filter(a => a.status === 'Present' || a.status === 'Late').length;
+        const startDate = document.getElementById('analyticsStart')?.value;
+        const endDate = document.getElementById('analyticsEnd')?.value;
+
+        let filteredAtt = State.attendance;
+        if (startDate && endDate) {
+          filteredAtt = State.attendance.filter(a => a.date >= startDate && a.date <= endDate);
+        }
+
+        const total = filteredAtt.length;
+        const presentCount = filteredAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
         const rate = total > 0 ? Math.round((presentCount / total) * 100) : 0;
 
         const rateEl = document.getElementById('ratePercent');
@@ -1261,9 +1352,9 @@
             datasets: [{
               label: 'ស្ថិតិវត្តមានទូទៅ',
               data: [
-                State.attendance.filter(a => a.status === 'Present').length,
-                State.attendance.filter(a => a.status === 'Late').length,
-                State.attendance.filter(a => a.status === 'Leave' || a.status === 'Absent').length
+                filteredAtt.filter(a => a.status === 'Present').length,
+                filteredAtt.filter(a => a.status === 'Late').length,
+                filteredAtt.filter(a => a.status === 'Leave' || a.status === 'Absent').length
               ],
               backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
             }]
