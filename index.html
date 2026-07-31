@@ -8,7 +8,7 @@
   <!-- Google Fonts for Khmer & English -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kantenbold&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Kantenbold&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,6 +27,7 @@
     :root {
       --font-main: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif;
       --font-brand: 'Kantenbold', 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Fira Code', monospace;
       --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       --radius-sm: 8px;
       --radius-md: 12px;
@@ -122,7 +123,7 @@
     /* LAYOUT: SIDEBAR & MAIN AREA */
     aside.sidebar { width: 280px; background-color: var(--bg-sidebar); color: var(--text-sidebar); display: flex; flex-direction: column; transition: var(--transition); z-index: 100; border-right: 1px solid var(--border); }
     .brand { padding: 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .brand i { font-size: 1.8rem; color: var(--primary); }
+    .brand img { height: 36px; width: 36px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
     .brand h2 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; }
 
     .nav-menu { list-style: none; padding: 16px 12px; flex: 1; overflow-y: auto; }
@@ -162,6 +163,10 @@
     .stat-info h4 { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
     .stat-info h2 { font-size: 1.8rem; font-weight: 700; margin-top: 4px; }
 
+    /* PROGRESS & ANALYTICS WIDGETS */
+    .progress-bar-bg { width: 100%; height: 10px; background: rgba(0,0,0,0.1); border-radius: 5px; overflow: hidden; margin: 10px 0 16px 0; }
+    .progress-bar-fill { height: 100%; width: 0%; background: var(--primary); transition: width 0.5s ease; }
+
     /* SPECIAL BENEFIT WIDGET & BADGES */
     .benefit-card-highlight { background: linear-gradient(135deg, var(--bg-card) 0%, var(--benefit-bg) 100%); border: 2px solid var(--benefit-gold); box-shadow: var(--shadow-glow); }
     .badge-benefit { background-color: var(--benefit-gold); color: #fff; padding: 4px 10px; border-radius: var(--radius-xl); font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; animation: pulse 2s infinite; }
@@ -196,7 +201,11 @@
     .inline-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); }
 
     /* REPORT VIEW SPECIFIC */
-    .report-paper { background: #fff; color: #000; padding: 40px; border-radius: var(--radius-sm); font-family: 'Kantumruy Pro', monospace; line-height: 1.6; border: 1px solid var(--border); box-shadow: var(--shadow-md); white-space: pre-wrap; font-size: 1rem; }
+    .report-paper { background: #fff; color: #000; padding: 40px; border-radius: var(--radius-sm); font-family: var(--font-mono); line-height: 1.6; border: 1px solid var(--border); box-shadow: var(--shadow-md); white-space: pre-wrap; font-size: 1rem; }
+
+    /* PRINTABLE ID CARD MODAL SPECIFIC */
+    .id-card { border: 2px dashed var(--primary); padding: 20px; border-radius: var(--radius-md); text-align: center; background: var(--bg-card); }
+    .qr-display-box { margin: 15px auto; display: flex; justify-content: center; }
 
     /* TOAST NOTIFICATIONS */
     .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
@@ -209,7 +218,7 @@
   <!-- SIDEBAR NAVIGATION -->
   <aside class="sidebar">
     <div class="brand">
-      <i class="fa-solid fa-graduation-cap"></i>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDh0_1M-Zvo3t2fpBiIE2WNocUo0GjOWPU15AOhSoh4g&s=10" alt="Logo">
       <h2>ប្រព័ន្ធគ្រប់គ្រងវត្តមាន</h2>
     </div>
     <ul class="nav-menu">
@@ -441,6 +450,15 @@
 
       <!-- 6. ANALYTICS VIEW -->
       <section id="analytics" class="view-section">
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+            <span>អត្រាវត្តមានសរុប (ATTENDANCE RATE)</span>
+            <b id="ratePercent">0%</b>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progressBar" class="progress-bar-fill"></div>
+          </div>
+        </div>
         <div class="form-row">
           <div class="stat-card" style="height: 380px;">
             <canvas id="attendanceChart"></canvas>
@@ -477,6 +495,17 @@
             <div class="form-group">
               <label>ឈ្មោះពេញ (Full Name)</label>
               <input type="text" class="form-control" id="empName" placeholder="ឧ. សុខ ដារ៉ា" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>ឈ្មោះអាណាព្យាបាល</label>
+              <input type="text" class="form-control" id="empParentName" placeholder="ឈ្មោះអាណាព្យាបាល">
+            </div>
+            <div class="form-group">
+              <label>លេខទូរស័ព្ទអាណាព្យាបាល</label>
+              <input type="tel" class="form-control" id="empParentPhone" placeholder="ឧ. 012345678">
             </div>
           </div>
           
@@ -592,6 +621,28 @@
     </div>
   </div>
 
+  <!-- MODAL: QR CARD PRINT -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal-content" style="max-width: 350px;">
+      <div class="modal-header">
+        <h3>ប័ណ្ណសម្គាល់ខ្លួន</h3>
+        <button class="btn btn-outline" onclick="closeQRModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="printableCard" class="id-card">
+          <h4 id="qrModalTitle">ប័ណ្ណសម្គាល់ខ្លួនបុគ្គលិក</h4>
+          <p id="qrModalSub">ID: #000</p>
+          <div class="qr-display-box" id="qrcodeCanvas"></div>
+          <p style="font-size: 11px; color: var(--text-secondary);">ស្កែនដើម្បីកត់ត្រាវត្តមាន</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="window.print()" class="btn btn-primary"><i class="fa-solid fa-print"></i> បោះពុម្ព</button>
+        <button onclick="closeQRModal()" class="btn btn-outline">បិទ</button>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST CONTAINER -->
   <div class="toast-container" id="toastBox"></div>
 
@@ -657,7 +708,10 @@
         companyName: 'សាកលវិទ្យាល័យ / Enterprise System',
         standardCheckout: '17:00',
         benefitCheckout: '15:30',
-        lateThreshold: '08:15'
+        lateThreshold: '08:15',
+        reminderTime: '08:00',
+        reminderToggle: 'OFF',
+        absenceThreshold: 3
       }
     };
 
@@ -673,7 +727,8 @@
 
       static updateClock() {
         const now = new Date();
-        document.getElementById('clockTime').innerText = now.toLocaleTimeString('en-US');
+        const clockEl = document.getElementById('clockTime');
+        if (clockEl) clockEl.innerText = now.toLocaleTimeString('en-US');
       }
 
       static setupNavigation() {
@@ -702,6 +757,7 @@
 
       static toast(msg, type = 'success') {
         const box = document.getElementById('toastBox');
+        if (!box) return;
         const toast = document.createElement('div');
         toast.className = 'toast';
         toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--primary);"></i> <span>${msg}</span>`;
@@ -718,6 +774,8 @@
         State.employees = await Database.getAll('employees');
         const tbody = document.getElementById('employeeTableBody');
         const select = document.getElementById('manualEmpSelect');
+        if (!tbody || !select) return;
+
         tbody.innerHTML = '';
         select.innerHTML = '';
 
@@ -742,6 +800,7 @@
             <td>${emp.position}</td>
             <td><span class="badge-benefit">${daysMapText || 'គ្មាន'}</span></td>
             <td>
+              <button class="btn btn-outline" style="padding: 4px 8px;" onclick="openQRModal('${emp.id}')"><i class="fa-solid fa-qrcode"></i></button>
               <button class="btn btn-outline" style="padding: 4px 8px;" onclick="EmployeeApp.openModal('${emp.id}')"><i class="fa-solid fa-pen-to-square"></i> កែប្រែ</button>
               <button class="btn btn-danger" style="padding: 4px 8px;" onclick="EmployeeApp.delete('${emp.id}')"><i class="fa-solid fa-trash"></i></button>
             </td>
@@ -771,6 +830,8 @@
             document.getElementById('empName').value = emp.name;
             document.getElementById('empMajor').value = emp.major || emp.dept;
             document.getElementById('empPosition').value = emp.position;
+            if(document.getElementById('empParentName')) document.getElementById('empParentName').value = emp.parentName || '';
+            if(document.getElementById('empParentPhone')) document.getElementById('empParentPhone').value = emp.parentPhone || '';
             document.getElementById('empModalTitle').innerText = 'កែប្រែព័ត៌មាន';
 
             const checkboxes = document.querySelectorAll('input[name="benefitDays"]');
@@ -792,6 +853,8 @@
         const name = document.getElementById('empName').value;
         const major = document.getElementById('empMajor').value;
         const position = document.getElementById('empPosition').value;
+        const parentName = document.getElementById('empParentName') ? document.getElementById('empParentName').value : '';
+        const parentPhone = document.getElementById('empParentPhone') ? document.getElementById('empParentPhone').value : '';
 
         if (!code || !name || !major) {
           System.toast('សូមបំព័ត៌មានចាំបាច់ឱ្យបានគ្រប់!', 'error');
@@ -803,7 +866,7 @@
           benefitDays.push(parseInt(cb.value));
         });
 
-        const empData = { id, code, name, major, position, dept: major, benefitDays };
+        const empData = { id, code, name, major, position, dept: major, benefitDays, parentName, parentPhone };
         await Database.save('employees', empData);
         System.toast('រក្សាទុកបានជោគជ័យ!');
         this.closeModal();
@@ -820,6 +883,7 @@
 
       static renderBenefitSchedule() {
         const tbody = document.getElementById('benefitScheduleTable');
+        if (!tbody) return;
         tbody.innerHTML = '';
         const daysMap = {0:'អាទិត្យ', 1:'ច័ន្ទ', 2:'អង្គារ', 3:'ពុធ', 4:'ព្រហស្បតិ៍', 5:'សុក្រ', 6:'សៅរ៍'};
 
@@ -993,69 +1057,73 @@
 
         const filteredAtt = State.attendance.filter(a => a.date === filterDate);
 
-        document.getElementById('dashTotalEmp').innerText = State.employees.length;
-        document.getElementById('dashPresent').innerText = filteredAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
-        document.getElementById('dashLate').innerText = filteredAtt.filter(a => a.status === 'Late').length;
-        document.getElementById('dashAbsent').innerText = filteredAtt.filter(a => a.status === 'Leave' || a.status === 'Absent').length;
+        if(document.getElementById('dashTotalEmp')) document.getElementById('dashTotalEmp').innerText = State.employees.length;
+        if(document.getElementById('dashPresent')) document.getElementById('dashPresent').innerText = filteredAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
+        if(document.getElementById('dashLate')) document.getElementById('dashLate').innerText = filteredAtt.filter(a => a.status === 'Late').length;
+        if(document.getElementById('dashAbsent')) document.getElementById('dashAbsent').innerText = filteredAtt.filter(a => a.status === 'Leave' || a.status === 'Absent').length;
 
         const tbody = document.getElementById('dashRecentTable');
-        tbody.innerHTML = '';
+        if (tbody) {
+          tbody.innerHTML = '';
 
-        if (filteredAtt.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding:20px;">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
-        } else {
-          filteredAtt.forEach(att => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><strong>${att.empCode || att.empId}</strong></td>
-              <td><strong>${att.empName}</strong></td>
-              <td><span style="color:var(--primary); font-weight:600;">${att.major || att.dept}</span></td>
-              <td>
-                <input type="text" class="inline-input" style="width: 110px; color: #10b981;" 
-                       value="${att.checkIn || '--:--'}" 
-                       onchange="DashboardModule.updateRecord('${att.id}', 'checkIn', this.value)">
-              </td>
-              <td>
-                <input type="text" class="inline-input" style="width: 110px; color: #f59e0b;" 
-                       value="${att.checkOut || '--:--'}" 
-                       onchange="DashboardModule.updateRecord('${att.id}', 'checkOut', this.value)">
-              </td>
-              <td>
-                <select class="inline-input" onchange="DashboardModule.updateRecord('${att.id}', 'status', this.value)">
-                  <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>Present (វត្តមាន)</option>
-                  <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>Late (មកយឺត)</option>
-                  <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>Leave (សុំច្បាប់)</option>
-                  <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>Absent (អវត្តមាន)</option>
-                </select>
-              </td>
-              <td>
-                <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.8rem;" onclick="DashboardModule.deleteRecord('${att.id}')">
-                  <i class="fa-solid fa-trash"></i> លុប
-                </button>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
+          if (filteredAtt.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding:20px;">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
+          } else {
+            filteredAtt.forEach(att => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td><strong>${att.empCode || att.empId}</strong></td>
+                <td><strong>${att.empName}</strong></td>
+                <td><span style="color:var(--primary); font-weight:600;">${att.major || att.dept}</span></td>
+                <td>
+                  <input type="text" class="inline-input" style="width: 110px; color: #10b981;" 
+                         value="${att.checkIn || '--:--'}" 
+                         onchange="DashboardModule.updateRecord('${att.id}', 'checkIn', this.value)">
+                </td>
+                <td>
+                  <input type="text" class="inline-input" style="width: 110px; color: #f59e0b;" 
+                         value="${att.checkOut || '--:--'}" 
+                         onchange="DashboardModule.updateRecord('${att.id}', 'checkOut', this.value)">
+                </td>
+                <td>
+                  <select class="inline-input" onchange="DashboardModule.updateRecord('${att.id}', 'status', this.value)">
+                    <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>Present (វត្តមាន)</option>
+                    <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>Late (មកយឺត)</option>
+                    <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>Leave (សុំច្បាប់)</option>
+                    <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>Absent (អវត្តមាន)</option>
+                  </select>
+                </td>
+                <td>
+                  <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.8rem;" onclick="DashboardModule.deleteRecord('${att.id}')">
+                    <i class="fa-solid fa-trash"></i> លុប
+                  </button>
+                </td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
         }
 
         const todayDayNum = new Date(filterDate).getDay(); 
         const benefitEmps = State.employees.filter(e => (e.benefitDays || []).includes(todayDayNum));
         
-        document.getElementById('benefitCountBadge').innerText = `${benefitEmps.length} នាក់`;
+        if(document.getElementById('benefitCountBadge')) document.getElementById('benefitCountBadge').innerText = `${benefitEmps.length} នាក់`;
         const container = document.getElementById('dashboardBenefitList');
-        container.innerHTML = '';
+        if (container) {
+          container.innerHTML = '';
 
-        if (benefitEmps.length === 0) {
-          container.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary);">គ្មានបុគ្គលិក/និស្សិតទទួលបានសិទ្ធិចេញមុនថ្ងៃនេះទេ</span>`;
-        } else {
-          benefitEmps.forEach(e => {
-            const tag = document.createElement('div');
-            tag.className = 'badge-benefit';
-            tag.style.fontSize = '0.85rem';
-            tag.style.padding = '6px 12px';
-            tag.innerHTML = `<i class="fa-solid fa-user-check"></i> ${e.name} (${e.major || e.dept})`;
-            container.appendChild(tag);
-          });
+          if (benefitEmps.length === 0) {
+            container.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary);">គ្មានបុគ្គលិក/និស្សិតទទួលបានសិទ្ធិចេញមុនថ្ងៃនេះទេ</span>`;
+          } else {
+            benefitEmps.forEach(e => {
+              const tag = document.createElement('div');
+              tag.className = 'badge-benefit';
+              tag.style.fontSize = '0.85rem';
+              tag.style.padding = '6px 12px';
+              tag.innerHTML = `<i class="fa-solid fa-user-check"></i> ${e.name} (${e.major || e.dept})`;
+              container.appendChild(tag);
+            });
+          }
         }
       }
 
@@ -1130,7 +1198,8 @@
 
         reportStr += `\n[បញ្ចប់របាយការណ៍]`;
 
-        document.getElementById('khmerReportPaper').textContent = reportStr;
+        const el = document.getElementById('khmerReportPaper');
+        if (el) el.textContent = reportStr;
       }
 
       static copyText() {
@@ -1168,8 +1237,19 @@
        ========================================================================== */
     class AnalyticsModule {
       static render() {
-        const ctx1 = document.getElementById('attendanceChart').getContext('2d');
-        const ctx2 = document.getElementById('deptChart').getContext('2d');
+        const total = State.attendance.length;
+        const presentCount = State.attendance.filter(a => a.status === 'Present' || a.status === 'Late').length;
+        const rate = total > 0 ? Math.round((presentCount / total) * 100) : 0;
+
+        const rateEl = document.getElementById('ratePercent');
+        const barEl = document.getElementById('progressBar');
+        if(rateEl) rateEl.innerText = `${rate}%`;
+        if(barEl) barEl.style.width = `${rate}%`;
+
+        const ctx1 = document.getElementById('attendanceChart')?.getContext('2d');
+        const ctx2 = document.getElementById('deptChart')?.getContext('2d');
+
+        if(!ctx1 || !ctx2) return;
 
         if (window.myChart1) window.myChart1.destroy();
         if (window.myChart2) window.myChart2.destroy();
@@ -1209,6 +1289,31 @@
           options: { responsive: true, maintainAspectRatio: false }
         });
       }
+    }
+
+    /* ==========================================================================
+       QR CODE GENERATOR MODAL FUNCTIONS
+       ========================================================================== */
+    function openQRModal(empId) {
+      const emp = State.employees.find(e => e.id === empId);
+      if (!emp) return;
+
+      document.getElementById('qrModalTitle').innerText = emp.name;
+      document.getElementById('qrModalSub').innerText = `ID: #${emp.code || emp.id}`;
+      
+      const qrBox = document.getElementById('qrcodeCanvas');
+      qrBox.innerHTML = '';
+      new QRCode(qrBox, {
+        text: emp.code || emp.id,
+        width: 128,
+        height: 128
+      });
+
+      document.getElementById('qrModal').classList.add('active');
+    }
+
+    function closeQRModal() {
+      document.getElementById('qrModal').classList.remove('active');
     }
 
     /* ==========================================================================
