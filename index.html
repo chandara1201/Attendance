@@ -596,6 +596,97 @@
       <section id="settings" class="view-section">
         <h2>ការកំណត់ប្រព័ន្ធ & សុវត្ថិភាព</h2>
 
+        <!-- Combined Time Rules Settings Card -->
+        <div style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border); margin: 16px 0;">
+          <h4><i class="fa-solid fa-clock"></i> កំណត់ម៉ោងធ្វើការ & លក្ខខណ្ឌយឺត (Time & Attendance Rules)</h4>
+          
+          <h5 style="margin-top: 16px; margin-bottom: 8px; color: var(--primary); font-size: 0.9rem;">1. Schedule & Shift Settings (ម៉ោងធ្វើការ standard)</h5>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ម៉ោងចូលធ្វើការ standard (Standard Check-In)</label>
+              <input type="time" id="cfgStandardCheckin" class="form-control" value="08:00">
+            </div>
+            <div class="form-group">
+              <label>ម៉ោងចេញធ្វើការ standard (Standard Check-Out)</label>
+              <input type="time" id="cfgStandardCheckout" class="form-control" value="17:00">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ម៉ោងចេញសម្រាប់កន្លះថ្ងៃ (Half-Day Check-Out)</label>
+              <input type="time" id="cfgHalfdayCheckout" class="form-control" value="12:00">
+            </div>
+          </div>
+
+          <h5 style="margin-top: 16px; margin-bottom: 8px; color: var(--primary); font-size: 0.9rem;">2. Special & Benefit Time Settings (ម៉ោងចេញពិសេស)</h5>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ម៉ោងចេញមុនសម្រាប់ថ្ងៃអត្ថប្រយោជន៍ (Special Benefit Check-Out)</label>
+              <input type="time" id="cfgBenefitCheckout" class="form-control" value="15:30">
+            </div>
+            <div class="form-group">
+              <label>ថ្ងៃទទួលសិទ្ធិពិសេស (Benefit Days Schedule Defaults)</label>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+                <label><input type="checkbox" id="cfgBenefitDay1" checked> ច័ន្ទ</label>
+                <label><input type="checkbox" id="cfgBenefitDay2" checked> អង្គារ</label>
+                <label><input type="checkbox" id="cfgBenefitDay3" checked> ពុធ</label>
+                <label><input type="checkbox" id="cfgBenefitDay4" checked> ព្រហ</label>
+                <label><input type="checkbox" id="cfgBenefitDay5" checked> សុក្រ</label>
+              </div>
+            </div>
+          </div>
+
+          <h5 style="margin-top: 16px; margin-bottom: 8px; color: var(--primary); font-size: 0.9rem;">3. Late & Grace Period Rules (ការកំណត់ម៉ោងយឺត)</h5>
+          <div class="form-row">
+            <div class="form-group">
+              <label>រយៈពេលអនុគ្រោះមិនគិតយឺត (Grace Period - នាទី)</label>
+              <input type="number" id="cfgGracePeriod" class="form-control" value="15" placeholder="ឧ. 15 នាទី">
+            </div>
+            <div class="form-group">
+              <label>ម៉ោងចាប់ផ្តើមរាប់ថា Late (Late Threshold Time)</label>
+              <input type="time" id="cfgLateThreshold" class="form-control" value="08:15">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ម៉ោងយឺតលើសកំណត់គិតជាកន្លះថ្ងៃ (Half-Day Late Cutoff)</label>
+              <input type="time" id="cfgHalfDayCutoff" class="form-control" value="10:00">
+            </div>
+          </div>
+
+          <h5 style="margin-top: 16px; margin-bottom: 8px; color: var(--primary); font-size: 0.9rem;">4. Overtime & Early Leave Rules (ការកំណត់បន្ថែមម៉ោង និងចេញមុន)</h5>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ម៉ោងរាប់ថាចេញមុន (Early Leave Threshold)</label>
+              <input type="time" id="cfgEarlyLeaveThreshold" class="form-control" value="17:00">
+            </div>
+            <div class="form-group">
+              <label>ម៉ោងចាប់ផ្តើមគិត Overtime (Minimum OT Threshold - នាទី)</label>
+              <input type="number" id="cfgOtMinThreshold" class="form-control" value="30" placeholder="ឧ. 30 នាទី">
+            </div>
+          </div>
+
+          <h5 style="margin-top: 16px; margin-bottom: 8px; color: var(--primary); font-size: 0.9rem;">5. System & Automation Settings (ការកំណត់ប្រព័ន្ធស្វ័យប្រវត្តិ)</h5>
+          <div class="form-row">
+            <div class="form-group">
+              <label>កំណត់អវត្តមានស្វ័យប្រវត្តិម៉ោង (Auto-Absent Time)</label>
+              <input type="time" id="cfgAutoAbsentTime" class="form-control" value="23:59">
+            </div>
+            <div class="form-group">
+              <label>លក្ខខណ្ឌអវត្តមានលើសកំណត់ (Absence Threshold Limit - ថ្ងៃ)</label>
+              <input type="number" id="cfgAbsenceThreshold" class="form-control" value="3" placeholder="ឧ. 3 ថ្ងៃ">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>ម៉ោងរំលឹកស្វ័យប្រវត្តិ (Auto Reminder Time)</label>
+              <input type="time" id="cfgReminderTime" class="form-control" value="08:00">
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="margin-top: 12px;" onclick="saveTimeSettings()"><i class="fa-solid fa-floppy-disk"></i> រក្សាទុកការកំណត់</button>
+        </div>
+
         <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); margin: 16px 0; max-width: 500px;">
           <h4><i class="fa-solid fa-key"></i> ផ្លាស់ប្តូរលេខកូដសម្ងាត់ Admin (Security)</h4>
           <div class="form-group" style="margin-top: 8px;">
@@ -603,19 +694,6 @@
             <input type="password" id="newAdminPass" class="form-control" placeholder="បញ្ចូលលេខកូដសម្ងាត់ថ្មី">
           </div>
           <button class="btn btn-primary" onclick="changeAdminPassword()">រក្សាទុកលេខកូដ</button>
-        </div>
-
-        <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); margin: 16px 0; max-width: 500px;">
-          <h4><i class="fa-solid fa-bell"></i> កំណត់ការរំលឹកស្វ័យប្រវត្តិ & លក្ខខណ្ឌអវត្តមាន</h4>
-          <div class="form-group" style="margin-top: 8px;">
-            <label>ម៉ោងរំលឹកកត់វត្តមានស្វ័យប្រវត្តិ</label>
-            <input type="time" id="cfgReminderTime" class="form-control">
-          </div>
-          <div class="form-group">
-            <label>លក្ខខណ្ឌអវត្តមានលើសកំណត់ (Absence Threshold គិតជាថ្ងៃ)</label>
-            <input type="number" id="cfgAbsenceThreshold" class="form-control" placeholder="ឧ. 3">
-          </div>
-          <button class="btn btn-primary" onclick="saveReminderConfig()">រក្សាទុកការកំណត់រំលឹក</button>
         </div>
       </section>
 
@@ -873,9 +951,18 @@
       attendance: [],
       config: {
         companyName: 'សាកលវិទ្យាល័យ / Enterprise System',
+        standardCheckin: '08:00',
         standardCheckout: '17:00',
+        halfdayCheckout: '12:00',
         benefitCheckout: '15:30',
-        lateThreshold: '08:15'
+        gracePeriod: 15,
+        lateThreshold: '08:15',
+        halfDayCutoff: '10:00',
+        earlyLeaveThreshold: '17:00',
+        otMinThreshold: 30,
+        autoAbsentTime: '23:59',
+        absenceThreshold: 3,
+        reminderTime: '08:00'
       }
     };
 
@@ -894,6 +981,7 @@
         if (document.getElementById('searchHistoryEnd')) document.getElementById('searchHistoryEnd').value = todayStr;
 
         this.setupNavigation();
+        loadSavedTimeSettings();
         await EmployeeApp.render();
       }
 
@@ -971,7 +1059,7 @@
     }
 
     /* ==========================================================================
-       NOTIFICATION & REMINDER
+       NOTIFICATION & SETTINGS PERSISTENCE
        ========================================================================== */
     function requestNotificationPermission() {
       if ('Notification' in window) {
@@ -987,10 +1075,47 @@
       }
     }
 
-    function saveReminderConfig() {
-      State.reminderTime = document.getElementById('cfgReminderTime').value;
-      State.absenceThreshold = parseInt(document.getElementById('cfgAbsenceThreshold').value) || 3;
-      System.toast('បានរក្សាទុកការកំណត់ការរំលឹកស្វ័យប្រវត្តិ!');
+    function saveTimeSettings() {
+      State.config.standardCheckin = document.getElementById('cfgStandardCheckin')?.value || '08:00';
+      State.config.standardCheckout = document.getElementById('cfgStandardCheckout')?.value || '17:00';
+      State.config.halfdayCheckout = document.getElementById('cfgHalfdayCheckout')?.value || '12:00';
+      State.config.benefitCheckout = document.getElementById('cfgBenefitCheckout')?.value || '15:30';
+      State.config.gracePeriod = parseInt(document.getElementById('cfgGracePeriod')?.value) || 15;
+      State.config.lateThreshold = document.getElementById('cfgLateThreshold')?.value || '08:15';
+      State.config.halfDayCutoff = document.getElementById('cfgHalfDayCutoff')?.value || '10:00';
+      State.config.earlyLeaveThreshold = document.getElementById('cfgEarlyLeaveThreshold')?.value || '17:00';
+      State.config.otMinThreshold = parseInt(document.getElementById('cfgOtMinThreshold')?.value) || 30;
+      State.config.autoAbsentTime = document.getElementById('cfgAutoAbsentTime')?.value || '23:59';
+      State.config.absenceThreshold = parseInt(document.getElementById('cfgAbsenceThreshold')?.value) || 3;
+      State.config.reminderTime = document.getElementById('cfgReminderTime')?.value || '08:00';
+
+      localStorage.setItem('sys_time_settings', JSON.stringify(State.config));
+      System.toast('បានរក្សាទុកការកំណត់ម៉ោងធ្វើការ រួចរាល់!');
+    }
+
+    function loadSavedTimeSettings() {
+      const saved = localStorage.getItem('sys_time_settings');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          Object.assign(State.config, parsed);
+        } catch (e) {
+          console.error('Error loading settings', e);
+        }
+      }
+
+      if (document.getElementById('cfgStandardCheckin')) document.getElementById('cfgStandardCheckin').value = State.config.standardCheckin;
+      if (document.getElementById('cfgStandardCheckout')) document.getElementById('cfgStandardCheckout').value = State.config.standardCheckout;
+      if (document.getElementById('cfgHalfdayCheckout')) document.getElementById('cfgHalfdayCheckout').value = State.config.halfdayCheckout;
+      if (document.getElementById('cfgBenefitCheckout')) document.getElementById('cfgBenefitCheckout').value = State.config.benefitCheckout;
+      if (document.getElementById('cfgGracePeriod')) document.getElementById('cfgGracePeriod').value = State.config.gracePeriod;
+      if (document.getElementById('cfgLateThreshold')) document.getElementById('cfgLateThreshold').value = State.config.lateThreshold;
+      if (document.getElementById('cfgHalfDayCutoff')) document.getElementById('cfgHalfDayCutoff').value = State.config.halfDayCutoff;
+      if (document.getElementById('cfgEarlyLeaveThreshold')) document.getElementById('cfgEarlyLeaveThreshold').value = State.config.earlyLeaveThreshold;
+      if (document.getElementById('cfgOtMinThreshold')) document.getElementById('cfgOtMinThreshold').value = State.config.otMinThreshold;
+      if (document.getElementById('cfgAutoAbsentTime')) document.getElementById('cfgAutoAbsentTime').value = State.config.autoAbsentTime;
+      if (document.getElementById('cfgAbsenceThreshold')) document.getElementById('cfgAbsenceThreshold').value = State.config.absenceThreshold;
+      if (document.getElementById('cfgReminderTime')) document.getElementById('cfgReminderTime').value = State.config.reminderTime;
     }
 
     /* ==========================================================================
@@ -1080,8 +1205,8 @@
             empName: emp.name,
             major: emp.major || emp.dept,
             dept: emp.dept || emp.major,
-            checkIn: status === 'Present' ? '08:00' : '--:--',
-            checkOut: status === 'Present' ? '17:00' : '--:--',
+            checkIn: status === 'Present' ? State.config.standardCheckin : '--:--',
+            checkOut: status === 'Present' ? State.config.standardCheckout : '--:--',
             status: status
           };
         }
@@ -1338,7 +1463,10 @@
 
         if (isCheckIn && status === 'Present') {
           const lateTime = State.config.lateThreshold || '08:15';
-          if (timeStr > lateTime) {
+          const halfDayTime = State.config.halfDayCutoff || '10:00';
+          if (timeStr > halfDayTime) {
+            attRecord.status = 'Absent';
+          } else if (timeStr > lateTime) {
             attRecord.status = 'Late';
           }
         }
