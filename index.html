@@ -191,6 +191,10 @@
     .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
+    /* EDITABLE INLINE INPUT STYLES */
+    .inline-input { padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background-color: var(--bg-main); color: var(--text-primary); font-size: 0.85rem; font-weight: 600; }
+    .inline-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); }
+
     /* REPORT VIEW SPECIFIC */
     .report-paper { background: #fff; color: #000; padding: 40px; border-radius: var(--radius-sm); font-family: 'Kantumruy Pro', monospace; line-height: 1.6; border: 1px solid var(--border); box-shadow: var(--shadow-md); white-space: pre-wrap; font-size: 1rem; }
 
@@ -291,10 +295,11 @@
           </div>
         </div>
 
-        <!-- RECENT ACTIVITY TABLE -->
+        <!-- RECENT ACTIVITY TABLE (EDITABLE INLINE) -->
         <div class="table-container">
-          <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); font-weight: 700;">
-            វត្តមានថ្មីៗចុងក្រោយថ្ងៃនេះ
+          <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+            <span><i class="fa-solid fa-pen-to-square" style="color: var(--primary);"></i> វត្តមានថ្មីៗចុងក្រោយថ្ងៃនេះ (អាចកែសម្រួលផ្ទាល់បាន)</span>
+            <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">* ផ្លាស់ប្តូរម៉ោង ឬស្ថានភាព រួចប្រព័ន្ធនឹង Save ស្វ័យប្រវត្តិ</span>
           </div>
           <table>
             <thead>
@@ -305,10 +310,11 @@
                 <th>ម៉ោងចូល</th>
                 <th>ម៉ោងចេញ</th>
                 <th>ស្ថានភាព</th>
+                <th>សកម្មភាព</th>
               </tr>
             </thead>
             <tbody id="dashRecentTable">
-              <!-- Dynamic Rows -->
+              <!-- Dynamic Editable Rows -->
             </tbody>
           </table>
         </div>
@@ -681,6 +687,7 @@
             const targetView = link.getAttribute('data-view');
             document.getElementById(targetView).classList.add('active');
 
+            if(targetView === 'dashboard') DashboardModule.render();
             if(targetView === 'attendance') AttendanceUI.renderAttendanceList();
             if(targetView === 'reports') ReportModule.renderKhmerReport();
             if(targetView === 'analytics') AnalyticsModule.render();
@@ -930,14 +937,14 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td><strong>${att.empName}</strong> (${att.empCode || att.empId})</td>
-            <td><input type="time" class="form-control" style="width: auto; padding: 4px 8px;" value="${att.checkIn === '--:--' ? '' : att.checkIn}" onchange="AttendanceUI.updateTime('${att.id}', 'checkIn', this.value)"></td>
-            <td><input type="time" class="form-control" style="width: auto; padding: 4px 8px;" value="${att.checkOut === '--:--' ? '' : att.checkOut}" onchange="AttendanceUI.updateTime('${att.id}', 'checkOut', this.value)"></td>
+            <td><input type="text" class="inline-input" style="width: 110px;" value="${att.checkIn || '--:--'}" onchange="AttendanceUI.updateTime('${att.id}', 'checkIn', this.value)"></td>
+            <td><input type="text" class="inline-input" style="width: 110px;" value="${att.checkOut || '--:--'}" onchange="AttendanceUI.updateTime('${att.id}', 'checkOut', this.value)"></td>
             <td>
-              <select class="form-control" style="width: auto; padding: 4px 8px;" onchange="AttendanceUI.updateStatus('${att.id}', this.value)">
-                <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>វត្តមាន</option>
-                <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>មកយឺត</option>
-                <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>សុំច្បាប់</option>
-                <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>អវត្តមាន</option>
+              <select class="inline-input" onchange="AttendanceUI.updateStatus('${att.id}', this.value)">
+                <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>វត្តមាន (Present)</option>
+                <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>មកយឺត (Late)</option>
+                <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>សុំច្បាប់ (Leave)</option>
+                <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>អវត្តមាន (Absent)</option>
               </select>
             </td>
             <td><button class="btn btn-danger" style="padding: 4px 8px;" onclick="AttendanceUI.deleteRecord('${att.id}')"><i class="fa-solid fa-trash"></i> លុប</button></td>
@@ -951,7 +958,7 @@
         if (record) {
           record[field] = value || '--:--';
           await Database.save('attendance', record);
-          System.toast('បានកែសម្រួលម៉ោងរួចរាល់');
+          System.toast('បានកែសម្រួលម៉ោងរួចរាល់!');
           DashboardModule.render();
         }
       }
@@ -961,7 +968,7 @@
         if (record) {
           record.status = newStatus;
           await Database.save('attendance', record);
-          System.toast('បានផ្លាស់ប្តូរស្ថានភាពរួចរាល់');
+          System.toast('បានផ្លាស់ប្តូរស្ថានភាពរួចរាល់!');
           DashboardModule.render();
         }
       }
@@ -977,7 +984,7 @@
     }
 
     /* ==========================================================================
-       DASHBOARD & DATE FILTERING ENGINE
+       DASHBOARD & DATE FILTERING ENGINE (WITH INLINE EDITING)
        ========================================================================== */
     class DashboardModule {
       static async render() {
@@ -995,17 +1002,37 @@
         tbody.innerHTML = '';
 
         if (filteredAtt.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-secondary);">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-secondary); padding:20px;">គ្មានទិន្នន័យវត្តមានសម្រាប់កាលបរិច្ឆេទនេះទេ</td></tr>`;
         } else {
           filteredAtt.forEach(att => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
               <td><strong>${att.empCode || att.empId}</strong></td>
-              <td>${att.empName}</td>
+              <td><strong>${att.empName}</strong></td>
               <td><span style="color:var(--primary); font-weight:600;">${att.major || att.dept}</span></td>
-              <td><span style="color: #10b981; font-weight:600;">${att.checkIn}</span></td>
-              <td><span style="color: #f59e0b; font-weight:600;">${att.checkOut}</span></td>
-              <td><strong>${att.status}</strong></td>
+              <td>
+                <input type="text" class="inline-input" style="width: 110px; color: #10b981;" 
+                       value="${att.checkIn || '--:--'}" 
+                       onchange="DashboardModule.updateRecord('${att.id}', 'checkIn', this.value)">
+              </td>
+              <td>
+                <input type="text" class="inline-input" style="width: 110px; color: #f59e0b;" 
+                       value="${att.checkOut || '--:--'}" 
+                       onchange="DashboardModule.updateRecord('${att.id}', 'checkOut', this.value)">
+              </td>
+              <td>
+                <select class="inline-input" onchange="DashboardModule.updateRecord('${att.id}', 'status', this.value)">
+                  <option value="Present" ${att.status === 'Present' ? 'selected' : ''}>Present (វត្តមាន)</option>
+                  <option value="Late" ${att.status === 'Late' ? 'selected' : ''}>Late (មកយឺត)</option>
+                  <option value="Leave" ${att.status === 'Leave' ? 'selected' : ''}>Leave (សុំច្បាប់)</option>
+                  <option value="Absent" ${att.status === 'Absent' ? 'selected' : ''}>Absent (អវត្តមាន)</option>
+                </select>
+              </td>
+              <td>
+                <button class="btn btn-danger" style="padding: 4px 8px; font-size:0.8rem;" onclick="DashboardModule.deleteRecord('${att.id}')">
+                  <i class="fa-solid fa-trash"></i> លុប
+                </button>
+              </td>
             `;
             tbody.appendChild(tr);
           });
@@ -1031,10 +1058,30 @@
           });
         }
       }
+
+      /* INLINE DIRECT UPDATE FROM DASHBOARD */
+      static async updateRecord(id, field, value) {
+        const record = State.attendance.find(a => a.id === id);
+        if (record) {
+          record[field] = value || '--:--';
+          await Database.save('attendance', record);
+          System.toast('បានធ្វើបច្ចុប្បន្នភាពទិន្នន័យវត្តមានរួចរាល់!');
+          this.render();
+        }
+      }
+
+      /* DELETE DIRECTLY FROM DASHBOARD */
+      static async deleteRecord(id) {
+        if (confirm('តើអ្នកពិតជាចង់លុបទិន្នន័យវត្តមាននេះមែនទេ?')) {
+          await Database.delete('attendance', id);
+          System.toast('បានលុបវត្តមានជោគជ័យ!');
+          this.render();
+        }
+      }
     }
 
     /* ==========================================================================
-       KHMER REPORT GENERATION ENGINE (UPDATED FORMAT & MAJOR)
+       KHMER REPORT GENERATION ENGINE
        ========================================================================== */
     class ReportModule {
       static renderKhmerReport() {
@@ -1308,7 +1355,7 @@
       }
 
       const dashHeader = document.querySelector('#dashboard .dashboard-grid');
-      if (dashHeader) {
+      if (dashHeader && !document.getElementById('dashDateFilter')) {
         const dateFilterDiv = document.createElement('div');
         dateFilterDiv.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;";
         dateFilterDiv.innerHTML = `
@@ -1322,7 +1369,7 @@
       }
 
       const attView = document.getElementById('attendance');
-      if (attView) {
+      if (attView && !document.getElementById('attLogDateFilter')) {
         const filterDiv = document.createElement('div');
         filterDiv.style.cssText = "display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;";
         filterDiv.innerHTML = `
@@ -1336,7 +1383,7 @@
       }
 
       const reportHeader = document.querySelector('#reports div');
-      if (reportHeader) {
+      if (reportHeader && !document.getElementById('reportDateFilter')) {
         const datePickerDiv = document.createElement('div');
         datePickerDiv.style.cssText = "display: flex; align-items: center; gap: 10px; margin-right: 15px;";
         datePickerDiv.innerHTML = `
@@ -1347,7 +1394,7 @@
       }
 
       const analyticsView = document.getElementById('analytics');
-      if (analyticsView) {
+      if (analyticsView && !document.getElementById('analyticsStart')) {
         const filterDiv = document.createElement('div');
         filterDiv.style.cssText = "display: flex; align-items: center; gap: 12px; margin-bottom: 20px;";
         filterDiv.innerHTML = `
