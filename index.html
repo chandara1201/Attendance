@@ -221,6 +221,14 @@
     .id-card { border: 2px dashed var(--primary); padding: 20px; border-radius: var(--radius-md); text-align: center; background: var(--bg-card); }
     .qr-display-box { margin: 15px auto; display: flex; justify-content: center; }
 
+    /* MEMBER VIEW MODAL STYLES */
+    .member-profile-header { display: flex; align-items: center; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+    .member-profile-avatar { width: 70px; height: 70px; border-radius: 50%; background: rgba(5, 150, 105, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; }
+    .member-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .member-info-item { background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    .member-info-item label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 4px; }
+    .member-info-item p { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+
     /* TOAST NOTIFICATIONS */
     .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
     .toast { background: var(--bg-card); color: var(--text-primary); border-left: 5px solid var(--primary); padding: 12px 18px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; min-width: 280px; animation: slideIn 0.3s forwards; }
@@ -613,6 +621,62 @@
 
     </div>
   </main>
+
+  <!-- MODAL: VIEW MEMBER DETAILS -->
+  <div class="modal-overlay" id="memberDetailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>ព័ត៌មានលម្អិតសមាជិក</h3>
+        <button class="btn btn-outline" style="padding: 4px 10px;" onclick="EmployeeApp.closeMemberModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="member-profile-header">
+          <div class="member-profile-avatar">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div>
+            <h3 id="viewMemberName" style="font-size: 1.2rem; color: var(--text-primary);">--</h3>
+            <span class="badge badge-admin" id="viewMemberCode">ID: --</span>
+          </div>
+        </div>
+
+        <div class="member-info-grid">
+          <div class="member-info-item">
+            <label>មុខជំនាញ / ផ្នែក</label>
+            <p id="viewMemberMajor">--</p>
+          </div>
+          <div class="member-info-item">
+            <label>តួនាទី / ឆ្នាំសិក្សា</label>
+            <p id="viewMemberPosition">--</p>
+          </div>
+          <div class="member-info-item">
+            <label>ឈ្មោះអាណាព្យាបាល</label>
+            <p id="viewMemberParentName">--</p>
+          </div>
+          <div class="member-info-item">
+            <label>លេខទូរស័ព្ទអាណាព្យាបាល</label>
+            <p id="viewMemberParentPhone">--</p>
+          </div>
+        </div>
+
+        <div class="member-info-item" style="margin-bottom: 16px;">
+          <label>ថ្ងៃទទួលបានសិទ្ធិពិសេសចេញមុន</label>
+          <p id="viewMemberBenefitDays" style="color: var(--benefit-gold);">--</p>
+        </div>
+
+        <div style="margin-top: 16px;">
+          <h4 style="font-size: 0.9rem; margin-bottom: 8px;"><i class="fa-solid fa-chart-simple"></i> សង្ខេបវត្តមានសរុប</h4>
+          <div style="display: flex; gap: 10px;">
+            <span class="badge badge-present" id="viewMemberPresentStat">វត្តមាន: 0</span>
+            <span class="badge badge-absent" id="viewMemberAbsentStat">អវត្តមាន: 0</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="EmployeeApp.closeMemberModal()">បិទ</button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL: ADD / EDIT EMPLOYEE/STUDENT -->
   <div class="modal-overlay" id="employeeModal">
@@ -1075,9 +1139,10 @@
             <td>${emp.position}</td>
             <td><span class="badge-benefit">${daysMapText || 'គ្មាន'}</span></td>
             <td>
-              <button class="btn btn-outline btn-sm" onclick="openQRModal('${emp.id}')"><i class="fa-solid fa-qrcode"></i></button>
-              <button class="btn btn-outline btn-sm" onclick="EmployeeApp.openModal('${emp.id}')"><i class="fa-solid fa-pen-to-square"></i> កែប្រែ</button>
-              <button class="btn btn-danger btn-sm" onclick="EmployeeApp.delete('${emp.id}')"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn btn-outline btn-sm" title="មើលព័ត៌មាន" onclick="EmployeeApp.viewMemberDetails('${emp.id}')"><i class="fa-solid fa-eye"></i></button>
+              <button class="btn btn-outline btn-sm" title="QR Code" onclick="openQRModal('${emp.id}')"><i class="fa-solid fa-qrcode"></i></button>
+              <button class="btn btn-outline btn-sm" title="កែប្រែ" onclick="EmployeeApp.openModal('${emp.id}')"><i class="fa-solid fa-pen-to-square"></i> កែប្រែ</button>
+              <button class="btn btn-danger btn-sm" title="លុប" onclick="EmployeeApp.delete('${emp.id}')"><i class="fa-solid fa-trash"></i></button>
             </td>
           `;
           tbody.appendChild(tr);
@@ -1091,6 +1156,36 @@
         this.renderBenefitSchedule();
         populateHistoryOptions();
         DashboardModule.render();
+      }
+
+      static async viewMemberDetails(id) {
+        const emp = State.employees.find(e => e.id === id);
+        if (!emp) return;
+
+        const daysMap = {0:'អាទិត្យ', 1:'ច័ន្ទ', 2:'អង្គារ', 3:'ពុធ', 4:'ព្រហស្បតិ៍', 5:'សុក្រ', 6:'សៅរ៍'};
+        const daysMapText = (emp.benefitDays || []).map(d => daysMap[d]).filter(Boolean).join(', ');
+
+        State.attendance = await Database.getAll('attendance');
+        const empAtt = State.attendance.filter(a => a.empId === emp.id);
+        const presentCount = empAtt.filter(a => a.status === 'Present' || a.status === 'Late').length;
+        const absentCount = empAtt.filter(a => a.status === 'Absent' || a.status === 'Leave').length;
+
+        document.getElementById('viewMemberName').innerText = emp.name;
+        document.getElementById('viewMemberCode').innerText = `ID: ${emp.code || emp.id}`;
+        document.getElementById('viewMemberMajor').innerText = emp.major || emp.dept || 'មិនមាន';
+        document.getElementById('viewMemberPosition').innerText = emp.position || 'មិនមាន';
+        document.getElementById('viewMemberParentName').innerText = emp.parentName || 'មិនមាន';
+        document.getElementById('viewMemberParentPhone').innerText = emp.parentPhone || 'មិនមាន';
+        document.getElementById('viewMemberBenefitDays').innerText = daysMapText || 'គ្មានថ្ងៃទទួលបានសិទ្ធិពិសេស';
+
+        document.getElementById('viewMemberPresentStat').innerText = `វត្តមាន: ${presentCount} ថ្ងៃ`;
+        document.getElementById('viewMemberAbsentStat').innerText = `អវត្តមាន: ${absentCount} ថ្ងៃ`;
+
+        document.getElementById('memberDetailModal').classList.add('active');
+      }
+
+      static closeMemberModal() {
+        document.getElementById('memberDetailModal').classList.remove('active');
       }
 
       static async seedSampleData(showToast = true) {
